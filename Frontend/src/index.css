@@ -1,0 +1,11 @@
+/* index.css */
+
+@import url('https://fonts.googleapis.com/css2?family=Italianno&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Itim&display=swap');
+/* @import url('https://fonts.googleapis.com/css2?family=DM+Serif+Text&display=swap'); */
+@import url('https://fonts.googleapis.com/css2?family=Italiana&display=swap');
+
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
