@@ -59,7 +59,7 @@ export default function Header() {
             <a
               key={item}
               href={`/${item.toLowerCase()}`}
-              className="text-[#0D1321] hover:text-[#003366] relative group transition-all duration-50 hover:scale-110 text-2xl"
+              className="text-[#0D1321] hover:text-[#003366] relative group transition-all duration-50 hover:scale-110 text-xl"
             >
               <span className="transition-colors duration-110 ">{item}</span>
               {/* <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-blue-600 transition-all duration-150 group-hover:w-full" /> */}
