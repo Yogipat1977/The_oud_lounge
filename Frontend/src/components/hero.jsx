@@ -34,11 +34,11 @@ const Hero = () => {
             </p> */}
    <a
       href="#"
-      className="font-bold mt-4 sm:mt-6 md:mt-20 font-italiana inline-block border-2 border-white text-white 
+      className="font-bold mt-4 sm:mt-6 md:mt-20 font-italiana inline-block border-2 border-[#DAA520] text-[#DAA520] 
                 py-2 px-8 sm:py-3 sm:px-10 md:py-3 md:px-12 lg:py-4 lg:px-16
                 rounded-full text-base sm:text-lg lg:text-xl font-medium 
                 transition-all duration-300 ease-in-out 
-                hover:bg-[#Ecebe4] hover:text-[#1c1c1c]"
+                hover:bg-[#DAA520] hover:text-[#1c1c1c]"
       style={{ fontFamily: "Italiana" }}
     >
       Shop Our Boxes

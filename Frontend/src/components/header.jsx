@@ -28,7 +28,7 @@ export default function Header() {
     <header
       className={cn(
         "fixed top-0 left-0 right-0 w-full z-50 transition-all duration-300 ease-in-out",
-        isScrolled ? "bg-white/90 backdrop-blur-sm shadow-md py-2" : "bg-[#DADDD8] py-4",
+        isScrolled ? "bg-white/90 backdrop-blur-sm shadow-md py-2" : "bg-[#DAA520] py-4",
       )}
     >
       <div className="container mx-auto px-4 max-w-[3000px] flex items-center justify-between">
@@ -59,7 +59,7 @@ export default function Header() {
             <a
               key={item}
               href={`/${item.toLowerCase()}`}
-              className="text-[#0D1321] hover:text-[#3E5C76] relative group transition-all duration-150 hover:scale-110 text-md"
+              className="text-[#0D1321] hover:text-[#003366] relative group transition-all duration-50 hover:scale-110 text-2xl"
             >
               <span className="transition-colors duration-110 ">{item}</span>
               {/* <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-blue-600 transition-all duration-150 group-hover:w-full" /> */}
