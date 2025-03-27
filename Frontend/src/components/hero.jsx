@@ -7,8 +7,8 @@ const Hero = () => {
           md:w-2/3 
           lg:w-1/2
           z-10 
-          mt-40 
-          md:ml-8
+          mt-20 
+          md:ml-4
           lg:ml-12
           xl:ml-20
           2xl:ml-8">
@@ -32,14 +32,17 @@ const Hero = () => {
             Step into 'The Oud Lounge'—where every scent tells a story of luxury, tradition, and allure.
             Let our fragrances transport you to an oasis of sophistication, where the richness of oud meets modern elegance.
             </p> */}
-         <a
-  href="#"
-  className=" mt-4 md:mt-20 font-italiana inline-block border border-white text-white py-2 px-6 rounded-full text-sm font-medium transition-all duration-300 ease-in-out hover:bg-[#Ecebe4] hover:text-[#1c1c1c]"
-  style={{ fontFamily: "Italiana" }}
->
-  Shop Our Boxes
-</a>
-
+   <a
+      href="#"
+      className="font-bold mt-4 sm:mt-6 md:mt-20 font-italiana inline-block border-2 border-white text-white 
+                py-2 px-8 sm:py-3 sm:px-10 md:py-3 md:px-12 lg:py-4 lg:px-16
+                rounded-full text-base sm:text-lg lg:text-xl font-medium 
+                transition-all duration-300 ease-in-out 
+                hover:bg-[#Ecebe4] hover:text-[#1c1c1c]"
+      style={{ fontFamily: "Italiana" }}
+    >
+      Shop Our Boxes
+    </a>
 
           </div>
           <div className="md:w-1/2 relative mt-12 md:mt-0">
