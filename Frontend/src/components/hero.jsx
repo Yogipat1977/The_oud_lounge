@@ -15,7 +15,7 @@ const Hero = () => {
           <h1
         className="
           font-italiana
-          text-[#Ecebe4]
+          text-[#DAA520]
           text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl
           leading-tight sm:leading-tight md:leading-tight
           mb-4 sm:mb-6 lg:mb-12
