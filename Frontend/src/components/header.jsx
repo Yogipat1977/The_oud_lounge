@@ -36,7 +36,7 @@ export default function Header() {
         <a
           href="/"
           className="text-4xl font-medium text-gray-800   font-italianno ml-8"
-          style={{ fontFamily: "'Italianno', cursive" }}
+          style={{ fontFamily: "Italianno"}}
         >
           The oud lounge
         </a>
@@ -53,7 +53,7 @@ export default function Header() {
         {/* Desktop Navigation */}
         <nav
           className="hidden md:flex items-center space-x-8 xl:space-x-12 2xl:space-x-16"
-          style={{ fontFamily: "'Itim', cursive" }}
+          style={{ fontFamily: "'item' " }}
         >
           {["Home", "About", "Features", "Contacts"].map((item) => (
             <a

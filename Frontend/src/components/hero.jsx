@@ -3,16 +3,23 @@
 import { useState, useEffect } from "react"
 import { Search, ArrowRight, ChevronLeft, ChevronRight } from "lucide-react"
 
+/**
+ * The Hero component displays a curated subscription box service landing page
+ * with a search bar and a product carousel. It uses React's useState and useEffect
+ * hooks to manage the state of the search bar and the product carousel.
+ *
+ * @returns {JSX.Element} The Hero component
+ */
 const Hero = () => {
   const [isFocused, setIsFocused] = useState(false)
   const [currentSlide, setCurrentSlide] = useState(0)
 
   // Dummy product data - replace with actual products later
   const products = [
-    { id: 1, color: "#8B4513", name: "Oud Collection Box" },
-    { id: 2, color: "#A0522D", name: "Premium Fragrance Set" },
-    { id: 3, color: "#CD853F", name: "Luxury Oud Sampler" },
-    { id: 4, color: "#D2B48C", name: "Signature Scent Box" },
+    { id: 1, color: "transparent", name: "Oud Collection Box" },
+    { id: 2, color: "transparent", name: "Premium Fragrance Set" },
+    { id: 3, color: "transparent", name: "Luxury Oud Sampler" },
+    { id: 4, color: "transparent", name: "Signature Scent Box" },
   ]
 
   // Auto-slide functionality
@@ -99,8 +106,8 @@ const Hero = () => {
                 className="
                   font-item 
                   inline-block 
-                  border-[0.15rem] 
-                  border-[#DAA520] 
+                  border-[0.10rem] 
+                   border-[#DAA520] 
                   text-[#DAA520] 
                   rounded-full
                   px-8 py-3 
@@ -111,7 +118,7 @@ const Hero = () => {
                   hover:bg-[#DAA520] 
                   hover:text-[#1c1c1c]
                 "
-                style={{ fontFamily: "Item,cursive" }}
+                style={{ fontFamily: "item" }}
               >
                 Shop Our Boxes
               </a>
@@ -122,12 +129,12 @@ const Hero = () => {
               <div
                 className={`
                 flex items-center 
-                border-2 
+                border-b-2
                 m-x-auto
-                p-1
                 dp:w-[40rem]
+                
                 ${isFocused ? "border-[#DAA520]" : "border-[#Ecebe4]"}
-                transition-all duration-300
+                transition-all duration-150
               `}
               >
                 <input
@@ -145,23 +152,25 @@ const Hero = () => {
                   onBlur={() => setIsFocused(false)}
                 />
                 <div className="flex items-center pr-2">
-                  <Search
-                    className={`
-                      w-5 h-5 
-                      ${isFocused ? "text-[#DAA520]" : "text-[#Ecebe4]"} 
-                      transition-all 
-                      duration-300
-                      ${isFocused ? "scale-110" : "scale-100"}
-                    `}
-                  />
+                  {!isFocused && (
+                    <Search
+                      className="
+                    w-5 h-5 
+                    text-[#Ecebe4] 
+                    transition-all 
+                    duration-300 
+                    scale-100
+                  "
+                    />
+                  )}
                   {isFocused && (
                     <ArrowRight
                       className="
-                        w-5 h-5 
-                        text-[#DAA520] 
-                        ml-2 
-                        animate-pulse
-                      "
+                    w-5 h-5 
+                    text-[#DAA520] 
+                    ml-2 
+                    animate-pulse
+                  "
                     />
                   )}
                 </div>
@@ -170,24 +179,26 @@ const Hero = () => {
           </div>
 
           {/* Right side product carousel */}
-          <div className="hidden dp:block lap:block relative h-[500px] mt-10">
+          <div className="hidden tab:block relative h-[400px] lap:h-[600px] dp:h-[700px] w-full tab:w-[500px] lap:w-[600px] dp:w-[800px] mt-10 tab:mx-auto lap:ml-auto lap:mr-0 dp:ml-auto dp:mr-0">
             {/* Product Slides */}
-            <div className="relative h-full w-full rounded-2xl overflow-hidden">
+            <div className="relative h-full w-full  overflow-hidden lap:ml-40 ">
               {products.map((product, index) => (
                 <div
                   key={product.id}
                   className={`
-                    absolute 
+                    absolute
                     top-0 
                     left-0 
-                    w-full 
-                    h-full 
+                    w-full
                     flex 
+                    h-full
                     items-center 
                     justify-center 
                     transition-opacity 
                     duration-500
                     ${currentSlide === index ? "opacity-100 z-10" : "opacity-0 z-0"}
+                    
+                   
                   `}
                   style={{ backgroundColor: product.color }}
                 >
@@ -262,23 +273,24 @@ const Hero = () => {
           </div>
         </div>
       </div>
-
-      {/* Dot patterns preserved */}
-      <div className="absolute right-0 top-1/4 z-0">{/* Dot pattern code */}</div>
-
-      <div className="absolute right-1/4 bottom-1/4 z-0">{/* Dot pattern code */}</div>
     </div>
   )
 }
 
 export default Hero
 
-
-
-  {/* <div className="md:w-1/2 relative mt-12 md:mt-0"> */}
-            {/* Person image */}
-            {/* <div className="hidden md:block">
+{
+  /* <div className="md:w-1/2 relative mt-12 md:mt-0"> */
+}
+{
+  /* Person image */
+}
+{
+  /* <div className="hidden md:block">
               <img src="https://via.placeholder.com/500x600" alt="Person in formal attire" className="relative z-10" />
-            </div> */}
-          {/* </div> */}
-  
+            </div> */
+}
+{
+  /* </div> */
+}
+
