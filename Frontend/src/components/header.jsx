@@ -28,13 +28,13 @@ export default function Header() {
     <header
       className={cn(
         "fixed top-0 left-0 right-0 w-full z-50 transition-all duration-300 ease-in-out",
-        isScrolled ? "bg-white/90 backdrop-blur-sm shadow-md py-2" : "bg-[#DAA520] py-4",
+        isScrolled ? "bg-[#DAA520]/90 backdrop-blur-sm shadow-md py-2" : "bg-[#DAA520] py-4",
       )}
     >
       <div className="container mx-auto px-4 max-w-[3000px] flex items-center justify-between">
         {/* Logo */}
         <a
-          href="/"
+          href="/home"
           className="text-4xl font-medium text-gray-800   font-italianno ml-8"
           style={{ fontFamily: "Italianno"}}
         >
@@ -55,7 +55,7 @@ export default function Header() {
           className="hidden md:flex items-center space-x-8 xl:space-x-12 2xl:space-x-16"
           style={{ fontFamily: "'item' " }}
         >
-          {["Home", "About", "Features", "Contacts"].map((item) => (
+          {["Home", "About", "Product", "Contact"].map((item) => (
             <a
               key={item}
               href={`/${item.toLowerCase()}`}

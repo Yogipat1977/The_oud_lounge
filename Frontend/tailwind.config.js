@@ -76,8 +76,15 @@ export default {
         gray: {
           // Note: Be mindful if you also use Tailwind's default grays.
           // These will extend/override the default gray palette.
-          850: '#1f2024', // Should now work for bg-gray-850 etc.
+          850: '#DADDD8', // Should now work for bg-gray-850 etc.
           950: '#0c0c0e', // Should now work for bg-gray-950 etc.
+        },
+        amber: {
+          500: '#FFD580',
+          600: '#FFBF00',
+          700: '#FF8C00',
+          800: '#996515',
+          900: '#996515',
         }
         // --- Your Custom Colors END ---
       },

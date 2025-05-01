@@ -4,10 +4,10 @@ import diamondIcon from "../Images/diamond-icon.png"
 
 export default function WhyChooseUs() {
   return (
-    <section className="w-full py-16 bg-gradient-to-br from-amber-50 via-gray-100 to-amber-50  ">
+    <section className="w-full py-16 bg-gray-850 ">
       <div className="container mx-auto px-4 md:px-6">
         <div className="text-center mb-12">
-          <h2 className="text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-amber-500 via-gray-400 to-amber-500 bg-clip-text text-transparent"  style={{ fontFamily: "Italiana" }}>
+          <h2 className="text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-amber-600 to-gray-600 bg-clip-text text-transparent"  style={{ fontFamily: "Italiana" }}>
             Why Choose us?
           </h2>
         </div>
@@ -78,7 +78,7 @@ export default function WhyChooseUs() {
         <div className="mt-40 text-center">
           <a
             href="#"
-            className="inline-flex items-center justify-center px-8 py-3 rounded-full bg-gradient-to-r from-amber-500 via-gray-400 to-amber-500 text-white font-medium shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105"
+            className="inline-flex items-center justify-center px-8 py-3 rounded-full bg-gradient-to-r from-amber-600 to-gray-600 text-white font-medium shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105"
           >
             Explore Our Products
           </a>

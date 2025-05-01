@@ -1,24 +1,23 @@
-
-import Header from "./components/header"
-import Hero from "./components/hero"
-import Section1 from "./components/Section1"
-import Section2 from "./components/Section2"
-import Section3 from "./components/Section3"
-
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Home from "./pages/Home";
+import AboutUs from "./pages/AboutUs";
+import Product from "./pages/Products";
+import ContactUs from "./pages/ContactUs";
+import Cart from "./pages/Cart";
+import Login from "./pages/Login";
 function App() {
   return (
-    <>
-      <Header />
-      <Hero />
-      <Section1 />
-      <Section2 />
-      <Section3 />
-      {/* Your other components can go here */}
-
-      
-    </>
-  )
+    <Router>
+      <Routes>
+        <Route path="/home" element={<Home />} />
+        <Route path="/about" element={<AboutUs />} />
+        <Route path="/product" element={<Product />} />
+        <Route path="/contact" element={<ContactUs />} />
+        <Route path="/cart" element={<Cart />} /> 
+        <Route path="/login" element={<Login />} />
+      </Routes>
+    </Router>
+  );
 }
 
-export default App
-
+export default App;
