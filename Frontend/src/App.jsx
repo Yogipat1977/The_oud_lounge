@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { Routes, Route, BrowserRouter } from "react-router-dom";
 import Home from "./pages/Home";
 import AboutUs from "./pages/AboutUs";
 import Product from "./pages/Products";
@@ -7,8 +7,8 @@ import Cart from "./pages/Cart";
 import Login from "./pages/Login";
 function App() {
   return (
-    <Router>
-       <BrowserRouter basename="/The_oud_lounge"></BrowserRouter>
+   
+      <BrowserRouter basename="/The_oud_lounge">
       <Routes>
         <Route path="/Home" element={<Home />} />
         <Route path="/about" element={<AboutUs />} />
@@ -17,7 +17,7 @@ function App() {
         <Route path="/cart" element={<Cart />} /> 
         <Route path="/login" element={<Login />} />
       </Routes>
-    </Router>
+     </BrowserRouter>
   );
 }
 
