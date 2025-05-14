@@ -8,8 +8,9 @@ import Login from "./pages/Login";
 function App() {
   return (
     <Router>
+       <BrowserRouter basename="/The_oud_lounge"></BrowserRouter>
       <Routes>
-        <Route path="/The_oud_lounge" element={<Home />} />
+        <Route path="/Home" element={<Home />} />
         <Route path="/about" element={<AboutUs />} />
         <Route path="/product" element={<Product />} />
         <Route path="/contact" element={<ContactUs />} />
