@@ -77,7 +77,7 @@ export default function WhyChooseUs() {
 
         <div className="mt-40 text-center">
           <a
-            href="#"
+            href="/product"
             className="inline-flex items-center justify-center px-8 py-3 rounded-full bg-gradient-to-r from-amber-600 to-gray-600 text-white font-medium shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105"
           >
             Explore Our Products

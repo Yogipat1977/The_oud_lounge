@@ -34,7 +34,7 @@ export default function Header() {
       <div className="container mx-auto px-4 max-w-[3000px] flex items-center justify-between">
         {/* Logo */}
         <a
-          href="/home"
+          href="#"
           className="text-4xl font-medium text-gray-800   font-italianno ml-8"
           style={{ fontFamily: "Italianno"}}
         >

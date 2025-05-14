@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
+import { Link } from "react-router-dom";
+
 
 const Section3 = () => {
   const [isVisible, setIsVisible] = useState(false);
@@ -138,14 +140,16 @@ const Section3 = () => {
           transition={{ duration: 0.5, delay: 0.4 }}
           className="flex justify-center"
         >
-          <motion.button
-            whileHover={{ scale: 1.05, backgroundColor: "#b8860b" }}
-            whileTap={{ scale: 0.95 }}
-            className="px-8 py-3 bg-[#d4af37] text-black rounded-full font-medium flex items-center gap-2 transition-all duration-300"
-          >
-            Shop Now
-            <ArrowRight className="w-4 h-4" />
-          </motion.button>
+       <Link to="/Product">
+  <motion.button
+    whileHover={{ scale: 1.05, backgroundColor: "#b8860b" }}
+    whileTap={{ scale: 0.95 }}
+    className="px-8 py-3 bg-[#d4af37] text-black rounded-full font-medium flex items-center gap-2 transition-all duration-300"
+  >
+    Shop Now
+    <ArrowRight className="w-4 h-4" />
+  </motion.button>
+</Link>
         </motion.div>
       </div>
     </section>
