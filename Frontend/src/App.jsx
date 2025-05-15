@@ -10,6 +10,7 @@ function App() {
    
       <BrowserRouter basename="/The_oud_lounge">
       <Routes>
+        <Route path="/" element={<Home />} />
         <Route path="/Home" element={<Home />} />
         <Route path="/about" element={<AboutUs />} />
         <Route path="/product" element={<Product />} />
