@@ -10,7 +10,7 @@ import ContactUs from "./pages/ContactUs";
 import Cart from "./pages/Cart"; // This is your CartPage
 import Login from "./pages/Login";
 import Register from "./pages/Register";
-import Profile from "./pages/Profile";
+import Profile from "./pages/profile"; // lowercase 'p' to match 'profile.jsx'
 
 function App() {
   return (
