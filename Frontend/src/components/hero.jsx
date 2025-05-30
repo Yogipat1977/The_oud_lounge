@@ -103,7 +103,7 @@ const Hero = () => {
             "
             >
               <a
-                href="#"
+                href="/product"
                 className="
                   font-item
                   inline-block

@@ -51,7 +51,7 @@ export default function Header() {
           {["Home", "About", "Product", "Contact"].map((item) => (
             <a
               key={item}
-              href={`/The_oud_lounge/${item.toLowerCase()}`}
+              href={`/${item.toLowerCase()}`}
               className="text-[#0D1321] hover:text-[#003366] relative group transition-all duration-50 hover:scale-110 text-xl"
             >
               <span className="transition-colors duration-110">{item}</span>
@@ -62,7 +62,7 @@ export default function Header() {
         {/* Cart and Login - Desktop */}
         <div className="hidden md:flex items-center space-x-4 xl:space-x-6">
           <a
-            href="/The_oud_lounge/cart"
+            href="/cart"
             className="p-2 rounded-full hover:bg-gray-100 transition-all duration-100 hover:scale-105 relative"
             aria-label="Shopping cart"
           >
@@ -72,12 +72,12 @@ export default function Header() {
             </span>
           </a>
           <a
-            href="/The_oud_lounge/login"
+            href="/login"
             className="flex items-center space-x-1 px-4 py-1.5 border border-gray-800 rounded-full hover:bg-gray-800 hover:text-white transition-all duration-200 hover:scale-102"
             style={{ fontFamily: "'Itim', cursive" }}
           >
             <User size={16} />
-            <span>Login</span>
+            <span>Login/Register</span>
           </a>
         </div>
 
@@ -85,7 +85,7 @@ export default function Header() {
         <div className="flex items-center space-x-3 md:hidden">
           {/* Cart Button - Mobile */}
           <Button variant="ghost" size="icon" className="relative" asChild>
-            <a href="/The_oud_lounge/cart" aria-label="Shopping cart">
+            <a href="/cart" aria-label="Shopping cart">
               <ShoppingCart size={20} className="text-gray-950" />
               <Badge className="absolute -top-1 -right-1 h-5 w-5 flex items-center justify-center p-0 bg-gray-950 text-amber-500 text-xs">
                 0
@@ -100,7 +100,7 @@ export default function Header() {
             className="rounded-full border-gray-800  text-gray-950 bg-transparent hover:bg-gray-800 hover:text-white transition-all duration-200 hover:scale-102"
             asChild
           >
-            <a href="/The_oud_lounge/login" className="flex items-center gap-1">
+            <a href="/login" className="flex items-center gap-1">
               <User size={14} />
               <span className="text-sm" style={{ fontFamily: "'Itim', cursive" }}>
                 Login
@@ -141,7 +141,7 @@ export default function Header() {
                   {["Home", "About", "Product", "Contact"].map((item) => (
                     <a
                       key={item}
-                      href={`/The_oud_lounge/${item.toLowerCase()}`}
+                      href={`/${item.toLowerCase()}`}
                       className="text-2xl font-medium text-gray-950 hover:text-gray-850 transition-all duration-200 hover:scale-110 py-2 px-6 rounded-full hover:bg-amber-600/30"
                       style={{ fontFamily: "'Itim', cursive" }}
                       onClick={() => setIsOpen(false)}

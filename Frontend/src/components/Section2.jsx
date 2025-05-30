@@ -1,36 +1,50 @@
 import { useState, useEffect } from "react";
+import { useCart } from '@/pages/CartContext';
 import { motion } from "framer-motion";
 import { Heart, ShoppingCart, Plus } from 'lucide-react';
+import { Link } from "react-router-dom";
+
 
 // Import the images
 const perfumeImages = [
-  {
-    id: 1,
-    name: "Arab Money",
-    price: 149.99,
-    image: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Img-1.jpg-BqzpWZJeqDLPpYRdzZC8X6e606PQz4.jpeg",
-    description: "Fragrance that exudes luxury and opulence with its rich and exotic scent."
+   {
+    id: 4,
+    name: "NIGHT IN PARIS",
+    description: "Romantic and elegant fragrance inspired by Parisian nights",
+    price: 49.99,
+    image: "/public/Images/Night-in-Paris.jpg",
+    rating: 4.8,
+    reviews: 134,
+    category: "Woody",
   },
-  {
-    id: 2,
-    name: "Paradise Falls",
-    price: 139.99,
-    image: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Img-2.jpg-MUKSomiVKjJP7Nx5yEpe7Y7ODLNCcr.jpeg",
-    description: "One of our exquisite scents, worn for every occasion."
+{
+    id: 7,
+    name: "COOL WATER",
+    description: "Crisp and clean aquatic fragrance with invigorating freshness",
+    price: 49.99,
+    image: "/Images/Cool-Water.jpg",
+    rating: 4.7,
+    reviews: 203,
+    category: "Fresh",
   },
+  // Fresh
   {
-    id: 3,
-    name: "Pink Sugar",
-    price: 129.99,
-    image: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Img-3.jpg-BxjyJBAU01GKDpAaNlwuHa2upgORE8.jpeg",
-    description: "Fragrance that exudes luxury and opulence with its rich and exotic scent."
-  }
+    id: 6,
+    name: "AQUA DI GIO",
+    description: "Refreshing aquatic scent that captures the essence of Mediterranean waters",
+    price: 49.99,
+    image: "/Images/Aqua-Di-Gio.jpg",
+    rating: 4.8,
+    reviews: 156,
+    category: "Fresh",
+  },
 ];
 
 // Card component with animations
 const PerfumeCard = ({ perfume, index }) => {
   const [isHovered, setIsHovered] = useState(false);
   const [isFavorite, setIsFavorite] = useState(false);
+  const { addToCart } = useCart();
 
   return (
     <motion.div
@@ -73,7 +87,7 @@ const PerfumeCard = ({ perfume, index }) => {
         >
           <h3 className="text-xl font-bold text-gold-400 mb-1">{perfume.name}</h3>
           <div className="flex items-center justify-between mb-3">
-            <p className="text-gold-200 text-lg font-semibold">${perfume.price}</p>
+            <p className="text-gold-200 text-lg font-semibold">£{perfume.price}</p>
             <div className="text-gold-400 text-sm">★★★★★</div>
           </div>
           <p className="text-gray-300 text-sm mb-4" style={{ fontFamily: "'item' " }}>{perfume.description}</p>
@@ -83,6 +97,7 @@ const PerfumeCard = ({ perfume, index }) => {
           whileHover={{ scale: 1.03 }}
           whileTap={{ scale: 0.97 }}
           className="w-full py-2.5 px-4 bg-gold-500 hover:bg-gold-600 text-black font-medium rounded-md flex items-center justify-center gap-2 transition-all duration-300"
+          onClick={() => addToCart(perfume)} 
         >
           <ShoppingCart className="w-4 h-4" />
           Add to cart
@@ -166,14 +181,17 @@ const LuxurySection = () => {
           animate={{ opacity: isVisible ? 1 : 0, y: isVisible ? 0 : 30 }}
           transition={{ duration: 0.7, delay: 0.6 }}
         >
-          <motion.button
-            whileHover={{ scale: 1.05, backgroundColor: "rgba(212, 175, 55, 0.2)" }}
-            whileTap={{ scale: 0.95 }}
-            className="px-8 py-3 bg-transparent border-2 border-gold-400 text-gold-400 hover:bg-gold-500/10 rounded-md font-medium flex items-center gap-2 mx-auto transition-all duration-300"
-          >
-            <Plus className="w-5 h-5" />
-            View All Collections
-          </motion.button>
+          <Link to="/product">
+  <motion.button
+    whileHover={{ scale: 1.05, backgroundColor: "rgba(212, 175, 55, 0.2)" }}
+    whileTap={{ scale: 0.95 }}
+    className="px-8 py-3 bg-transparent border-2 border-gold-400 text-gold-400 hover:bg-gold-500/10 rounded-md font-medium flex items-center gap-2 mx-auto transition-all duration-300"
+  >
+    <Plus className="w-5 h-5" />
+    View All Collections
+  </motion.button>
+</Link>
+
         </motion.div>
       </div>
     </section>

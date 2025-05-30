@@ -1,6 +1,3 @@
-import perfumeIcon from "../Images/perfume-icon.png"
-import deliveryIcon from "../Images/delivery-icon.png"
-import diamondIcon from "../Images/diamond-icon.png"
 
 export default function WhyChooseUs() {
   return (
@@ -20,7 +17,7 @@ export default function WhyChooseUs() {
             </div>
             <div className="w-24 h-24 mb-6 flex items-center justify-center bg-gradient-to-br from-amber-100 to-gray-200 rounded-full p-5">
               <img
-                src={perfumeIcon || "/placeholder.svg"}
+                src="/Images/perfume-icon.png" 
                 alt="Premium Scents"
                 className="w-[60px] h-[60px] object-contain"
               />
@@ -40,7 +37,7 @@ export default function WhyChooseUs() {
             </div>
             <div className="w-24 h-24 mb-6 flex items-center justify-center bg-gradient-to-br from-amber-100 to-gray-200 rounded-full p-5">
               <img
-                src={deliveryIcon || "/placeholder.svg"}
+                src="/Images/delivery-icon.png"
                 alt="Fast Delivery"
                 className="w-[60px] h-[60px] object-contain"
               />
@@ -61,7 +58,7 @@ export default function WhyChooseUs() {
             </div>
             <div className="w-24 h-24 mb-6 flex items-center justify-center bg-gradient-to-br from-amber-100 to-gray-200 rounded-full p-5">
               <img
-                src={diamondIcon || "/placeholder.svg"}
+                src="/Images/diamond-icon.png"
                 alt="Exclusive Offers"
                 className="w-[60px] h-[60px] object-contain"
               />

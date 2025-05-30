@@ -1,24 +1,33 @@
-import { Routes, Route, BrowserRouter } from "react-router-dom";
+// App.jsx
+import React from 'react';
+import { Routes, Route } from "react-router-dom";
+// No need to import CartProvider here anymore, it's provided by main.jsx
+// No need to import BrowserRouter here anymore
 import Home from "./pages/Home";
 import AboutUs from "./pages/AboutUs";
-import Product from "./pages/Products";
+import Product from "./pages/Products"; // This is your PerfumeProducts page
 import ContactUs from "./pages/ContactUs";
-import Cart from "./pages/Cart";
+import Cart from "./pages/Cart"; // This is your CartPage
 import Login from "./pages/Login";
+import Register from "./pages/Register";
+import Profile from "./pages/Profile";
+
 function App() {
   return (
-   
-      <BrowserRouter basename="/The_oud_lounge">
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/Home" element={<Home />} />
-        <Route path="/about" element={<AboutUs />} />
-        <Route path="/product" element={<Product />} />
-        <Route path="/contact" element={<ContactUs />} />
-        <Route path="/cart" element={<Cart />} /> 
-        <Route path="/login" element={<Login />} />
-      </Routes>
-     </BrowserRouter>
+    // No BrowserRouter here
+    // No CartProvider here
+    <Routes>
+      <Route path="/" element={<Home />} />
+      <Route path="/home" element={<Home />} />
+      <Route path="/about" element={<AboutUs />} />
+      <Route path="/product" element={<Product />} /> {/* This renders your PerfumeProducts component */}
+      <Route path="/contact" element={<ContactUs />} />
+      <Route path="/cart" element={<Cart />} /> {/* This renders your CartPage component */}
+      <Route path="/login" element={<Login />} />
+      <Route path="/register" element={<Register />} />
+      <Route path="/profile" element={<Profile />} />
+      
+    </Routes>
   );
 }
 
