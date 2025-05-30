@@ -1,29 +1,31 @@
+// Products.jsx
 "use client"
 
 import { motion } from "framer-motion"
-import { useState, useEffect } from "react" // Added useEffect
+import { useState, useEffect } from "react"
 import { useCart } from "./CartContext"
 import { Star, Heart, ShoppingCart, Sparkles } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import Header from "../components/header" // Assuming this path is correct
-import Footer from "../components/Footer" // Assuming this path is correct
+import Header from "../components/header"
+import Footer from "../components/Footer"
 
-// --- REMOVED: const allPerfumes = [ ... ] ---
-// The data will now be fetched from the backend
+// --- ADD THIS LINE ---
+// Define API_BASE_URL at the module level so it's accessible throughout this file
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:5000/api";
+// --- END OF ADDITION ---
 
 const ProductCard = ({ product, index }) => {
   const [isLiked, setIsLiked] = useState(false)
   const [isHovered, setIsHovered] = useState(false)
   const [isAdding, setIsAdding] = useState(false)
   const { addToCart } = useCart()
-  // const { getCartItemsCount } = useCart() // Not used directly in ProductCard, can be removed if only used in PerfumeProducts
 
   const handleAddToCart = async () => {
     setIsAdding(true)
     try {
       console.log("Adding product to cart:", product)
-      addToCart(product) // This product object should now have an 'id' (e.g., from _id or id_from_js)
+      addToCart(product)
       console.log(`Successfully added ${product.name} to cart`)
     } catch (error) {
       console.error("Error adding to cart:", error)
@@ -57,7 +59,7 @@ const ProductCard = ({ product, index }) => {
 
       <div className="relative overflow-hidden">
         <motion.img
-          src={product.image} // Ensure this image path is correct or use a full URL if stored elsewhere
+          src={product.image}
           alt={product.name}
           className="w-full h-64 object-cover transition-transform duration-700"
           animate={{ scale: isHovered ? 1.05 : 1 }}
@@ -130,7 +132,7 @@ const ProductCard = ({ product, index }) => {
   )
 }
 
-const FilterBar = ({ activeFilter, onFilterChange, categories }) => { // Added categories prop
+const FilterBar = ({ activeFilter, onFilterChange, categories }) => {
   return (
     <motion.div
       initial={{ opacity: 0, y: -20 }}
@@ -159,50 +161,57 @@ const FilterBar = ({ activeFilter, onFilterChange, categories }) => { // Added c
 }
 
 export default function PerfumeProducts() {
+  // No need to define API_BASE_URL here again, it's defined at the module level above
+
   const [activeFilter, setActiveFilter] = useState("All")
-  const [masterProductList, setMasterProductList] = useState([]) // Stores all fetched products
-  const [filteredProducts, setFilteredProducts] = useState([])   // Stores products to display after filtering
-  const [categories, setCategories] = useState(["All"])         // Stores unique categories from products
+  const [masterProductList, setMasterProductList] = useState([])
+  const [filteredProducts, setFilteredProducts] = useState([])
+  const [categories, setCategories] = useState(["All"])
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState(null)
   const { getCartItemsCount } = useCart()
 
   useEffect(() => {
     const fetchProducts = async () => {
+      // Add a check for API_BASE_URL before fetching
+      if (!API_BASE_URL) {
+        setError("API_BASE_URL is not defined. Please check your environment variables and ensure they are prefixed with VITE_ for client-side access.");
+        setIsLoading(false);
+        console.error("API_BASE_URL is undefined in PerfumeProducts fetchProducts");
+        return;
+      }
+
       try {
         setIsLoading(true)
         setError(null)
-        const response = await fetch(`${API_BASE_URL}/products`) // Ensure your backend API is running and accessible
+        const response = await fetch(`${API_BASE_URL}/products`)
         if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status} - ${response.statusText || 'Failed to fetch'}`)
+          throw new Error(`HTTP error! status: ${response.status} - ${response.statusText || 'Failed to fetch products'}`)
         }
         const data = await response.json()
 
-        // Map backend data to frontend structure if needed
-        // Key for ProductCard is important. Ensure each product has a unique 'id'.
-        // Backend might return `_id` (MongoDB default) or `id_from_js` (from your schema).
         const mappedData = data.map(p => ({
           ...p,
-          id: p.id_from_js || p._id, // Use id_from_js if present, else MongoDB's _id
+          id: p.id_from_js || p._id,
         }));
 
         setMasterProductList(mappedData)
-        setFilteredProducts(mappedData) // Initially show all products
+        setFilteredProducts(mappedData)
 
-        // Extract unique categories for the filter bar
         const uniqueCategories = ["All", ...new Set(mappedData.map(p => p.category).filter(Boolean))]
         setCategories(uniqueCategories)
 
       } catch (e) {
         console.error("Failed to fetch products:", e)
-        setError(e.message || "An unknown error occurred while fetching products.")
+        // Append the API_BASE_URL value to the error for easier debugging if it's still an issue
+        setError(`${e.message} (Using API_BASE_URL: ${API_BASE_URL || 'undefined'})` || "An unknown error occurred while fetching products.")
       } finally {
         setIsLoading(false)
       }
     }
 
     fetchProducts()
-  }, []) // Empty dependency array: runs once on component mount
+  }, [])
 
   const handleFilterChange = (category) => {
     setActiveFilter(category)
@@ -232,7 +241,7 @@ export default function PerfumeProducts() {
         <main className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-gray-50 via-white to-gray-50 py-16 px-4 text-center">
           <p className="text-xl text-red-600 mb-4">Oops! Something went wrong.</p>
           <p className="text-md text-gray-700 mb-2">Could not load the perfumes.</p>
-          <p className="text-sm text-gray-500">Details: {error}</p>
+          <p className="text-sm text-gray-500">Details: {error}</p> {/* Error will now be more informative */}
           <Button onClick={() => window.location.reload()} className="mt-6">Try Again</Button>
         </main>
         <Footer />
@@ -274,7 +283,6 @@ export default function PerfumeProducts() {
               className="text-xl md:text-2xl text-gray-600 max-w-4xl mx-auto leading-relaxed"
             >
               Discover our exquisite collection of premium fragrances, each crafted to perfection.
-              {/* Removed hardcoded price. You could display an average price or range if desired */}
             </motion.p>
             {getCartItemsCount() > 0 && (
               <motion.div initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }} className="mt-4">
@@ -350,4 +358,3 @@ export default function PerfumeProducts() {
     </>
   )
 }
-
