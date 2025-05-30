@@ -58,7 +58,7 @@ export default function WhyChooseUs() {
             </div>
             <div className="w-24 h-24 mb-6 flex items-center justify-center bg-gradient-to-br from-amber-100 to-gray-200 rounded-full p-5">
               <img
-                src="/Images/diamond-icon.png"
+                src="/Images/Diamond-icon.png"
                 alt="Exclusive Offers"
                 className="w-[60px] h-[60px] object-contain"
               />
