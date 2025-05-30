@@ -9,7 +9,7 @@ import Header from "../components/header"
 import Footer from "../components/Footer"
 
 const stripePromise = loadStripe(
-  "pk_test_51RSlVpGLNE9rb5dhnJAQLOwM8SOu1QWLl1GsgGMHu34WpyXF1QBqZV60zhhfGTvRJW3MeMeiMVSSGwPqP5qzA61q00xDYwBcBm",
+  "pk_live_51RSlVpGLNE9rb5dh0JFN3uHOgUQ2hlUD3HW7rRyBPKYYgigmAGCAKRFzaP2KusIFrgFYwDt3LlggatotuodbhJ6B005sNV2xpN",
 )
 
 // Sample recommended products with actual image paths

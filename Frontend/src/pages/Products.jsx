@@ -10,10 +10,10 @@ import { Badge } from "@/components/ui/badge"
 import Header from "../components/header"
 import Footer from "../components/Footer"
 
-// --- ADD THIS LINE ---
+
 // Define API_BASE_URL at the module level so it's accessible throughout this file
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:5000/api";
-// --- END OF ADDITION ---
+
 
 const ProductCard = ({ product, index }) => {
   const [isLiked, setIsLiked] = useState(false)
