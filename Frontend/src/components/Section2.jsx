@@ -12,7 +12,7 @@ const perfumeImages = [
     name: "NIGHT IN PARIS",
     description: "Romantic and elegant fragrance inspired by Parisian nights",
     price: 49.99,
-    image: "/public/Images/Night-in-Paris.jpg",
+    image: "/Images/Night-in-Paris.jpg",
     rating: 4.8,
     reviews: 134,
     category: "Woody",
