@@ -1,5 +1,5 @@
 // controllers/authController.js
-const User = require('../Models/user');
+const User = require('../Models/User');
 const jwt = require('jsonwebtoken');
 // bcrypt is used implicitly by user.matchPassword(), so explicit require here is optional for login.
 
