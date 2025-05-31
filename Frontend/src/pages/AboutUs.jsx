@@ -44,16 +44,11 @@ export default function AboutUs() {
             </div>
             <div className="animate-slide-in-right">
               <div className="relative">
-               <video
-  src="/AboutUs-Video.mp4"
-  autoPlay
-  loop
-  muted
-  playsInline
-  className="w-full h-96 object-cover rounded-lg shadow-2xl transform hover:scale-105 transition-transform duration-500"
->w
-  Your browser does not support the video tag.
-</video>
+                <img
+                  src="/Images/AboutUs-Img.jpg"
+                  alt="The Oud Lounge Story"
+                  className="w-full h-96 object-cover rounded-lg shadow-2xl transform hover:scale-105 transition-transform duration-500"
+                />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent rounded-lg"></div>
               </div>
             </div>
