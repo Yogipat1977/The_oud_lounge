@@ -1,3 +1,4 @@
+
 "use client"
 
 import { useState, useEffect } from "react"
@@ -6,10 +7,20 @@ import { Button } from "@/components/ui/button"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
 import { Badge } from "@/components/ui/badge"
 import { SheetTitle, SheetDescription } from "@/components/ui/sheet"
+// --- MODIFICATION START ---
+// Adjust this import path based on your actual project structure.
+// This example assumes CartContext.jsx is in a 'pages' directory,
+// and Header.jsx is in a 'components' directory,
+// e.g., src/components/header.jsx and src/pages/CartContext.jsx
+import { useCart } from "../pages/CartContext" // Adjust path if necessary
+// --- MODIFICATION END ---
 
 export default function Header() {
   const [isScrolled, setIsScrolled] = useState(false)
   const [isOpen, setIsOpen] = useState(false)
+  // --- MODIFICATION START ---
+  const { getCartItemsCount } = useCart()
+  // --- MODIFICATION END ---
 
   // Handle scroll effect
   useEffect(() => {
@@ -67,9 +78,11 @@ export default function Header() {
             aria-label="Shopping cart"
           >
             <ShoppingCart size={20} className="transition-colors duration-100 hover:text-[#0D1321]" />
+            {/* --- MODIFICATION START --- */}
             <span className="absolute -top-1 -right-1 bg-gray-900 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
-              0
+              {getCartItemsCount()}
             </span>
+            {/* --- MODIFICATION END --- */}
           </a>
           <a
             href="/login"
@@ -87,9 +100,11 @@ export default function Header() {
           <Button variant="ghost" size="icon" className="relative" asChild>
             <a href="/cart" aria-label="Shopping cart">
               <ShoppingCart size={20} className="text-gray-950" />
+              {/* --- MODIFICATION START --- */}
               <Badge className="absolute -top-1 -right-1 h-5 w-5 flex items-center justify-center p-0 bg-gray-950 text-amber-500 text-xs">
-                0
+                {getCartItemsCount()}
               </Badge>
+              {/* --- MODIFICATION END --- */}
             </a>
           </Button>
 
