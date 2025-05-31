@@ -123,6 +123,58 @@ app.post('/api/webhook', express.raw({type: 'application/json'}), async (request
         });
         console.log(`Order ${newOrder._id} created successfully for session ${session.id}`);
 
+// --- START: Admin SMS Notification with Shipping Address ---
+        if (process.env.ADMIN_PHONE_NUMBER) {
+          try {
+            let customerIdentifier = newOrder.guestEmail;
+            if (newOrder.user) {
+                try {
+                    const orderUser = await User.findById(newOrder.user);
+                    if (orderUser) customerIdentifier = orderUser.name || orderUser.email;
+                } catch (userFetchError) {
+                    console.warn(`Could not fetch user details for SMS for order ${newOrder._id}`);
+                    // Fallback to email from order if user fetch fails
+                    customerIdentifier = newOrder.guestEmail || (newOrder.paymentResult ? newOrder.paymentResult.email_address : 'N/A');
+                }
+            }
+
+            let shippingAddressString = "No shipping address provided.";
+            if (newOrder.shippingAddress) {
+                const sa = newOrder.shippingAddress; // shorthand
+                const addressParts = [
+                    sa.address, // Street
+                    // sa.line2, // Optional: Apt, suite
+                    sa.city,
+                    sa.postalCode,
+                    sa.country
+                ].filter(Boolean); // Remove any null/undefined parts
+                if (addressParts.length > 0) {
+                    shippingAddressString = addressParts.join(', ');
+                }
+            }
+
+            // Construct the SMS body. Be mindful of character limits for SMS.
+            // You might need to abbreviate "The Oud Lounge" or other parts if it gets too long.
+            const smsBody = `New TOL Order (#${newOrder._id.toString().slice(-6)}) £${newOrder.totalPrice.toFixed(2)}. Cust: ${customerIdentifier}. Ship to: ${shippingAddressString}`;
+            
+            // Check estimated length (very rough check, actual SMS segmentation can be complex)
+            if (smsBody.length > 160) { // 160 is a common single SMS segment limit
+                console.warn(`[Webhook] Admin SMS for order ${newOrder._id} is long (${smsBody.length} chars), may be split or truncated.`);
+                // You could potentially send a shorter SMS and refer to email for full details
+                // e.g., smsBody = `New TOL Order (#${newOrder._id.toString().slice(-6)}) £${newOrder.totalPrice.toFixed(2)}. Cust: ${customerIdentifier}. Address in email.`;
+            }
+
+            await sendSms(process.env.ADMIN_PHONE_NUMBER, smsBody);
+            // Success is logged in smsSender.js
+          } catch (smsError) {
+            // Error is logged in smsSender.js
+            console.error(`[Webhook] Failed to send admin SMS (with address) for order ${newOrder._id}.`);
+          }
+        } else {
+          console.log('[Webhook] ADMIN_PHONE_NUMBER not set, skipping admin SMS notification.');
+        }
+        // --- END: Admin SMS Notification ---
+
         for (const item of newOrder.orderItems) {
           if (item.productId) {
             try {
