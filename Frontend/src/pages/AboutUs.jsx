@@ -47,7 +47,7 @@ export default function AboutUs() {
                 <img
                   src="/Images/AboutUs-Img.jpg"
                   alt="The Oud Lounge Story"
-                  className="w-full h-96 object-cover rounded-lg shadow-2xl transform hover:scale-105 transition-transform duration-500"
+                  className="w-full h-100 object-cover rounded-lg shadow-2xl transform hover:scale-105 transition-transform duration-500"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent rounded-lg"></div>
               </div>
