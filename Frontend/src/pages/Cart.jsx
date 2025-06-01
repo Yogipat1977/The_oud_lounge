@@ -64,6 +64,8 @@ export default function CartPage() {
 
   const handleProceedToCheckout = async () => {
 
+     const VITE_APP_BASE_URL = import.meta.env.VITE_APP_BASE_URL; // Should be 
+
     
     if (!stripePromise) {
         setCheckoutError("Stripe is not configured correctly. Cannot proceed to checkout.");
@@ -89,6 +91,7 @@ export default function CartPage() {
     // --- END MODIFICATION ---
 
       try {
+        
         const itemsToCheckout = cartItems.map((item) => ({ id: item.id, quantity: item.quantity, name: item.name,
           price: item.price,
         image: item.image ? `${VITE_APP_BASE_URL}${item.image.startsWith('/') ? item.image : '/' + item.image}` : null
