@@ -21,7 +21,7 @@ const stripe = StripeNode(process.env.STRIPE_SECRET_KEY);
 const app = express();
 
 const FRONTEND_URL = process.env.FRONTEND_URL || 'http://localhost:5173';
-const IMAGE_BASE_URL = process.env.IMAGE_BASE_URL || process.env.BACKEND_URL || 'http://localhost:5000';
+const IMAGE_BASE_URL = process.env.FRONTEND_URL; // Make sure FRONTEND_URL is https://www.theoudlounge.co.uk or https://theoudlounge.co.uk
 
 const corsOptions = {
   origin: FRONTEND_URL,
