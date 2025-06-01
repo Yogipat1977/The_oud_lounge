@@ -25,7 +25,7 @@ const recommendedProducts = [
     id: 7,
     name: "COOL WATER",
     description: "Crisp and clean aquatic fragrance with invigorating freshness",
-    price: 49.99,
+    price: 39.99,
     image: "/Images/Cool-Water.jpg", // Assuming Images folder is in public
     rating: 4.7,
     reviews: 203,
@@ -35,7 +35,7 @@ const recommendedProducts = [
     id: 4,
     name: "NIGHT IN PARIS",
     description: "Romantic and elegant fragrance inspired by Parisian nights",
-    price: 49.99,
+    price: 39.99,
     image: "/Images/Night-in-Paris.jpg", // Assuming Images folder is in public
     rating: 4.8,
     reviews: 134,
@@ -45,7 +45,7 @@ const recommendedProducts = [
     id: 7, // Note: Duplicate ID, ensure IDs are unique if used as keys
     name: "COOL WATER",
     description: "Crisp and clean aquatic fragrance with invigorating freshness",
-    price: 49.99,
+    price: 39.99,
     image: "/Images/Cool-Water.jpg", // Assuming Images folder is in public
     rating: 4.7,
     reviews: 203,
@@ -93,7 +93,7 @@ export default function CartPage() {
           price: item.price,
         image: item.image ? `${VITE_APP_BASE_URL}${item.image.startsWith('/') ? item.image : '/' + item.image}` : null
       }));
-      
+
         console.log("Items being sent to backend for checkout:", itemsToCheckout); // <-- ADD THIS FOR DEBUGGING
 
         const response = await fetch(`${API_BASE_URL_CLIENT}/create-checkout-session`, { // Use API_BASE_URL_CLIENT
