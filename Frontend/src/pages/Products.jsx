@@ -1,20 +1,20 @@
-// Products.jsx
+
+
 "use client"
 
 import { motion } from "framer-motion"
 import { useState, useEffect } from "react"
-import { useCart } from "./CartContext" // Make sure this path is correct: e.g., ../contexts/CartContext or ./CartContext
-import { Star, Heart, ShoppingCart, Sparkles } from "lucide-react"
-import { Button } from "@/components/ui/button" // Assuming ShadCN UI setup
-import { Badge } from "@/components/ui/badge"   // Assuming ShadCN UI setup
-import Header from "../components/header" // Adjust path if necessary
-import Footer from "../components/Footer"   // Adjust path if necessary
+import { useCart } from "./CartContext"
+import { Star, Heart, ShoppingCart, Sparkles, Gift } from "lucide-react"
+import { Button } from "@/components/ui/button"
+import { Badge } from "@/components/ui/badge"
+import Header from "../components/header"
+import Footer from "../components/Footer"
 
-// --- START: LOCAL PRODUCT DATA ---
-// Mapped from your provided data. 'id' is now 'id_from_js'.
+// Local product data
 const localPerfumeProducts = [
   {
-    id: 1, // This is the id_from_js, mapped to 'id'
+    id: 1,
     name: "ARAB MONEY",
     description: "Luxurious and rich blend of precious woods and golden amber",
     price: 39.99,
@@ -22,7 +22,6 @@ const localPerfumeProducts = [
     rating: 4.9,
     reviews: 89,
     category: "Woody",
-    // stockQuantity: 100, // Optional for display, backend handles real stock
   },
   {
     id: 2,
@@ -52,7 +51,7 @@ const localPerfumeProducts = [
     image: "/Images/Night-in-Paris.jpg",
     rating: 4.8,
     reviews: 134,
-    category: "Floral", // Was Woody in Cart.jsx, now Floral as per your new data
+    category: "Floral",
   },
   {
     id: 5,
@@ -62,12 +61,12 @@ const localPerfumeProducts = [
     image: "/Images/Tropical-Aroma.jpg",
     rating: 4.7,
     reviews: 112,
-    category: "Woody", // Was Floral in Products.jsx example, now Woody
+    category: "Woody",
   },
   {
     id: 6,
     name: "AQUA DI GIO",
-    description: "Refreshing aquatic scent that captures the essence of Mediterranean wa…", // Truncated in your data
+    description: "Refreshing aquatic scent that captures the essence of Mediterranean waters",
     price: 39.99,
     image: "/Images/Aqua-Di-Gio.jpg",
     rating: 4.8,
@@ -106,13 +105,13 @@ const localPerfumeProducts = [
   },
   {
     id: 10,
-    name: "MARSHEMELLOW", // Corrected spelling from "MARSHEMELLOW" based on common usage
+    name: "MARSHMALLOW",
     description: "Sweet and warm gourmand with comforting vanilla notes",
     price: 39.99,
-    image: "/Images/Marshemellow.jpg", // Ensure filename matches
+    image: "/Images/Marshemellow.jpg",
     rating: 4.7,
     reviews: 145,
-    category: "Floral", // Could also be "Gourmand"
+    category: "Floral",
   },
   {
     id: 11,
@@ -122,40 +121,87 @@ const localPerfumeProducts = [
     image: "/Images/Fruitella.jpg",
     rating: 4.5,
     reviews: 167,
-    category: "Floral", // Could also be "Fruity"
+    category: "Floral",
   },
-  // Add any other products you have here in the same format.
-];
-// --- END: LOCAL PRODUCT DATA ---
+]
 
+// Promotional Banner Component
+const PromotionalBanner = () => {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: -20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.8 }}
+      className="bg-gradient-to-r from-purple-600 via-pink-600 to-red-600 text-white p-8 rounded-3xl shadow-2xl mb-12 mx-4 relative overflow-hidden"
+    >
+      <div className="absolute inset-0 bg-black/10"></div>
+      <div className="relative z-10 text-center">
+        <motion.div
+          animate={{ rotate: [0, 10, -10, 0] }}
+          transition={{ duration: 2, repeat: Number.POSITIVE_INFINITY, repeatDelay: 3 }}
+          className="flex items-center justify-center gap-3 mb-4"
+        >
+          <Gift className="w-10 h-10" />
+          <Sparkles className="w-8 h-8 animate-pulse" />
+          <Gift className="w-10 h-10" />
+        </motion.div>
+        <motion.h2
+          initial={{ scale: 0.8 }}
+          animate={{ scale: 1 }}
+          transition={{ duration: 0.5, delay: 0.2 }}
+          className="text-4xl md:text-5xl font-bold mb-4"
+        >
+          🎉 MEGA DEAL ALERT! 🎉
+        </motion.h2>
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.4 }}
+          className="bg-white/20 backdrop-blur-sm rounded-2xl p-6 mb-6"
+        >
+          <p className="text-2xl md:text-3xl font-bold mb-2">Buy Any 3 Perfumes for £100</p>
+          <p className="text-lg md:text-xl font-semibold mb-2">+ Get 2 FREE Roll-ins Worth £20!</p>
+          <p className="text-base opacity-90">Save up to £39.97 on your order!</p>
+        </motion.div>
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.6, delay: 0.6 }}
+          className="flex flex-wrap justify-center gap-4 text-sm"
+        >
+          <div className="bg-white/20 px-4 py-2 rounded-full">✨ Mix & Match Any Fragrances</div>
+          <div className="bg-white/20 px-4 py-2 rounded-full">🎁 FREE Roll-ins Included</div>
+          <div className="bg-white/20 px-4 py-2 rounded-full">💝 Limited Time Offer</div>
+        </motion.div>
+      </div>
+    </motion.div>
+  )
+}
 
 const ProductCard = ({ product, index }) => {
-  const [isLiked, setIsLiked] = useState(false);
-  const [isHovered, setIsHovered] = useState(false);
-  const [isAdding, setIsAdding] = useState(false);
-  const { addToCart } = useCart();
+  const [isLiked, setIsLiked] = useState(false)
+  const [isHovered, setIsHovered] = useState(false)
+  const [isAdding, setIsAdding] = useState(false)
+  const { addToCart } = useCart()
 
-  const handleAddToCart = () => { // Removed async as CartContext.addToCart is not async
-    if (!product || typeof product.id === 'undefined') {
-        console.error("ProductCard: Cannot add to cart, product data is invalid.", product);
-        return;
+  const handleAddToCart = () => {
+    if (!product || typeof product.id === "undefined") {
+      console.error("ProductCard: Cannot add to cart, product data is invalid.", product)
+      return
     }
-    setIsAdding(true);
-    // The 'product' object from localPerfumeProducts should have all necessary fields
-    // as defined in the CartContext's addToCart validation/structuring.
-    addToCart(product, 1); // Add 1 quantity by default
-    console.log(`ProductCard: Attempted to add ${product.name} to cart`);
-    // Visual feedback for "Added!"
-    setTimeout(() => setIsAdding(false), 1000);
-  };
+    setIsAdding(true)
+    addToCart(product, 1)
+    console.log(`ProductCard: Attempted to add ${product.name} to cart`)
+    setTimeout(() => setIsAdding(false), 1000)
+  }
 
-  // Fallback for product data if any essential prop is missing
-  if (!product || typeof product.id === 'undefined' || typeof product.name === 'undefined' || typeof product.price === 'undefined') {
-    return (
-      <div className="p-6 border rounded-2xl shadow-lg text-center text-red-500">
-        Product data is incomplete.
-      </div>
-    );
+  if (
+    !product ||
+    typeof product.id === "undefined" ||
+    typeof product.name === "undefined" ||
+    typeof product.price === "undefined"
+  ) {
+    return <div className="p-6 border rounded-2xl shadow-lg text-center text-red-500">Product data is incomplete.</div>
   }
 
   return (
@@ -181,11 +227,18 @@ const ProductCard = ({ product, index }) => {
         />
       </motion.button>
 
-      <div className="relative overflow-hidden h-64"> {/* Fixed height for image container */}
+      {/* Deal Badge */}
+      <div className="absolute top-4 left-4 z-10">
+        <Badge className="bg-gradient-to-r from-purple-500 to-pink-500 text-white font-bold">
+          Part of 3-for-£100 Deal!
+        </Badge>
+      </div>
+
+      <div className="relative overflow-hidden h-64">
         <motion.img
-          src={product.image || "/placeholder.svg"} // Fallback image
+          src={product.image || "/placeholder.svg"}
           alt={product.name}
-          className="w-full h-full object-cover transition-transform duration-700" // h-full
+          className="w-full h-full object-cover transition-transform duration-700"
           animate={{ scale: isHovered ? 1.05 : 1 }}
           transition={{ duration: 0.7 }}
         />
@@ -216,12 +269,22 @@ const ProductCard = ({ product, index }) => {
       </div>
 
       <div className="p-6">
-        {product.category && <Badge variant="secondary" className="mb-3 inline-block"> {product.category} </Badge>}
-        <h3 className="text-xl font-bold text-gray-900 mb-2 group-hover:text-yellow-600 transition-colors duration-300 truncate" title={product.name}>
+        {product.category && (
+          <Badge variant="secondary" className="mb-3 inline-block">
+            {product.category}
+          </Badge>
+        )}
+        <h3
+          className="text-xl font-bold text-gray-900 mb-2 group-hover:text-yellow-600 transition-colors duration-300 truncate"
+          title={product.name}
+        >
           {product.name}
         </h3>
-        <p className="text-gray-600 text-sm leading-relaxed mb-4 h-10 overflow-hidden line-clamp-2" title={product.description}> {/* Fixed height and line-clamp */}
-            {product.description || "No description available."}
+        <p
+          className="text-gray-600 text-sm leading-relaxed mb-4 h-10 overflow-hidden line-clamp-2"
+          title={product.description}
+        >
+          {product.description || "No description available."}
         </p>
         <div className="flex items-center gap-2 mb-4">
           <div className="flex items-center" role="img" aria-label={`Rating: ${product.rating || 0} out of 5 stars`}>
@@ -235,11 +298,16 @@ const ProductCard = ({ product, index }) => {
             ))}
           </div>
           <span className="text-sm text-gray-600">
-            {parseFloat(product.rating || 0).toFixed(1)} ({product.reviews || 0} reviews)
+            {Number.parseFloat(product.rating || 0).toFixed(1)} ({product.reviews || 0} reviews)
           </span>
         </div>
         <div className="flex items-center justify-between">
-          <span className="text-2xl font-bold text-gray-900">£{product.price ? product.price.toFixed(2) : '0.00'}</span>
+          <div>
+            <span className="text-2xl font-bold text-gray-900">
+              £{product.price ? product.price.toFixed(2) : "0.00"}
+            </span>
+            <p className="text-xs text-purple-600 font-semibold">Or 3 for £100!</p>
+          </div>
           <Button
             onClick={handleAddToCart}
             disabled={isAdding}
@@ -289,29 +357,26 @@ export default function PerfumeProducts() {
   const [masterProductList, setMasterProductList] = useState([])
   const [filteredProducts, setFilteredProducts] = useState([])
   const [categories, setCategories] = useState(["All"])
-  // isLoading will be true for a very short time, or not at all if data is processed sync
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState(null)
   const { getCartItemsCount } = useCart()
 
   useEffect(() => {
-    setIsLoading(true);
-    setError(null);
+    setIsLoading(true)
+    setError(null)
     try {
-        // Use the local product data.
-        // The 'id' field in localPerfumeProducts is already what CartContext expects.
-        setMasterProductList(localPerfumeProducts);
-        setFilteredProducts(localPerfumeProducts); // Initially show all
+      setMasterProductList(localPerfumeProducts)
+      setFilteredProducts(localPerfumeProducts)
 
-        const uniqueCategories = ["All", ...new Set(localPerfumeProducts.map(p => p.category).filter(Boolean))];
-        setCategories(uniqueCategories);
-        setIsLoading(false);
+      const uniqueCategories = ["All", ...new Set(localPerfumeProducts.map((p) => p.category).filter(Boolean))]
+      setCategories(uniqueCategories)
+      setIsLoading(false)
     } catch (e) {
-        console.error("Error processing local product data:", e);
-        setError("Failed to load product information. Please try again.");
-        setIsLoading(false);
+      console.error("Error processing local product data:", e)
+      setError("Failed to load product information. Please try again.")
+      setIsLoading(false)
     }
-  }, []);
+  }, [])
 
   const handleFilterChange = (category) => {
     setActiveFilter(category)
@@ -341,7 +406,9 @@ export default function PerfumeProducts() {
         <main className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-gray-50 via-white to-gray-50 py-16 px-4 text-center">
           <p className="text-xl text-red-600 mb-4">Oops! Something went wrong.</p>
           <p className="text-md text-gray-700 mb-2">{error}</p>
-          <Button onClick={() => window.location.reload()} className="mt-6">Try Again</Button>
+          <Button onClick={() => window.location.reload()} className="mt-6">
+            Try Again
+          </Button>
         </main>
         <Footer />
       </>
@@ -392,6 +459,8 @@ export default function PerfumeProducts() {
             )}
           </motion.header>
 
+          <PromotionalBanner />
+
           <FilterBar activeFilter={activeFilter} onFilterChange={handleFilterChange} categories={categories} />
 
           <motion.div
@@ -418,7 +487,7 @@ export default function PerfumeProducts() {
           ) : (
             <motion.div layout className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
               {filteredProducts.map((product, index) => (
-                <ProductCard key={product.id || index} product={product} index={index} /> // Added index as fallback key
+                <ProductCard key={product.id || index} product={product} index={index} />
               ))}
             </motion.div>
           )}
@@ -458,40 +527,164 @@ export default function PerfumeProducts() {
   )
 }
 
-// // Products.jsx
+// Products.jsx
 // "use client"
 
 // import { motion } from "framer-motion"
 // import { useState, useEffect } from "react"
-// import { useCart } from "./CartContext"
+// import { useCart } from "./CartContext" // Make sure this path is correct: e.g., ../contexts/CartContext or ./CartContext
 // import { Star, Heart, ShoppingCart, Sparkles } from "lucide-react"
-// import { Button } from "@/components/ui/button"
-// import { Badge } from "@/components/ui/badge"
-// import Header from "../components/header"
-// import Footer from "../components/Footer"
+// import { Button } from "@/components/ui/button" // Assuming ShadCN UI setup
+// import { Badge } from "@/components/ui/badge"   // Assuming ShadCN UI setup
+// import Header from "../components/header" // Adjust path if necessary
+// import Footer from "../components/Footer"   // Adjust path if necessary
 
-
-// // Define API_BASE_URL at the module level so it's accessible throughout this file
-// const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:5000/api";
+// // --- START: LOCAL PRODUCT DATA ---
+// // Mapped from your provided data. 'id' is now 'id_from_js'.
+// const localPerfumeProducts = [
+//   {
+//     id: 1, // This is the id_from_js, mapped to 'id'
+//     name: "ARAB MONEY",
+//     description: "Luxurious and rich blend of precious woods and golden amber",
+//     price: 39.99,
+//     image: "/Images/Arab-money.jpg",
+//     rating: 4.9,
+//     reviews: 89,
+//     category: "Woody",
+//     // stockQuantity: 100, // Optional for display, backend handles real stock
+//   },
+//   {
+//     id: 2,
+//     name: "NIGHT ILLUSION",
+//     description: "Deep and mysterious fragrance with dark, enchanting notes",
+//     price: 39.99,
+//     image: "/Images/Night-Illusion.jpg",
+//     rating: 4.8,
+//     reviews: 124,
+//     category: "Oriental",
+//   },
+//   {
+//     id: 3,
+//     name: "VELVET MUSK",
+//     description: "Soft and musky with luxurious velvet undertones",
+//     price: 39.99,
+//     image: "/Images/Velvet-Musk.jpg",
+//     rating: 4.8,
+//     reviews: 156,
+//     category: "Woody",
+//   },
+//   {
+//     id: 4,
+//     name: "NIGHT IN PARIS",
+//     description: "Romantic and elegant fragrance inspired by Parisian nights",
+//     price: 39.99,
+//     image: "/Images/Night-in-Paris.jpg",
+//     rating: 4.8,
+//     reviews: 134,
+//     category: "Floral", // Was Woody in Cart.jsx, now Floral as per your new data
+//   },
+//   {
+//     id: 5,
+//     name: "TROPICAL AROMA",
+//     description: "Exotic and warm fragrance with tropical florals and spices",
+//     price: 39.99,
+//     image: "/Images/Tropical-Aroma.jpg",
+//     rating: 4.7,
+//     reviews: 112,
+//     category: "Woody", // Was Floral in Products.jsx example, now Woody
+//   },
+//   {
+//     id: 6,
+//     name: "AQUA DI GIO",
+//     description: "Refreshing aquatic scent that captures the essence of Mediterranean wa…", // Truncated in your data
+//     price: 39.99,
+//     image: "/Images/Aqua-Di-Gio.jpg",
+//     rating: 4.8,
+//     reviews: 156,
+//     category: "Fresh",
+//   },
+//   {
+//     id: 7,
+//     name: "COOL WATER",
+//     description: "Crisp and clean aquatic fragrance with invigorating freshness",
+//     price: 39.99,
+//     image: "/Images/Cool-Water.jpg",
+//     rating: 4.7,
+//     reviews: 203,
+//     category: "Fresh",
+//   },
+//   {
+//     id: 8,
+//     name: "WARDIA",
+//     description: "Rich, floral and opulent with precious rose and jasmine",
+//     price: 39.99,
+//     image: "/Images/Wardia.jpg",
+//     rating: 4.9,
+//     reviews: 98,
+//     category: "Floral",
+//   },
+//   {
+//     id: 9,
+//     name: "CANDY CRUSH",
+//     description: "Sweet and vibrant fragrance bursting with playful energy",
+//     price: 39.99,
+//     image: "/Images/Candy-Crush.jpg",
+//     rating: 4.6,
+//     reviews: 178,
+//     category: "Floral",
+//   },
+//   {
+//     id: 10,
+//     name: "MARSHEMELLOW", // Corrected spelling from "MARSHEMELLOW" based on common usage
+//     description: "Sweet and warm gourmand with comforting vanilla notes",
+//     price: 39.99,
+//     image: "/Images/Marshemellow.jpg", // Ensure filename matches
+//     rating: 4.7,
+//     reviews: 145,
+//     category: "Floral", // Could also be "Gourmand"
+//   },
+//   {
+//     id: 11,
+//     name: "FRUITELLA",
+//     description: "Juicy and fruity explosion of tropical and citrus notes",
+//     price: 39.99,
+//     image: "/Images/Fruitella.jpg",
+//     rating: 4.5,
+//     reviews: 167,
+//     category: "Floral", // Could also be "Fruity"
+//   },
+//   // Add any other products you have here in the same format.
+// ];
+// // --- END: LOCAL PRODUCT DATA ---
 
 
 // const ProductCard = ({ product, index }) => {
-//   const [isLiked, setIsLiked] = useState(false)
-//   const [isHovered, setIsHovered] = useState(false)
-//   const [isAdding, setIsAdding] = useState(false)
-//   const { addToCart } = useCart()
+//   const [isLiked, setIsLiked] = useState(false);
+//   const [isHovered, setIsHovered] = useState(false);
+//   const [isAdding, setIsAdding] = useState(false);
+//   const { addToCart } = useCart();
 
-//   const handleAddToCart = async () => {
-//     setIsAdding(true)
-//     try {
-//       console.log("Adding product to cart:", product)
-//       addToCart(product)
-//       console.log(`Successfully added ${product.name} to cart`)
-//     } catch (error) {
-//       console.error("Error adding to cart:", error)
-//     } finally {
-//       setTimeout(() => setIsAdding(false), 1000)
+//   const handleAddToCart = () => { // Removed async as CartContext.addToCart is not async
+//     if (!product || typeof product.id === 'undefined') {
+//         console.error("ProductCard: Cannot add to cart, product data is invalid.", product);
+//         return;
 //     }
+//     setIsAdding(true);
+//     // The 'product' object from localPerfumeProducts should have all necessary fields
+//     // as defined in the CartContext's addToCart validation/structuring.
+//     addToCart(product, 1); // Add 1 quantity by default
+//     console.log(`ProductCard: Attempted to add ${product.name} to cart`);
+//     // Visual feedback for "Added!"
+//     setTimeout(() => setIsAdding(false), 1000);
+//   };
+
+//   // Fallback for product data if any essential prop is missing
+//   if (!product || typeof product.id === 'undefined' || typeof product.name === 'undefined' || typeof product.price === 'undefined') {
+//     return (
+//       <div className="p-6 border rounded-2xl shadow-lg text-center text-red-500">
+//         Product data is incomplete.
+//       </div>
+//     );
 //   }
 
 //   return (
@@ -517,11 +710,11 @@ export default function PerfumeProducts() {
 //         />
 //       </motion.button>
 
-//       <div className="relative overflow-hidden">
+//       <div className="relative overflow-hidden h-64"> {/* Fixed height for image container */}
 //         <motion.img
-//           src={product.image}
+//           src={product.image || "/placeholder.svg"} // Fallback image
 //           alt={product.name}
-//           className="w-full h-64 object-cover transition-transform duration-700"
+//           className="w-full h-full object-cover transition-transform duration-700" // h-full
 //           animate={{ scale: isHovered ? 1.05 : 1 }}
 //           transition={{ duration: 0.7 }}
 //         />
@@ -552,30 +745,30 @@ export default function PerfumeProducts() {
 //       </div>
 
 //       <div className="p-6">
-//         <Badge variant="secondary" className="mb-3">
-//           {product.category}
-//         </Badge>
-//         <h3 className="text-xl font-bold text-gray-900 mb-2 group-hover:text-yellow-600 transition-colors duration-300">
+//         {product.category && <Badge variant="secondary" className="mb-3 inline-block"> {product.category} </Badge>}
+//         <h3 className="text-xl font-bold text-gray-900 mb-2 group-hover:text-yellow-600 transition-colors duration-300 truncate" title={product.name}>
 //           {product.name}
 //         </h3>
-//         <p className="text-gray-600 text-sm leading-relaxed mb-4">{product.description}</p>
+//         <p className="text-gray-600 text-sm leading-relaxed mb-4 h-10 overflow-hidden line-clamp-2" title={product.description}> {/* Fixed height and line-clamp */}
+//             {product.description || "No description available."}
+//         </p>
 //         <div className="flex items-center gap-2 mb-4">
-//           <div className="flex items-center" role="img" aria-label={`Rating: ${product.rating} out of 5 stars`}>
+//           <div className="flex items-center" role="img" aria-label={`Rating: ${product.rating || 0} out of 5 stars`}>
 //             {[...Array(5)].map((_, i) => (
 //               <Star
 //                 key={i}
 //                 className={`w-4 h-4 ${
-//                   i < Math.floor(product.rating) ? "fill-yellow-400 text-yellow-400" : "text-gray-300"
+//                   i < Math.floor(product.rating || 0) ? "fill-yellow-400 text-yellow-400" : "text-gray-300"
 //                 }`}
 //               />
 //             ))}
 //           </div>
 //           <span className="text-sm text-gray-600">
-//             {product.rating} ({product.reviews} reviews)
+//             {parseFloat(product.rating || 0).toFixed(1)} ({product.reviews || 0} reviews)
 //           </span>
 //         </div>
 //         <div className="flex items-center justify-between">
-//           <span className="text-2xl font-bold text-gray-900">£{product.price}</span>
+//           <span className="text-2xl font-bold text-gray-900">£{product.price ? product.price.toFixed(2) : '0.00'}</span>
 //           <Button
 //             onClick={handleAddToCart}
 //             disabled={isAdding}
@@ -621,57 +814,33 @@ export default function PerfumeProducts() {
 // }
 
 // export default function PerfumeProducts() {
-//   // No need to define API_BASE_URL here again, it's defined at the module level above
-
 //   const [activeFilter, setActiveFilter] = useState("All")
 //   const [masterProductList, setMasterProductList] = useState([])
 //   const [filteredProducts, setFilteredProducts] = useState([])
 //   const [categories, setCategories] = useState(["All"])
+//   // isLoading will be true for a very short time, or not at all if data is processed sync
 //   const [isLoading, setIsLoading] = useState(true)
 //   const [error, setError] = useState(null)
 //   const { getCartItemsCount } = useCart()
 
 //   useEffect(() => {
-//     const fetchProducts = async () => {
-//       // Add a check for API_BASE_URL before fetching
-//       if (!API_BASE_URL) {
-//         setError("API_BASE_URL is not defined. Please check your environment variables and ensure they are prefixed with VITE_ for client-side access.");
+//     setIsLoading(true);
+//     setError(null);
+//     try {
+//         // Use the local product data.
+//         // The 'id' field in localPerfumeProducts is already what CartContext expects.
+//         setMasterProductList(localPerfumeProducts);
+//         setFilteredProducts(localPerfumeProducts); // Initially show all
+
+//         const uniqueCategories = ["All", ...new Set(localPerfumeProducts.map(p => p.category).filter(Boolean))];
+//         setCategories(uniqueCategories);
 //         setIsLoading(false);
-//         console.error("API_BASE_URL is undefined in PerfumeProducts fetchProducts");
-//         return;
-//       }
-
-//       try {
-//         setIsLoading(true)
-//         setError(null)
-//         const response = await fetch(`${API_BASE_URL}/products`)
-//         if (!response.ok) {
-//           throw new Error(`HTTP error! status: ${response.status} - ${response.statusText || 'Failed to fetch products'}`)
-//         }
-//         const data = await response.json()
-
-//         const mappedData = data.map(p => ({
-//           ...p,
-//           id: p.id_from_js || p._id,
-//         }));
-
-//         setMasterProductList(mappedData)
-//         setFilteredProducts(mappedData)
-
-//         const uniqueCategories = ["All", ...new Set(mappedData.map(p => p.category).filter(Boolean))]
-//         setCategories(uniqueCategories)
-
-//       } catch (e) {
-//         console.error("Failed to fetch products:", e)
-//         // Append the API_BASE_URL value to the error for easier debugging if it's still an issue
-//         setError(`${e.message} (Using API_BASE_URL: ${API_BASE_URL || 'undefined'})` || "An unknown error occurred while fetching products.")
-//       } finally {
-//         setIsLoading(false)
-//       }
+//     } catch (e) {
+//         console.error("Error processing local product data:", e);
+//         setError("Failed to load product information. Please try again.");
+//         setIsLoading(false);
 //     }
-
-//     fetchProducts()
-//   }, [])
+//   }, []);
 
 //   const handleFilterChange = (category) => {
 //     setActiveFilter(category)
@@ -687,7 +856,7 @@ export default function PerfumeProducts() {
 //       <>
 //         <Header />
 //         <main className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-50 via-white to-gray-50 py-24 px-4">
-//           <p className="text-xl text-yellow-600">Loading perfumes, please wait...</p>
+//           <p className="text-xl text-yellow-600">Loading perfumes...</p>
 //         </main>
 //         <Footer />
 //       </>
@@ -700,8 +869,7 @@ export default function PerfumeProducts() {
 //         <Header />
 //         <main className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-gray-50 via-white to-gray-50 py-16 px-4 text-center">
 //           <p className="text-xl text-red-600 mb-4">Oops! Something went wrong.</p>
-//           <p className="text-md text-gray-700 mb-2">Could not load the perfumes.</p>
-//           <p className="text-sm text-gray-500">Details: {error}</p> {/* Error will now be more informative */}
+//           <p className="text-md text-gray-700 mb-2">{error}</p>
 //           <Button onClick={() => window.location.reload()} className="mt-6">Try Again</Button>
 //         </main>
 //         <Footer />
@@ -747,7 +915,7 @@ export default function PerfumeProducts() {
 //             {getCartItemsCount() > 0 && (
 //               <motion.div initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }} className="mt-4">
 //                 <Badge variant="outline" className="text-lg px-4 py-2 bg-yellow-100 text-yellow-800 border-yellow-300">
-//                   🛒 Cart: {getCartItemsCount()} items
+//                   🛒 Cart: {getCartItemsCount()} item(s)
 //                 </Badge>
 //               </motion.div>
 //             )}
@@ -767,7 +935,7 @@ export default function PerfumeProducts() {
 //             </p>
 //           </motion.div>
 
-//           {filteredProducts.length === 0 && !isLoading ? (
+//           {filteredProducts.length === 0 ? (
 //             <motion.div
 //               initial={{ opacity: 0, y: 20 }}
 //               animate={{ opacity: 1, y: 0 }}
@@ -777,9 +945,9 @@ export default function PerfumeProducts() {
 //               <p className="text-xl text-gray-500">No perfumes found for "{activeFilter}".</p>
 //             </motion.div>
 //           ) : (
-//             <motion.div layout className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+//             <motion.div layout className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
 //               {filteredProducts.map((product, index) => (
-//                 <ProductCard key={product.id} product={product} index={index} />
+//                 <ProductCard key={product.id || index} product={product} index={index} /> // Added index as fallback key
 //               ))}
 //             </motion.div>
 //           )}
@@ -818,3 +986,4 @@ export default function PerfumeProducts() {
 //     </>
 //   )
 // }
+
