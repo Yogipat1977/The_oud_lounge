@@ -1,33 +1,18 @@
 // CartContext.js
 "use client";
 
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState } from 'react'; // Removed useEffect
 
 const CartContext = createContext();
 
 export const useCart = () => useContext(CartContext);
 
 export const CartProvider = ({ children }) => {
-  const [cartItems, setCartItems] = useState(() => {
-    // Load cart from localStorage if available (optional, but good for persistence)
-    if (typeof window !== 'undefined') {
-      const localData = localStorage.getItem('perfumeCartItems');
-      try {
-        return localData ? JSON.parse(localData) : [];
-      } catch (error) {
-        console.error("Error parsing cart items from localStorage:", error);
-        return [];
-      }
-    }
-    return [];
-  });
+  // Initialize cartItems as an empty array.
+  // It will not load from localStorage anymore.
+  const [cartItems, setCartItems] = useState([]);
 
-  useEffect(() => {
-    // Save cart to localStorage whenever it changes
-    if (typeof window !== 'undefined') {
-      localStorage.setItem('perfumeCartItems', JSON.stringify(cartItems));
-    }
-  }, [cartItems]);
+  // The useEffect hook for saving to localStorage has been removed.
 
   const addToCart = (product, quantity = 1) => {
     setCartItems(prevItems => {
@@ -41,7 +26,7 @@ export const CartProvider = ({ children }) => {
         );
       } else {
         // If item is new, add it to the cart
-        // Ensure all necessary product details are included for the cart page
+        // Ensure all necessary product details are included
         return [...prevItems, { ...product, quantity }];
       }
     });
@@ -73,11 +58,19 @@ export const CartProvider = ({ children }) => {
   };
 
   const getCartTotal = () => {
-    return cartItems.reduce((total, item) => total + (item.price * item.quantity), 0);
+    return cartItems.reduce((total, item) => {
+        // Ensure item.price and item.quantity are valid numbers
+        const price = Number(item.price) || 0;
+        const quantity = Number(item.quantity) || 0;
+        return total + (price * quantity);
+    }, 0);
   };
 
   const getCartItemsCount = () => {
-    return cartItems.reduce((count, item) => count + item.quantity, 0);
+    return cartItems.reduce((count, item) => {
+        const quantity = Number(item.quantity) || 0;
+        return count + quantity;
+    }, 0);
   };
 
   return (
