@@ -63,6 +63,8 @@ export default function CartPage() {
   const total = subtotal + tax
 
   const handleProceedToCheckout = async () => {
+
+    
     if (!stripePromise) {
         setCheckoutError("Stripe is not configured correctly. Cannot proceed to checkout.");
         setIsProcessingCheckout(false);
@@ -86,14 +88,20 @@ export default function CartPage() {
     }
     // --- END MODIFICATION ---
 
-    try {
-      const itemsToCheckout = cartItems.map((item) => ({ id: item.id, quantity: item.quantity }))
+      try {
+        const itemsToCheckout = cartItems.map((item) => ({ id: item.id, quantity: item.quantity, name: item.name,
+          price: item.price,
+        image: item.image ? `${VITE_APP_BASE_URL}${item.image.startsWith('/') ? item.image : '/' + item.image}` : null
+      }));
+      
+        console.log("Items being sent to backend for checkout:", itemsToCheckout); // <-- ADD THIS FOR DEBUGGING
 
-      const response = await fetch(`${API_BASE_URL_CLIENT}/create-checkout-session`, { // Use API_BASE_URL_CLIENT
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ cartItems: itemsToCheckout }), // You might also send userId here if needed by backend
-      });
+        const response = await fetch(`${API_BASE_URL_CLIENT}/create-checkout-session`, { // Use API_BASE_URL_CLIENT
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ cartItems: itemsToCheckout }), // You might also send userId here if needed by backend
+        });
+
 
       // --- MODIFICATION: Robust response handling ---
       const responseBodyText = await response.text();
