@@ -3,50 +3,51 @@
 
 import { useState } from "react"
 import { Minus, Plus, ShoppingCart, ArrowLeft, Trash2, Star } from "lucide-react"
-import { useCart } from "./CartContext"
-import { Link } from "react-router-dom"
+import { useCart } from "./CartContext" // Assuming CartContext.jsx is in the same directory
+import { Link } from "react-router-dom" // Assuming you are using React Router
 import { loadStripe } from "@stripe/stripe-js"
-import Header from "../components/header"
-import Footer from "../components/Footer"
+import Header from "../components/header" // Adjust path if necessary
+import Footer from "../components/Footer"   // Adjust path if necessary
 
-// --- MODIFICATION: Load Stripe key from environment variable ---
+// --- Load Stripe key from environment variable ---
 const VITE_STRIPE_PUBLISHABLE_KEY = import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY;
+let stripePromise;
 
 if (!VITE_STRIPE_PUBLISHABLE_KEY) {
-    console.error("Stripe publishable key is not defined. Please set VITE_STRIPE_PUBLISHABLE_KEY in your .env file for local development, or in Render environment variables for deployment.");
-    // Potentially display an error to the user or disable checkout
+    console.error("Stripe publishable key (VITE_STRIPE_PUBLISHABLE_KEY) is not defined. Please set it in your .env file for local development, or in Render environment variables for deployment.");
+} else {
+    stripePromise = loadStripe(VITE_STRIPE_PUBLISHABLE_KEY);
 }
-const stripePromise = VITE_STRIPE_PUBLISHABLE_KEY ? loadStripe(VITE_STRIPE_PUBLISHABLE_KEY) : null;
-// --- END MODIFICATION ---
+// --- END ---
 
-// Sample recommended products with actual image paths (ensure these paths work after deployment)
+// Sample recommended products (ensure image paths are correct relative to your public folder)
 const recommendedProducts = [
   {
-    id: 7,
+    id: "rec1", // Use unique string IDs if possible
     name: "COOL WATER",
     description: "Crisp and clean aquatic fragrance with invigorating freshness",
     price: 39.99,
-    image: "/Images/Cool-Water.jpg", // Assuming Images folder is in public
+    image: "/Images/Cool-Water.jpg",
     rating: 4.7,
     reviews: 203,
     category: "Fresh",
   },
-    {
-    id: 4,
+  {
+    id: "rec2",
     name: "NIGHT IN PARIS",
     description: "Romantic and elegant fragrance inspired by Parisian nights",
     price: 39.99,
-    image: "/Images/Night-in-Paris.jpg", // Assuming Images folder is in public
+    image: "/Images/Night-in-Paris.jpg",
     rating: 4.8,
     reviews: 134,
     category: "Woody",
   },
   {
-    id: 7, // Note: Duplicate ID, ensure IDs are unique if used as keys
-    name: "COOL WATER",
+    id: "rec3", // Made this ID unique
+    name: "OCEAN BREEZE", // Changed name for uniqueness example
     description: "Crisp and clean aquatic fragrance with invigorating freshness",
     price: 39.99,
-    image: "/Images/Cool-Water.jpg", // Assuming Images folder is in public
+    image: "/Images/Cool-Water.jpg", // You might want a different image for a different product
     rating: 4.7,
     reviews: 203,
     category: "Fresh",
@@ -63,15 +64,34 @@ export default function CartPage() {
   const total = subtotal + tax
 
   const handleProceedToCheckout = async () => {
+    // --- Log all critical environment variables ---
+    console.log("VITE_STRIPE_PUBLISHABLE_KEY in CartPage:", VITE_STRIPE_PUBLISHABLE_KEY);
+    const VITE_APP_BASE_URL = import.meta.env.VITE_APP_BASE_URL;
+    console.log("VITE_APP_BASE_URL in CartPage:", VITE_APP_BASE_URL);
+    const API_BASE_URL_CLIENT = import.meta.env.VITE_API_BASE_URL;
+    console.log("VITE_API_BASE_URL_CLIENT in CartPage:", API_BASE_URL_CLIENT);
+    // --- End log ---
 
-     const VITE_APP_BASE_URL = import.meta.env.VITE_APP_BASE_URL; // Should be 
-
-    
-    if (!stripePromise) {
-        setCheckoutError("Stripe is not configured correctly. Cannot proceed to checkout.");
+    if (!VITE_STRIPE_PUBLISHABLE_KEY || !stripePromise) {
+        setCheckoutError("Stripe is not configured correctly (missing publishable key). Cannot proceed to checkout.");
         setIsProcessingCheckout(false);
         return;
     }
+
+    if (!VITE_APP_BASE_URL) {
+        console.error("CRITICAL: VITE_APP_BASE_URL is NOT DEFINED. Cannot construct absolute image URLs.");
+        setCheckoutError("Client configuration error: Application base URL is missing. Please contact support.");
+        setIsProcessingCheckout(false);
+        return;
+    }
+
+    if (!API_BASE_URL_CLIENT) {
+        console.error("CRITICAL: VITE_API_BASE_URL (for client) is NOT DEFINED. Cannot contact backend.");
+        setCheckoutError("Client configuration error: API endpoint is missing. Please contact support.");
+        setIsProcessingCheckout(false);
+        return;
+    }
+
     if (cartItems.length === 0) {
       setCheckoutError("Your cart is empty.")
       return
@@ -79,45 +99,34 @@ export default function CartPage() {
     setCheckoutError("")
     setIsProcessingCheckout(true)
 
-    // --- MODIFICATION: Define and use API_BASE_URL_CLIENT ---
-    const API_BASE_URL_CLIENT = import.meta.env.VITE_API_BASE_URL;
-
-    if (!API_BASE_URL_CLIENT) {
-        console.error("VITE_API_BASE_URL is not defined in the frontend environment for CartPage.");
-        setCheckoutError("Client configuration error: API endpoint is missing. Cannot proceed.");
-        setIsProcessingCheckout(false);
-        return;
-    }
-    // --- END MODIFICATION ---
-
-      try {
-        
-        const itemsToCheckout = cartItems.map((item) => ({ id: item.id, quantity: item.quantity, name: item.name,
-          price: item.price,
+    try {
+      const itemsToCheckout = cartItems.map((item) => ({
+        id: item.id, // Ensure your cart items have a unique `id`
+        quantity: item.quantity,
+        name: item.name,
+        price: item.price,
+        // Construct absolute image URL
         image: item.image ? `${VITE_APP_BASE_URL}${item.image.startsWith('/') ? item.image : '/' + item.image}` : null
       }));
 
-        console.log("Items being sent to backend for checkout:", itemsToCheckout); // <-- ADD THIS FOR DEBUGGING
+      console.log("Items being sent to backend for checkout:", itemsToCheckout); // CRITICAL DEBUG LOG
 
-        const response = await fetch(`${API_BASE_URL_CLIENT}/create-checkout-session`, { // Use API_BASE_URL_CLIENT
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ cartItems: itemsToCheckout }), // You might also send userId here if needed by backend
-        });
+      const response = await fetch(`${API_BASE_URL_CLIENT}/create-checkout-session`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ cartItems: itemsToCheckout }),
+      });
 
-
-      // --- MODIFICATION: Robust response handling ---
       const responseBodyText = await response.text();
       console.log("Raw server response text from /create-checkout-session:", responseBodyText);
       console.log("Response Status from /create-checkout-session:", response.status);
       console.log("Response OK from /create-checkout-session:", response.ok);
-      console.log("Response Content-Type from /create-checkout-session:", response.headers.get('Content-Type'));
 
       if (!response.ok) {
         let errorMsg = `Server error (status ${response.status}).`;
         try {
             const errorData = JSON.parse(responseBodyText);
-            errorMsg = errorData.error || JSON.stringify(errorData);
+            errorMsg = errorData.error || errorData.message || JSON.stringify(errorData);
         } catch (e) {
             errorMsg = `Server error (status ${response.status}): ${responseBodyText.substring(0, 200)}...`;
         }
@@ -131,24 +140,26 @@ export default function CartPage() {
           console.error("Error parsing successful server response as JSON:", e, "Response text:", responseBodyText);
           throw new Error(`Failed to parse server response: ${e.message}. Original response: ${responseBodyText.substring(0,100)}...`);
       }
-      // --- END MODIFICATION ---
 
       if (sessionData.sessionId) {
         const stripe = await stripePromise;
+        if (!stripe) { // Should not happen if VITE_STRIPE_PUBLISHABLE_KEY was set
+            throw new Error("Stripe.js has not loaded yet.");
+        }
         const { error } = await stripe.redirectToCheckout({
           sessionId: sessionData.sessionId,
         });
         if (error) {
           console.error("Stripe redirectToCheckout error:", error);
-          setCheckoutError(error.message);
+          setCheckoutError(error.message || "An error occurred during Stripe redirect.");
         }
       } else {
         console.error("Checkout session ID not found in server response. Response data:", sessionData);
-        throw new Error("Checkout session ID not found in server response.");
+        throw new Error("Checkout session ID not found in server response. Check backend logs.");
       }
     } catch (error) {
       console.error("Error proceeding to checkout (outer catch):", error);
-      setCheckoutError(error.message || "An error occurred. Please try again.");
+      setCheckoutError(error.message || "An unexpected error occurred. Please try again.");
     } finally {
       setIsProcessingCheckout(false);
     }
@@ -177,11 +188,11 @@ export default function CartPage() {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
               {recommendedProducts.map((product) => (
                 <div
-                  key={`${product.id}-${product.name}`} // Using name too for better uniqueness if IDs repeat
+                  key={product.id} // Ensure recommended products have unique IDs
                   className="bg-gradient-to-br from-white to-amber-50 border border-amber-200 rounded-lg p-4 hover:shadow-amber-200/50 hover:shadow-lg transition-shadow duration-300"
                 >
                   <img
-                    src={product.image || "/placeholder.svg"}
+                    src={product.image || "/placeholder.svg"} // Ensure these images exist in public/Images
                     alt={product.name}
                     className="w-full h-64 object-cover rounded-lg mb-4"
                   />
@@ -220,21 +231,23 @@ export default function CartPage() {
             <div className="space-y-4">
               {cartItems.map((item) => (
                 <div
-                  key={item.id} // Assuming cart item IDs are unique from context
+                  key={item.id} // Ensure cart item IDs are unique
                   className="bg-gradient-to-br from-white to-amber-50 border border-amber-200 rounded-lg p-6 hover:shadow-amber-200/50 hover:shadow-lg transition-shadow duration-300"
                 >
                   <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
                     <img
-                      src={item.image || "/placeholder.svg"}
+                      src={item.image || "/placeholder.svg"} // Assumes item.image is like /Images/product.jpg
                       alt={item.name}
                       className="w-24 h-24 object-cover rounded-lg"
                     />
                     <div className="flex-1">
                       <h3 className="text-lg font-semibold text-amber-900 mb-2">{item.name}</h3>
                       <p className="text-sm text-amber-600 mb-2">{item.description}</p>
-                      <span className="inline-block bg-gray-100 text-gray-600 text-xs font-medium px-3 py-1 rounded-full mb-2">
-                        {item.category}
-                      </span>
+                      {item.category && (
+                        <span className="inline-block bg-gray-100 text-gray-600 text-xs font-medium px-3 py-1 rounded-full mb-2">
+                          {item.category}
+                        </span>
+                      )}
                       <div className="flex items-center gap-1 mb-2">
                         {[...Array(5)].map((_, i) => (
                           <Star
@@ -290,7 +303,7 @@ export default function CartPage() {
                   <span className="font-semibold">£{subtotal.toFixed(2)}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-amber-700">Tax</span>
+                  <span className="text-amber-700">Tax (8%)</span>
                   <span className="font-semibold">£{tax.toFixed(2)}</span>
                 </div>
                 <hr className="border-amber-200" />
@@ -301,12 +314,12 @@ export default function CartPage() {
               </div>
               <button
                 onClick={handleProceedToCheckout}
-                disabled={isProcessingCheckout || !stripePromise} // Also disable if Stripe key is missing
+                disabled={isProcessingCheckout || !stripePromise || !VITE_STRIPE_PUBLISHABLE_KEY}
                 className="w-full bg-amber-600 hover:bg-amber-700 text-white py-3 mb-4 rounded-lg font-semibold transition-colors duration-300 disabled:opacity-50"
               >
                 {isProcessingCheckout ? "Processing..." : "Proceed to Checkout"}
               </button>
-              {checkoutError && <p className="text-red-500 text-sm mb-2">{checkoutError}</p>}
+              {checkoutError && <p className="text-red-500 text-sm mb-2 text-center">{checkoutError}</p>}
               <div className="text-center">
                 <p className="text-xs text-amber-600">🔒 Secure checkout guaranteed</p>
               </div>
