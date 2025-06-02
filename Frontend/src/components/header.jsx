@@ -90,7 +90,7 @@ export default function Header() {
             style={{ fontFamily: "'Itim', cursive" }}
           >
             <User size={16} />
-            <span>Login/Register</span>
+            {/* <span></span> */}
           </a>
         </div>
 
