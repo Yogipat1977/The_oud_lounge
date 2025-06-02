@@ -46,13 +46,14 @@ export default function Header() {
     >
       <div className="container mx-auto px-4 max-w-[3000px] flex items-center justify-between">
         {/* Logo */}
-        <a
-          href="/"
-          className="text-4xl font-medium text-gray-800 font-italianno ml-8"
-          style={{ fontFamily: "Italianno" }}
-        >
-          The oud lounge
-        </a>
+       <a href="/" className="ml-8 flex items-center">
+  <img
+    src="/Theoudlounge/.png" // Replace this with your actual logo path
+    alt="The Oud Lounge"
+    className="h-14 w-14 rounded-full object-cover border-2 border-gray-800 shadow-md"
+  />
+</a>
+
 
         {/* Desktop Navigation */}
         <nav
