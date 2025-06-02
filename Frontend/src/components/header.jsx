@@ -50,7 +50,7 @@ export default function Header() {
   <img
     src="/Images/Theoudlounge.jpg" // Replace this with your actual logo path
     alt="The Oud Lounge"
-    className="h-10 w-10 rounded-full object-cover border-2 border-gray-800 shadow-md"
+    className="h-10 w-10 rounded-full object-cover border-2 border-gray-800 shadow-md ph:ml-0"
   />
 </a>
 
