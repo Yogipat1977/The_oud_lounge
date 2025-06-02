@@ -21,9 +21,6 @@ const stripe = StripeNode(process.env.STRIPE_SECRET_KEY);
 const app = express();
 
 const FRONTEND_URL = process.env.FRONTEND_URL || 'http://localhost:5173';
-// IMAGE_BASE_URL should point to the root where your public/Images folder is served.
-// e.g., if your images are at https://www.theoudlounge.co.uk/Images/deal_bundle_image.jpg
-// then IMAGE_BASE_URL should be https://www.theoudlounge.co.uk
 const IMAGE_BASE_URL = process.env.IMAGE_BASE_URL || process.env.FRONTEND_URL;
 
 
@@ -70,11 +67,11 @@ app.post('/api/webhook', express.raw({type: 'application/json'}), async (request
         return response.status(500).json({ error: 'Failed to retrieve session details from Stripe.' });
       }
       
-      const metadata = sessionWithLineItems.metadata || {}; // Ensure metadata object exists
+      const metadata = sessionWithLineItems.metadata || {}; 
       console.log('[Webhook] Session Metadata:', metadata);
 
       const dealWasActuallyApplied = metadata.dealApplied === 'true';
-      const dealPriceWhenApplied = parseFloat(metadata.dealPriceIfApplied); // Will be NaN if not a number
+      const dealPriceWhenApplied = parseFloat(metadata.dealPriceIfApplied); 
       const cartDetailsFromMeta = JSON.parse(metadata.cartDetails || '[]');
       const originalSubtotalFromMeta = parseFloat(metadata.originalSubtotalCalculated);
       const deliveryChargePaidFromMeta = parseFloat(metadata.deliveryChargePaid);
@@ -88,13 +85,12 @@ app.post('/api/webhook', express.raw({type: 'application/json'}), async (request
       const orderItemsForDB = cartDetailsFromMeta.map(item => ({
         name: item.name,
         quantity: item.quantity,
-        price: item.pricePerUnit, // Store original price per unit
-        image: item.image,
-        product: item.dbProductId, // Reference to MongoDB Product _id
+        price: item.pricePerUnit, 
+        image: item.image, // Relative path stored from metadata
+        product: item.dbProductId, 
       }));
 
-      // Add free roll-ins if deal applied and eligible
-      if (dealWasActuallyApplied && totalQuantityFromMeta >= 3) { // Assuming 3 items qualify
+      if (dealWasActuallyApplied && totalQuantityFromMeta >= 3) { 
         orderItemsForDB.push({
           name: 'Free Roll-in (Bonus Gift 1)', quantity: 1, price: 0, image: '/Images/placeholder_roll_in.jpg', product: null,
         });
@@ -143,22 +139,18 @@ app.post('/api/webhook', express.raw({type: 'application/json'}), async (request
         const newOrder = await Order.create(newOrderData);
         console.log(`Order ${newOrder._id} created successfully for session ${session.id}`);
 
-        // --- Admin SMS Notification ---
         if (process.env.ADMIN_PHONE_NUMBER) {
           try {
             let customerIdentifier = newOrder.guestEmail || (newOrder.paymentResult ? newOrder.paymentResult.email_address : 'N/A');
-            
             let shippingAddressString = "No shipping address.";
             if (newOrder.shippingAddress) {
                 const sa = newOrder.shippingAddress;
                 const addressParts = [sa.address, sa.city, sa.postalCode, sa.country].filter(Boolean);
                 if (addressParts.length > 0) shippingAddressString = addressParts.join(', ');
             }
-
             let productNamesString = "";
             const maxProductNameLengthPerItem = 20;
             const maxTotalProductChars = 60;
-
             if (newOrder.orderItems && newOrder.orderItems.length > 0) {
                 const productNames = newOrder.orderItems
                     .filter(item => item.price > 0) 
@@ -167,7 +159,6 @@ app.post('/api/webhook', express.raw({type: 'application/json'}), async (request
                         if (name.length > maxProductNameLengthPerItem) name = name.substring(0, maxProductNameLengthPerItem - 3) + "...";
                         return name;
                     });
-
                 let tempProductString = productNames.join('; ');
                 if (tempProductString.length > maxTotalProductChars) {
                     productNamesString = "";
@@ -184,12 +175,10 @@ app.post('/api/webhook', express.raw({type: 'application/json'}), async (request
                 }
             }
             if (!productNamesString) productNamesString = "Items in email";
-            
             const smsBody = `TOL Order (#${newOrder._id.toString().slice(-6)}) £${newOrder.totalPrice.toFixed(2)}. ` +
                             `Cust: ${customerIdentifier}. ` +
                             `Items: ${productNamesString}. ` +
                             `Ship to: ${shippingAddressString}`;
-            
             console.log(`[Webhook] Constructed SMS Body (length ${smsBody.length}): ${smsBody}`);
             await sendSms(process.env.ADMIN_PHONE_NUMBER, smsBody);
           } catch (smsError) {
@@ -198,9 +187,7 @@ app.post('/api/webhook', express.raw({type: 'application/json'}), async (request
         } else {
           console.log('[Webhook] ADMIN_PHONE_NUMBER not set, skipping admin SMS notification.');
         }
-        // --- END Admin SMS Notification ---
 
-        // Stock Update Logic
         if (cartDetailsFromMeta.length > 0) {
             for (const item of cartDetailsFromMeta) { 
               if (item.dbProductId && item.quantity > 0) {
@@ -234,13 +221,12 @@ app.post('/api/webhook', express.raw({type: 'application/json'}), async (request
 
 app.use(express.json());
 
-// Mount Routers
 app.use('/api/auth', authRoutes);
 app.use('/api/orders', orderRoutes);
 app.use('/api/products', productRoutes);
 
 app.post('/api/create-checkout-session', async (req, res) => {
-  const { cartItems, dealApplied } = req.body; // Removed frontendCalculated fields as backend recalculates
+  const { cartItems, dealApplied } = req.body; 
   console.log('[Checkout Session] Request received. CartItems count:', cartItems ? cartItems.length : 0, 'Deal Applied from Frontend:', dealApplied);
 
   if (!cartItems || cartItems.length === 0) {
@@ -251,7 +237,7 @@ app.post('/api/create-checkout-session', async (req, res) => {
   try {
     let backendSubtotal = 0;
     let backendTotalQuantity = 0;
-    const dbCartItems = []; 
+    const dbCartItems = []; // Will store items with DB-verified details
 
     for (const cartItem of cartItems) {
       if (!cartItem.id) { 
@@ -270,7 +256,7 @@ app.post('/api/create-checkout-session', async (req, res) => {
         dbPrice: product.price,
         dbName: product.name,
         dbDescription: product.description,
-        dbImage: product.image, // Store relative path from DB
+        dbImage: product.image, // Relative path from DB
         dbProductId: product._id.toString(),
       });
       backendSubtotal += product.price * cartItem.quantity;
@@ -297,29 +283,48 @@ app.post('/api/create-checkout-session', async (req, res) => {
     console.log(`[Checkout Session] Final backend calculated delivery charge: £${finalCalculatedDeliveryCharge.toFixed(2)}`);
 
     const line_items_for_stripe = [];
+    let dealItemNamesForDescription = ""; // To list product names in the deal description
 
     if (isDealEffectivelyApplied) {
-      // Construct the full public URL for the deal image
-      const dealBundleImageUrl = `${IMAGE_BASE_URL}/Images/deal_bundle_image.jpg`; // Adjust path if your generic image is elsewhere
-      console.log(`[Checkout Session] Using deal bundle image URL: ${dealBundleImageUrl}`);
+      // Get names of products in the deal for the description
+      // And determine the primary image for the bundle (e.g., first product's image)
+      let primaryImageUrlForDeal = null;
+      const productNamesInDeal = [];
+
+      // Iterate through dbCartItems to get names and find the first image
+      // We only need to list products up to the deal quantity, or all if more are in cart but part of the same flat price deal.
+      // For simplicity here, we'll list all names from dbCartItems if they contribute to the deal.
+      for (let i = 0; i < dbCartItems.length; i++) {
+          const item = dbCartItems[i];
+          productNamesInDeal.push(item.dbName); // Add name to list
+          if (i === 0 && item.dbImage) { // Use first item's image as primary for the bundle
+            primaryImageUrlForDeal = item.dbImage.startsWith('http') ? item.dbImage : `${IMAGE_BASE_URL}${item.dbImage.startsWith('/') ? item.dbImage : '/' + item.dbImage}`;
+          }
+      }
+      dealItemNamesForDescription = productNamesInDeal.join(', ');
+      if (dealItemNamesForDescription.length > 200) { // Truncate if too long for Stripe description
+          dealItemNamesForDescription = dealItemNamesForDescription.substring(0, 197) + "...";
+      }
+      
+      console.log(`[Checkout Session] Primary image for deal: ${primaryImageUrlForDeal}`);
+      console.log(`[Checkout Session] Deal item names for description: ${dealItemNamesForDescription}`);
 
       line_items_for_stripe.push({
         price_data: {
           currency: 'gbp',
           product_data: {
-            name: `Special Offer: ${backendTotalQuantity} Perfume(s) + 2 Free Roll-ins`,
-            description: `Includes ${backendTotalQuantity} selected perfume(s) at a special bundle price of £${actualDealPrice.toFixed(2)}. Plus 2 Free Roll-ins (Worth £20).`,
-            images: [dealBundleImageUrl], // Added image for the deal bundle
+            name: `Special Offer (${backendTotalQuantity} Perfumes) + 2 Free Roll-ins`,
+            description: `Includes: ${dealItemNamesForDescription}. Total for selected perfumes at £${actualDealPrice.toFixed(2)}. Plus 2 Free Roll-ins (Worth £20).`,
+            images: primaryImageUrlForDeal ? [primaryImageUrlForDeal] : [], // Use the first product's image
           },
           unit_amount: Math.round(actualDealPrice * 100),
         },
-        quantity: 1,
+        quantity: 1, // The deal is one line item
       });
-    } else {
+    } else { // No deal, or not eligible - list items individually
       for (const item of dbCartItems) {
         let imageUrl = null;
         if (item.dbImage) {
-          // Construct full public URL for individual product images
           imageUrl = item.dbImage.startsWith('http') ? item.dbImage : `${IMAGE_BASE_URL}${item.dbImage.startsWith('/') ? item.dbImage : '/' + item.dbImage}`;
         }
         console.log(`[Checkout Session] Product: ${item.dbName}, Image URL: ${imageUrl}`);
@@ -343,7 +348,7 @@ app.post('/api/create-checkout-session', async (req, res) => {
       line_items_for_stripe.push({
         price_data: {
           currency: 'gbp',
-          product_data: { name: 'Delivery Charge' },
+          product_data: { name: 'Delivery Charge' }, // No image needed for delivery
           unit_amount: Math.round(finalCalculatedDeliveryCharge * 100),
         },
         quantity: 1,
