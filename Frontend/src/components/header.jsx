@@ -48,9 +48,9 @@ export default function Header() {
         {/* Logo */}
        <a href="/" className="ml-8 flex items-center">
   <img
-    src="/Theoudlounge/.png" // Replace this with your actual logo path
+    src="Theoudlounge.jpg" // Replace this with your actual logo path
     alt="The Oud Lounge"
-    className="h-14 w-14 rounded-full object-cover border-2 border-gray-800 shadow-md"
+    className="h-10 w-10 rounded-full object-cover border-2 border-gray-800 shadow-md"
   />
 </a>
 
