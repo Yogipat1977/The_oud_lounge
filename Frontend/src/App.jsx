@@ -1,8 +1,6 @@
 // App.jsx
 import React from 'react';
 import { Routes, Route } from "react-router-dom";
-// No need to import CartProvider here anymore, it's provided by main.jsx
-// No need to import BrowserRouter here anymore
 import Home from "./pages/Home";
 import AboutUs from "./pages/AboutUs";
 import Product from "./pages/Products"; // This is your PerfumeProducts page
@@ -12,21 +10,25 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Profile from "./pages/profile"; // lowercase 'p' to match 'profile.jsx'
 
+// Import the new pages
+import CheckoutSuccessPage from './pages/CheckoutSuccessPage'; // Adjust path if needed
+import CheckoutCancelPage from './pages/CheckoutCancelPage';   // Adjust path if needed
+
 function App() {
   return (
-    // No BrowserRouter here
-    // No CartProvider here
+ 
     <Routes>
       <Route path="/" element={<Home />} />
       <Route path="/home" element={<Home />} />
       <Route path="/about" element={<AboutUs />} />
-      <Route path="/product" element={<Product />} /> {/* This renders your PerfumeProducts component */}
+      <Route path="/product" element={<Product />} /> 
       <Route path="/contact" element={<ContactUs />} />
-      <Route path="/cart" element={<Cart />} /> {/* This renders your CartPage component */}
+      <Route path="/cart" element={<Cart />} /> 
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
       <Route path="/profile" element={<Profile />} />
-      
+      <Route path="/checkout-success" element={<CheckoutSuccessPage />} />
+      <Route path="/checkout-cancel" element={<CheckoutCancelPage />} />
     </Routes>
   );
 }
