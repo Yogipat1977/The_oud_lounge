@@ -1,11 +1,9 @@
-
-
 "use client"
 
 import { motion } from "framer-motion"
 import { useState, useEffect } from "react"
 import { useCart } from "./CartContext"
-import { Star, Heart, ShoppingCart, Sparkles, Gift } from "lucide-react"
+import { Star, Heart, ShoppingCart, Sparkles } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import Header from "../components/header"
@@ -132,46 +130,115 @@ const PromotionalBanner = () => {
       initial={{ opacity: 0, y: -20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.8 }}
-      className="bg-gradient-to-r from-purple-600 via-pink-600 to-red-600 text-white p-8 rounded-3xl shadow-2xl mb-12 mx-4 relative overflow-hidden"
+      className="relative bg-gradient-to-r from-yellow-400 via-orange-500 to-red-500 text-white p-8 mb-12 mx-4 overflow-hidden"
+      style={{
+        clipPath: "polygon(0 0, calc(100% - 20px) 0, 100% 20px, 100% 100%, 20px 100%, 0 calc(100% - 20px))",
+      }}
     >
-      <div className="absolute inset-0 bg-black/10"></div>
+      {/* Diagonal stripes background */}
+      <div className="absolute inset-0 opacity-20">
+        <div
+          className="absolute inset-0"
+          style={{
+            backgroundImage: `repeating-linear-gradient(
+            45deg,
+            transparent,
+            transparent 10px,
+            rgba(0,0,0,0.1) 10px,
+            rgba(0,0,0,0.1) 20px
+          )`,
+          }}
+        ></div>
+      </div>
+
+      {/* Decorative stars */}
+      <div className="absolute top-4 left-8">
+        <Star className="w-6 h-6 fill-yellow-300 text-yellow-300" />
+      </div>
+      <div className="absolute top-8 right-12">
+        <Star className="w-4 h-4 fill-yellow-300 text-yellow-300" />
+      </div>
+      <div className="absolute bottom-6 left-16">
+        <Star className="w-5 h-5 fill-yellow-300 text-yellow-300" />
+      </div>
+      <div className="absolute bottom-4 right-8">
+        <Star className="w-6 h-6 fill-yellow-300 text-yellow-300" />
+      </div>
+
+      {/* Shopping bag icons */}
+      <div className="absolute left-4 top-1/2 transform -translate-y-1/2">
+        <ShoppingCart className="w-12 h-12 text-white opacity-30" />
+      </div>
+      <div className="absolute right-4 top-1/2 transform -translate-y-1/2">
+        <ShoppingCart className="w-12 h-12 text-white opacity-30" />
+      </div>
+
       <div className="relative z-10 text-center">
+        {/* Main banner ribbon */}
         <motion.div
-          animate={{ rotate: [0, 10, -10, 0] }}
-          transition={{ duration: 2, repeat: Number.POSITIVE_INFINITY, repeatDelay: 3 }}
-          className="flex items-center justify-center gap-3 mb-4"
+          initial={{ scale: 0.8, rotate: -5 }}
+          animate={{ scale: 1, rotate: 0 }}
+          transition={{ duration: 0.6, delay: 0.2 }}
+          className="relative mx-auto mb-6 max-w-2xl"
         >
-          <Gift className="w-10 h-10" />
-          <Sparkles className="w-8 h-8 animate-pulse" />
-          <Gift className="w-10 h-10" />
+          <div
+            className="bg-red-600 text-white p-6 transform -rotate-2 shadow-2xl"
+            style={{
+              clipPath: "polygon(10px 0, 100% 0, calc(100% - 10px) 100%, 0 100%)",
+            }}
+          >
+            <h2 className="text-4xl md:text-5xl font-black tracking-wider">SUPER DEAL</h2>
+          </div>
         </motion.div>
-        <motion.h2
-          initial={{ scale: 0.8 }}
-          animate={{ scale: 1 }}
-          transition={{ duration: 0.5, delay: 0.2 }}
-          className="text-4xl md:text-5xl font-bold mb-4"
-        >
-          🎉 MEGA DEAL ALERT! 🎉
-        </motion.h2>
+
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.4 }}
-          className="bg-white/20 backdrop-blur-sm rounded-2xl p-6 mb-6"
+          className="space-y-4"
         >
-          <p className="text-2xl md:text-3xl font-bold mb-2">Buy Any 3 Perfumes for £100</p>
-          <p className="text-lg md:text-xl font-semibold mb-2">+ Get 2 FREE Roll-ins Worth £20!</p>
-          <p className="text-base opacity-90">Save up to £39.97 on your order!</p>
+          <div
+            className="bg-black/20 p-6 transform rotate-1"
+            style={{
+              clipPath: "polygon(0 0, calc(100% - 15px) 0, 100% 15px, 100% 100%, 15px 100%, 0 calc(100% - 15px))",
+            }}
+          >
+            <p className="text-2xl md:text-3xl font-bold mb-2">Buy Any 3 Perfumes for £100</p>
+            <p className="text-lg md:text-xl font-semibold mb-2">+ Get 2 FREE Roll-ins Worth £20!</p>
+            <p className="text-base font-medium">Save up to £39.97 on your order!</p>
+          </div>
         </motion.div>
+
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.6, delay: 0.6 }}
-          className="flex flex-wrap justify-center gap-4 text-sm"
+          className="flex flex-wrap justify-center gap-4 mt-6"
         >
-          <div className="bg-white/20 px-4 py-2 rounded-full">✨ Mix & Match Any Fragrances</div>
-          <div className="bg-white/20 px-4 py-2 rounded-full">🎁 FREE Roll-ins Included</div>
-          <div className="bg-white/20 px-4 py-2 rounded-full">💝 Limited Time Offer</div>
+          <div
+            className="bg-white/20 px-6 py-3 transform -rotate-1"
+            style={{
+              clipPath: "polygon(8px 0, 100% 0, calc(100% - 8px) 100%, 0 100%)",
+            }}
+          >
+            <span className="font-bold">✨ Mix & Match Any Fragrances</span>
+          </div>
+          <div
+            className="bg-white/20 px-6 py-3 transform rotate-1"
+            style={{
+              clipPath: "polygon(8px 0, 100% 0, calc(100% - 8px) 100%, 0 100%)",
+            }}
+          >
+            <span className="font-bold">🎁 FREE Roll-ins Included</span>
+          </div>
+          <div
+            className="bg-white/20 px-6 py-3 transform -rotate-1"
+            style={{
+              clipPath: "polygon(8px 0, 100% 0, calc(100% - 8px) 100%, 0 100%)",
+            }}
+          >
+            <span className="font-bold">💝 Limited Time Offer</span>
+          </div>
         </motion.div>
       </div>
     </motion.div>

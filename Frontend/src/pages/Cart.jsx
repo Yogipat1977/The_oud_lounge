@@ -1,5 +1,3 @@
-
-
 "use client"
 
 import { useState } from "react"
@@ -67,17 +65,51 @@ const PromotionalOffer = ({ cartItems, isCartPage = false }) => {
   if (!isCartPage && totalItems === 0) {
     // Show promotional banner on product page
     return (
-      <div className="bg-gradient-to-r from-purple-600 via-pink-600 to-red-600 text-white p-6 rounded-2xl shadow-xl mb-8 mx-4">
-        <div className="flex items-center justify-center gap-3 mb-4">
-          <Gift className="w-8 h-8" />
-          <Sparkles className="w-6 h-6 animate-pulse" />
+      <div
+        className="relative bg-gradient-to-r from-yellow-400 via-orange-500 to-red-500 text-white p-6 mb-8 mx-4 overflow-hidden"
+        style={{
+          clipPath: "polygon(0 0, calc(100% - 15px) 0, 100% 15px, 100% 100%, 15px 100%, 0 calc(100% - 15px))",
+        }}
+      >
+        {/* Diagonal stripes */}
+        <div className="absolute inset-0 opacity-20">
+          <div
+            className="absolute inset-0"
+            style={{
+              backgroundImage: `repeating-linear-gradient(
+              45deg,
+              transparent,
+              transparent 8px,
+              rgba(0,0,0,0.1) 8px,
+              rgba(0,0,0,0.1) 16px
+            )`,
+            }}
+          ></div>
         </div>
-        <div className="text-center">
-          <h3 className="text-2xl font-bold mb-2">🎉 SPECIAL OFFER 🎉</h3>
-          <p className="text-lg font-semibold mb-2">Buy Any 3 Perfumes for £100</p>
-          <p className="text-sm opacity-90">+ Get 2 FREE Roll-ins Worth £20!</p>
-          <div className="mt-4 bg-white/20 rounded-lg p-3">
-            <p className="text-sm font-medium">Save up to £39.97 on your order!</p>
+
+        {/* Stars */}
+        <Star className="absolute top-3 left-6 w-5 h-5 fill-yellow-300 text-yellow-300" />
+        <Star className="absolute top-6 right-8 w-4 h-4 fill-yellow-300 text-yellow-300" />
+        <Star className="absolute bottom-4 left-12 w-4 h-4 fill-yellow-300 text-yellow-300" />
+        <Star className="absolute bottom-3 right-6 w-5 h-5 fill-yellow-300 text-yellow-300" />
+
+        <div className="relative z-10 text-center">
+          <div
+            className="bg-red-600 p-4 mb-4 transform -rotate-1 shadow-xl"
+            style={{
+              clipPath: "polygon(8px 0, 100% 0, calc(100% - 8px) 100%, 0 100%)",
+            }}
+          >
+            <h3 className="text-2xl font-black tracking-wide">🎉 SPECIAL OFFER 🎉</h3>
+          </div>
+          <div
+            className="bg-black/20 p-4"
+            style={{
+              clipPath: "polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 10px 100%, 0 calc(100% - 10px))",
+            }}
+          >
+            <p className="text-lg font-bold mb-2">Buy Any 3 Perfumes for £100</p>
+            <p className="text-sm font-semibold">+ Get 2 FREE Roll-ins Worth £20!</p>
           </div>
         </div>
       </div>
@@ -86,33 +118,73 @@ const PromotionalOffer = ({ cartItems, isCartPage = false }) => {
 
   if (isCartPage && totalItems >= 3) {
     return (
-      <div className="bg-gradient-to-r from-green-500 to-emerald-600 text-white p-6 rounded-2xl shadow-xl mb-6">
-        <div className="flex items-center gap-3 mb-4">
-          <Gift className="w-8 h-8" />
-          <div>
-            <h3 className="text-xl font-bold">🎉 DEAL AVAILABLE!</h3>
-            <p className="text-sm opacity-90">You qualify for our special offer</p>
-          </div>
+      <div
+        className="relative bg-gradient-to-r from-green-500 via-emerald-500 to-green-600 text-white p-6 mb-6 overflow-hidden"
+        style={{
+          clipPath: "polygon(0 0, calc(100% - 20px) 0, 100% 20px, 100% 100%, 20px 100%, 0 calc(100% - 20px))",
+        }}
+      >
+        {/* Diagonal stripes */}
+        <div className="absolute inset-0 opacity-15">
+          <div
+            className="absolute inset-0"
+            style={{
+              backgroundImage: `repeating-linear-gradient(
+              45deg,
+              transparent,
+              transparent 10px,
+              rgba(0,0,0,0.1) 10px,
+              rgba(0,0,0,0.1) 20px
+            )`,
+            }}
+          ></div>
         </div>
-        <div className="bg-white/20 rounded-lg p-4">
-          <div className="flex justify-between items-center mb-2">
-            <span className="font-semibold">3 Perfumes Deal Price:</span>
-            <span className="text-2xl font-bold">£100.00</span>
-          </div>
-          <div className="flex justify-between items-center mb-2">
-            <span>+ 2 FREE Roll-ins</span>
-            <span className="text-green-200">FREE (Worth £20)</span>
-          </div>
-          {savings > 0 && (
-            <div className="flex justify-between items-center text-green-200">
-              <span>Your Savings:</span>
-              <span className="font-bold">£{savings.toFixed(2)}</span>
+
+        <div className="relative z-10">
+          <div className="flex items-center gap-3 mb-4">
+            <Gift className="w-8 h-8" />
+            <div>
+              <div
+                className="bg-red-600 px-4 py-2 transform -rotate-1"
+                style={{
+                  clipPath: "polygon(6px 0, 100% 0, calc(100% - 6px) 100%, 0 100%)",
+                }}
+              >
+                <h3 className="text-xl font-black">🎉 DEAL AVAILABLE!</h3>
+              </div>
+              <p className="text-sm opacity-90 mt-2">You qualify for our special offer</p>
             </div>
-          )}
+          </div>
+          <div
+            className="bg-white/20 p-4"
+            style={{
+              clipPath: "polygon(0 0, calc(100% - 12px) 0, 100% 12px, 100% 100%, 12px 100%, 0 calc(100% - 12px))",
+            }}
+          >
+            <div className="flex justify-between items-center mb-2">
+              <span className="font-semibold">3 Perfumes Deal Price:</span>
+              <span className="text-2xl font-bold">£100.00</span>
+            </div>
+            <div className="flex justify-between items-center mb-2">
+              <span>+ 2 FREE Roll-ins</span>
+              <span className="text-green-200">FREE (Worth £20)</span>
+            </div>
+            {savings > 0 && (
+              <div className="flex justify-between items-center text-green-200">
+                <span>Your Savings:</span>
+                <span className="font-bold">£{savings.toFixed(2)}</span>
+              </div>
+            )}
+          </div>
+          <button
+            className="w-full mt-4 bg-white text-green-600 font-bold py-3 hover:bg-gray-100 transition-colors transform hover:scale-105"
+            style={{
+              clipPath: "polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 8px 100%, 0 calc(100% - 8px))",
+            }}
+          >
+            Apply Deal - Save £{savings > 0 ? savings.toFixed(2) : "0.00"}
+          </button>
         </div>
-        <button className="w-full mt-4 bg-white text-green-600 font-bold py-3 rounded-lg hover:bg-gray-100 transition-colors">
-          Apply Deal - Save £{savings > 0 ? savings.toFixed(2) : "0.00"}
-        </button>
       </div>
     )
   }
@@ -120,25 +192,65 @@ const PromotionalOffer = ({ cartItems, isCartPage = false }) => {
   if (isCartPage && totalItems > 0 && totalItems < 3) {
     const itemsNeeded = 3 - totalItems
     return (
-      <div className="bg-gradient-to-r from-amber-500 to-orange-600 text-white p-6 rounded-2xl shadow-xl mb-6">
-        <div className="flex items-center gap-3 mb-4">
-          <Sparkles className="w-6 h-6 animate-pulse" />
-          <div>
-            <h3 className="text-lg font-bold">Almost There! 🎯</h3>
-            <p className="text-sm opacity-90">
-              Add {itemsNeeded} more perfume{itemsNeeded > 1 ? "s" : ""} to unlock the deal
-            </p>
+      <div
+        className="relative bg-gradient-to-r from-amber-500 via-orange-500 to-red-500 text-white p-6 mb-6 overflow-hidden"
+        style={{
+          clipPath: "polygon(0 0, calc(100% - 20px) 0, 100% 20px, 100% 100%, 20px 100%, 0 calc(100% - 20px))",
+        }}
+      >
+        {/* Diagonal stripes */}
+        <div className="absolute inset-0 opacity-20">
+          <div
+            className="absolute inset-0"
+            style={{
+              backgroundImage: `repeating-linear-gradient(
+              45deg,
+              transparent,
+              transparent 10px,
+              rgba(0,0,0,0.1) 10px,
+              rgba(0,0,0,0.1) 20px
+            )`,
+            }}
+          ></div>
+        </div>
+
+        <div className="relative z-10">
+          <div className="flex items-center gap-3 mb-4">
+            <Sparkles className="w-6 h-6 animate-pulse" />
+            <div>
+              <div
+                className="bg-red-600 px-4 py-2 transform rotate-1"
+                style={{
+                  clipPath: "polygon(6px 0, 100% 0, calc(100% - 6px) 100%, 0 100%)",
+                }}
+              >
+                <h3 className="text-lg font-black">Almost There! 🎯</h3>
+              </div>
+              <p className="text-sm opacity-90 mt-2">
+                Add {itemsNeeded} more perfume{itemsNeeded > 1 ? "s" : ""} to unlock the deal
+              </p>
+            </div>
           </div>
+          <div
+            className="bg-white/20 p-4 mb-4"
+            style={{
+              clipPath: "polygon(0 0, calc(100% - 12px) 0, 100% 12px, 100% 100%, 12px 100%, 0 calc(100% - 12px))",
+            }}
+          >
+            <p className="font-semibold mb-2">🎁 3 Perfumes for £100 + 2 FREE Roll-ins</p>
+            <p className="text-sm">Save up to £39.97 on your order!</p>
+          </div>
+          <Link to="/product">
+            <button
+              className="w-full bg-white text-orange-600 font-bold py-3 hover:bg-gray-100 transition-colors transform hover:scale-105"
+              style={{
+                clipPath: "polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 8px 100%, 0 calc(100% - 8px))",
+              }}
+            >
+              Add More Perfumes
+            </button>
+          </Link>
         </div>
-        <div className="bg-white/20 rounded-lg p-4">
-          <p className="font-semibold mb-2">🎁 3 Perfumes for £100 + 2 FREE Roll-ins</p>
-          <p className="text-sm">Save up to £39.97 on your order!</p>
-        </div>
-        <Link to="/product">
-          <button className="w-full mt-4 bg-white text-orange-600 font-bold py-3 rounded-lg hover:bg-gray-100 transition-colors">
-            Add More Perfumes
-          </button>
-        </Link>
       </div>
     )
   }
