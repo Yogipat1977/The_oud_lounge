@@ -10,7 +10,9 @@ export default function AboutUs() {
       <section className="relative bg-black text-white py-20 md:py-32 overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-r from-black via-gray-900 to-black opacity-90"></div>
         <div className="relative container mx-auto px-4 text-center">
-          <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold mb-6 animate-fade-in-up">
+          <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold mb-6 animate-fade-in-up"
+           style={{ fontFamily: "'Itim', cursive" }}
+           >
             About <span className="text-yellow-400">The Oud Lounge</span>
           </h1>
           <p className="text-lg md:text-xl lg:text-2xl text-gray-300 max-w-3xl mx-auto animate-fade-in-up animation-delay-300">
@@ -25,7 +27,8 @@ export default function AboutUs() {
         <div className="container mx-auto px-4">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div className="animate-slide-in-left">
-              <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-black mb-6">
+              <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-black mb-6"
+               style={{ fontFamily: "'Itim', cursive" }} >
                 Our <span className="text-yellow-500">Story</span>
               </h2>
               <p className="text-gray-600 text-lg mb-6 leading-relaxed">
@@ -60,7 +63,8 @@ export default function AboutUs() {
       <section className="py-16 md:py-24 bg-gray-100">
         <div className="container mx-auto px-4">
           <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-black mb-4 animate-fade-in-up">
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-black mb-4 animate-fade-in-up" 
+             style={{ fontFamily: "'Itim', cursive" }} >
               Our <span className="text-yellow-500">Mission & Vision</span>
             </h2>
             <div className="w-24 h-1 bg-yellow-500 mx-auto animate-expand"></div>
@@ -74,7 +78,8 @@ export default function AboutUs() {
                     <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                   </svg>
                 </div>
-                <h3 className="text-2xl font-bold text-black mb-4">Our Mission</h3>
+                <h3 className="text-2xl font-bold text-black mb-4"  style={{ fontFamily: "'Itim', cursive" }}
+                >Our Mission</h3>
               </div>
               <p className="text-gray-600 text-center leading-relaxed">
                 To provide our customers with the finest selection of authentic, high-quality perfumes that embody
@@ -95,7 +100,7 @@ export default function AboutUs() {
                     />
                   </svg>
                 </div>
-                <h3 className="text-2xl font-bold text-black mb-4">Our Vision</h3>
+                <h3 className="text-2xl font-bold text-black mb-4"  style={{ fontFamily: "'Itim', cursive" }}>Our Vision</h3>
               </div>
               <p className="text-gray-600 text-center leading-relaxed">
                 To become the world's most trusted destination for premium fragrances, where every customer discovers
@@ -110,7 +115,8 @@ export default function AboutUs() {
       <section className="py-16 md:py-24 bg-black text-white">
         <div className="container mx-auto px-4">
           <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4 animate-fade-in-up">
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4 animate-fade-in-up" 
+             style={{ fontFamily: "'Itim', cursive" }}>
               Our <span className="text-yellow-400">Values</span>
             </h2>
             <p className="text-gray-300 text-lg max-w-2xl mx-auto animate-fade-in-up animation-delay-300">
@@ -129,7 +135,7 @@ export default function AboutUs() {
                   />
                 </svg>
               </div>
-              <h3 className="text-xl font-bold mb-3">Quality</h3>
+              <h3 className="text-xl font-bold mb-3" style={{ fontFamily: "'Itim', cursive" }}>Quality</h3>
               <p className="text-gray-300">We never compromise on the quality of our products and services.</p>
             </div>
 
@@ -139,7 +145,7 @@ export default function AboutUs() {
                   <path d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z" />
                 </svg>
               </div>
-              <h3 className="text-xl font-bold mb-3">Authenticity</h3>
+              <h3 className="text-xl font-bold mb-3" style={{ fontFamily: "'Itim', cursive" }}>Authenticity</h3>
               <p className="text-gray-300">Every fragrance is genuine and sourced from trusted suppliers.</p>
             </div>
 
@@ -153,7 +159,7 @@ export default function AboutUs() {
                   />
                 </svg>
               </div>
-              <h3 className="text-xl font-bold mb-3">Passion</h3>
+              <h3 className="text-xl font-bold mb-3" style={{ fontFamily: "'Itim', cursive" }}>Passion</h3>
               <p className="text-gray-300">Our love for perfumery drives everything we do.</p>
             </div>
 
@@ -163,7 +169,7 @@ export default function AboutUs() {
                   <path d="M9 6a3 3 0 11-6 0 3 3 0 016 0zM17 6a3 3 0 11-6 0 3 3 0 016 0zM12.93 17c.046-.327.07-.66.07-1a6.97 6.97 0 00-1.5-4.33A5 5 0 0119 16v1h-6.07zM6 11a5 5 0 015 5v1H1v-1a5 5 0 015-5z" />
                 </svg>
               </div>
-              <h3 className="text-xl font-bold mb-3">Excellence</h3>
+              <h3 className="text-xl font-bold mb-3" style={{ fontFamily: "'Itim', cursive" }}>Excellence</h3>
               <p className="text-gray-300">We strive for excellence in every customer interaction.</p>
             </div>
           </div>
@@ -174,7 +180,7 @@ export default function AboutUs() {
       <section className="py-16 md:py-24 bg-gray-50">
         <div className="container mx-auto px-4">
           <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-black mb-4 animate-fade-in-up">
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-black mb-4 animate-fade-in-up"  style={{ fontFamily: "'Itim', cursive" }}>
               Why Choose <span className="text-yellow-500">The Oud Lounge</span>
             </h2>
             <div className="w-24 h-1 bg-yellow-500 mx-auto animate-expand"></div>
@@ -188,7 +194,7 @@ export default function AboutUs() {
                     <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
                   </svg>
                 </div>
-                <h3 className="text-xl font-bold text-black mb-4">Premium Quality</h3>
+                <h3 className="text-xl font-bold text-black mb-4"  style={{ fontFamily: "'Itim', cursive" }}>Premium Quality</h3>
                 <p className="text-gray-600">Hand-selected fragrances from the world's finest perfume houses.</p>
               </div>
             </div>
@@ -204,7 +210,7 @@ export default function AboutUs() {
                     />
                   </svg>
                 </div>
-                <h3 className="text-xl font-bold text-black mb-4">Authentic Products</h3>
+                <h3 className="text-xl font-bold text-black mb-4"  style={{ fontFamily: "'Itim', cursive" }}>Authentic Products</h3>
                 <p className="text-gray-600">100% genuine fragrances with authenticity guarantee.</p>
               </div>
             </div>
@@ -217,7 +223,7 @@ export default function AboutUs() {
                     <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
                   </svg>
                 </div>
-                <h3 className="text-xl font-bold text-black mb-4">Expert Service</h3>
+                <h3 className="text-xl font-bold text-black mb-4"  style={{ fontFamily: "'Itim', cursive" }}>Expert Service</h3>
                 <p className="text-gray-600">Personalized recommendations from our fragrance experts.</p>
               </div>
             </div>
@@ -228,7 +234,7 @@ export default function AboutUs() {
       {/* Call to Action Section */}
       <section className="py-16 md:py-24 bg-gradient-to-r from-black via-gray-900 to-black text-white">
         <div className="container mx-auto px-4 text-center">
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-6 animate-fade-in-up">
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-6 animate-fade-in-up"  style={{ fontFamily: "'Itim', cursive" }}>
             Ready to Find Your <span className="text-yellow-400">Signature Scent?</span>
           </h2>
           <p className="text-lg md:text-xl text-gray-300 mb-8 max-w-2xl mx-auto animate-fade-in-up animation-delay-300">

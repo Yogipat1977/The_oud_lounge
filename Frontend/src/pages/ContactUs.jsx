@@ -16,10 +16,12 @@ export default function ContactUs() {
       {/* Hero Section */}
       <section className="py-16 bg-gradient-to-b from-gray-900 to-black">
         <div className="container mx-auto px-4 text-center">
-          <h2 className="text-4xl md:text-5xl font-bold mb-4">
+          <h2 className="text-4xl md:text-5xl font-bold mb-4"
+           style={{ fontFamily: "'Itim', cursive" }}>
             Get in <span className="text-yellow-500">Touch</span>
           </h2>
-          <p className="text-xl text-gray-300 max-w-2xl mx-auto">
+          <p className="text-xl text-gray-300 max-w-2xl mx-auto"
+           style={{ fontFamily: "'Itim', cursive" }}>
             We'd love to hear from you. Send us a message and we'll respond as soon as possible.
           </p>
         </div>
@@ -32,7 +34,7 @@ export default function ContactUs() {
             {/* Contact Form */}
             <Card className="bg-gray-900 border-gray-800">
               <CardHeader>
-                <CardTitle className="text-2xl text-yellow-500">Send us a Message</CardTitle>
+                <CardTitle className="text-2xl text-yellow-500"  style={{ fontFamily: "'Itim', cursive" }}>Send us a Message</CardTitle>
               </CardHeader>
               <CardContent className="space-y-6">
                 <form className="space-y-6">
@@ -117,8 +119,8 @@ export default function ContactUs() {
             {/* Contact Information */}
             <div className="space-y-8">
               <div>
-                <h3 className="text-2xl font-bold text-yellow-500 mb-6">Contact Information</h3>
-                <p className="text-gray-300 mb-8">
+                <h3 className="text-2xl font-bold text-yellow-500 mb-6" style={{ fontFamily: "'Itim', cursive" }}>Contact Information</h3>
+                <p className="text-gray-300 mb-8" style={{ fontFamily: "'Itim', cursive" }}>
                   Reach out to us through any of the following channels. We're here to help you discover the perfect
                   fragrance.
                 </p>
