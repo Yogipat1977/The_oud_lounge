@@ -86,7 +86,7 @@ export default function Header() {
           </a>
           <a
             href="/login"
-            className="flex items-center space-x-1 px-2 py-1.5 border border-gray-800 rounded-full hover:bg-gray-800 hover:text-white transition-all duration-200 hover:scale-102"
+            className="flex items-center space-x-1 px-1 py-1border border-gray-800 rounded-full hover:bg-gray-800 hover:text-white transition-all duration-200 hover:scale-102"
             style={{ fontFamily: "'Itim', cursive" }}
           >
             <User size={16} />
