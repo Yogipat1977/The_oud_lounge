@@ -88,7 +88,7 @@ export default function Header() {
           <a
             href="/login"
             className="flex items-center space-x-1 px-1.5 py-1.5 border border-gray-800 rounded-full hover:bg-gray-800 hover:text-white transition-all duration-200 hover:scale-102"
-            style={{ fontFamily: "'Itim'" }}
+            style={{ fontFamily: "'item'" }}
           >
             <User size={16} />
             {/* <span></span> */}
@@ -118,7 +118,7 @@ export default function Header() {
           >
             <a href="/login" className="flex items-center gap-1">
               <User size={14} />
-              <span className="text-sm" style={{ fontFamily: "'Itim', cursive" }}>
+              <span className="text-sm" style={{ fontFamily: "'item'" }}>
                 Login
               </span>
             </a>
@@ -159,7 +159,7 @@ export default function Header() {
                       key={item}
                       href={`/${item.toLowerCase()}`}
                       className="text-2xl font-medium text-gray-950 hover:text-gray-850 transition-all duration-200 hover:scale-110 py-2 px-6 rounded-full hover:bg-amber-600/30"
-                      style={{ fontFamily: "'Itim'" }}
+                      style={{ fontFamily: "'item'" }}
                       onClick={() => setIsOpen(false)}
                     >
                       {item}
@@ -170,7 +170,7 @@ export default function Header() {
                 {/* Footer with social links or additional info */}
                 <div className="p-6 border-t border-amber-600/30">
                   <div className="text-center text-gray-950/80 text-sm">
-                    <p className="mb-2" style={{ fontFamily: "'Itim'," }}>
+                    <p className="mb-2" style={{ fontFamily: "'item'," }}>
                       Follow us
                     </p>
                     <div className="flex justify-center space-x-4">

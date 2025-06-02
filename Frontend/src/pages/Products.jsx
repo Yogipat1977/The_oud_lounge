@@ -715,7 +715,7 @@ export default function PerfumeProducts() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.3 }}
               className="text-5xl md:text-7xl font-bold bg-gradient-to-r from-yellow-600 via-yellow-500 to-yellow-400 bg-clip-text text-transparent mb-6"
-               style={{ fontFamily: "'Itim', cursive" }}
+               style={{ fontFamily: "'item'" }}
             >
               Premium Perfumes
             </motion.h1>
@@ -724,7 +724,7 @@ export default function PerfumeProducts() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.5 }}
               className="text-xl md:text-2xl text-gray-600 max-w-4xl mx-auto leading-relaxed"
-               style={{ fontFamily: "'Itim', cursive" }}
+               style={{ fontFamily: "'item'" }}
             >
               Discover our exquisite collection of premium fragrances, each crafted to perfection.
             </motion.p>
@@ -784,7 +784,7 @@ export default function PerfumeProducts() {
                 transition={{ duration: 0.6, delay: 0.8 }}
                 id="cta-heading"
                 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4"
-                 style={{ fontFamily: "'Itim', cursive" }}
+                 style={{ fontFamily: "'item'" }}
               >
                 Find Your Signature Scent
               </motion.h2>
@@ -793,7 +793,7 @@ export default function PerfumeProducts() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.9 }}
                 className="text-gray-600 mb-8 max-w-2xl mx-auto text-lg"
-                 style={{ fontFamily: "'Itim', cursive" }}
+                 style={{ fontFamily: "'item'm" }}
               >
                 Each fragrance tells a unique story. Explore our collection and discover the perfect scent that defines
                 your personality and style.
