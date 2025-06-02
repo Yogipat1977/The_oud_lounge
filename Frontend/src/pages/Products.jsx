@@ -3,7 +3,7 @@
 import { motion } from "framer-motion"
 import { useState, useEffect } from "react"
 import { useCart } from "./CartContext"
-import { Star, Heart, ShoppingCart, Sparkles, Gift, Zap, Crown, Gem, Award, TrendingUp } from "lucide-react"
+import { Star, Heart, ShoppingCart, Sparkles } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import Header from "../components/header"
@@ -135,26 +135,42 @@ const PromotionalBanner = () => {
         clipPath: "polygon(0 0, calc(100% - 20px) 0, 100% 20px, 100% 100%, 20px 100%, 0 calc(100% - 20px))",
       }}
     >
-      {/* Decorative icons */}
+      {/* Diagonal stripes background */}
+      <div className="absolute inset-0 opacity-20">
+        <div
+          className="absolute inset-0"
+          style={{
+            backgroundImage: `repeating-linear-gradient(
+            45deg,
+            transparent,
+            transparent 10px,
+            rgba(0,0,0,0.1) 10px,
+            rgba(0,0,0,0.1) 20px
+          )`,
+          }}
+        ></div>
+      </div>
+
+      {/* Decorative stars */}
       <div className="absolute top-4 left-8">
-        <Crown className="w-8 h-8 text-yellow-300 animate-pulse" />
+        <Star className="w-6 h-6 fill-yellow-300 text-yellow-300" />
       </div>
       <div className="absolute top-8 right-12">
-        <Gem className="w-6 h-6 text-yellow-300" />
+        <Star className="w-4 h-4 fill-yellow-300 text-yellow-300" />
       </div>
       <div className="absolute bottom-6 left-16">
-        <Award className="w-7 h-7 text-yellow-300" />
+        <Star className="w-5 h-5 fill-yellow-300 text-yellow-300" />
       </div>
       <div className="absolute bottom-4 right-8">
-        <TrendingUp className="w-8 h-8 text-yellow-300 animate-bounce" />
+        <Star className="w-6 h-6 fill-yellow-300 text-yellow-300" />
       </div>
 
       {/* Shopping bag icons */}
       <div className="absolute left-4 top-1/2 transform -translate-y-1/2">
-        <ShoppingCart className="w-16 h-16 text-white opacity-20" />
+        <ShoppingCart className="w-12 h-12 text-white opacity-30" />
       </div>
       <div className="absolute right-4 top-1/2 transform -translate-y-1/2">
-        <ShoppingCart className="w-16 h-16 text-white opacity-20" />
+        <ShoppingCart className="w-12 h-12 text-white opacity-30" />
       </div>
 
       <div className="relative z-10 text-center">
@@ -171,26 +187,7 @@ const PromotionalBanner = () => {
               clipPath: "polygon(10px 0, 100% 0, calc(100% - 10px) 100%, 0 100%)",
             }}
           >
-            <div className="flex items-center justify-center gap-4 mb-2">
-              <Zap className="w-10 h-10 text-yellow-300 animate-pulse" />
-              <h2
-                className="text-4xl md:text-6xl font-black tracking-widest uppercase"
-                style={{ fontFamily: "Impact, Arial Black, sans-serif" }}
-              >
-                MEGA DEAL
-              </h2>
-              <Zap className="w-10 h-10 text-yellow-300 animate-pulse" />
-            </div>
-            <div className="flex items-center justify-center gap-2">
-              <Sparkles className="w-6 h-6 text-yellow-300" />
-              <span
-                className="text-xl font-extrabold tracking-wider uppercase"
-                style={{ fontFamily: "Arial Black, sans-serif" }}
-              >
-                ALERT!
-              </span>
-              <Sparkles className="w-6 h-6 text-yellow-300" />
-            </div>
+            <h2 className="text-4xl md:text-5xl font-black tracking-wider">SUPER DEAL</h2>
           </div>
         </motion.div>
 
@@ -206,36 +203,9 @@ const PromotionalBanner = () => {
               clipPath: "polygon(0 0, calc(100% - 15px) 0, 100% 15px, 100% 100%, 15px 100%, 0 calc(100% - 15px))",
             }}
           >
-            <div className="flex items-center justify-center gap-3 mb-3">
-              <Gift className="w-8 h-8 text-yellow-300 animate-bounce" />
-              <p
-                className="text-2xl md:text-4xl font-black tracking-wide uppercase"
-                style={{ fontFamily: "Arial Black, sans-serif" }}
-              >
-                Buy Any 3 Perfumes for £100
-              </p>
-              <Gift className="w-8 h-8 text-yellow-300 animate-bounce" />
-            </div>
-            <div className="flex items-center justify-center gap-2 mb-2">
-              <Crown className="w-6 h-6 text-yellow-300" />
-              <p
-                className="text-lg md:text-2xl font-bold tracking-wide uppercase"
-                style={{ fontFamily: "Arial, sans-serif" }}
-              >
-                + Get 2 FREE Roll-ins Worth £20!
-              </p>
-              <Crown className="w-6 h-6 text-yellow-300" />
-            </div>
-            <div className="flex items-center justify-center gap-2">
-              <Award className="w-5 h-5 text-yellow-300" />
-              <p
-                className="text-base md:text-lg font-extrabold tracking-wider uppercase"
-                style={{ fontFamily: "Arial, sans-serif" }}
-              >
-                Save up to £39.97 on your order!
-              </p>
-              <Award className="w-5 h-5 text-yellow-300" />
-            </div>
+            <p className="text-2xl md:text-3xl font-bold mb-2">Buy Any 3 Perfumes for £100</p>
+            <p className="text-lg md:text-xl font-semibold mb-2">+ Get 2 FREE Roll-ins Worth £20!</p>
+            <p className="text-base font-medium">Save up to £39.97 on your order!</p>
           </div>
         </motion.div>
 
@@ -251,15 +221,7 @@ const PromotionalBanner = () => {
               clipPath: "polygon(8px 0, 100% 0, calc(100% - 8px) 100%, 0 100%)",
             }}
           >
-            <div className="flex items-center gap-2">
-              <Sparkles className="w-5 h-5 text-yellow-300" />
-              <span
-                className="font-black text-sm md:text-base tracking-wide uppercase"
-                style={{ fontFamily: "Arial Black, sans-serif" }}
-              >
-                Mix & Match Any Fragrances
-              </span>
-            </div>
+            <span className="font-bold">✨ Mix & Match Any Fragrances</span>
           </div>
           <div
             className="bg-white/20 px-6 py-3 transform rotate-1"
@@ -267,15 +229,7 @@ const PromotionalBanner = () => {
               clipPath: "polygon(8px 0, 100% 0, calc(100% - 8px) 100%, 0 100%)",
             }}
           >
-            <div className="flex items-center gap-2">
-              <Gift className="w-5 h-5 text-yellow-300" />
-              <span
-                className="font-black text-sm md:text-base tracking-wide uppercase"
-                style={{ fontFamily: "Arial Black, sans-serif" }}
-              >
-                FREE Roll-ins Included
-              </span>
-            </div>
+            <span className="font-bold">🎁 FREE Roll-ins Included</span>
           </div>
           <div
             className="bg-white/20 px-6 py-3 transform -rotate-1"
@@ -283,15 +237,7 @@ const PromotionalBanner = () => {
               clipPath: "polygon(8px 0, 100% 0, calc(100% - 8px) 100%, 0 100%)",
             }}
           >
-            <div className="flex items-center gap-2">
-              <TrendingUp className="w-5 h-5 text-yellow-300" />
-              <span
-                className="font-black text-sm md:text-base tracking-wide uppercase"
-                style={{ fontFamily: "Arial Black, sans-serif" }}
-              >
-                Limited Time Offer
-              </span>
-            </div>
+            <span className="font-bold">💝 Limited Time Offer</span>
           </div>
         </motion.div>
       </div>
@@ -350,9 +296,8 @@ const ProductCard = ({ product, index }) => {
 
       {/* Deal Badge */}
       <div className="absolute top-4 left-4 z-10">
-        <Badge className="bg-gradient-to-r from-purple-500 to-pink-500 text-white font-black text-xs tracking-wide">
-          <Crown className="w-3 h-3 mr-1" />
-          3-FOR-£100 DEAL!
+        <Badge className="bg-gradient-to-r from-purple-500 to-pink-500 text-white font-bold">
+          Part of 3-for-£100 Deal!
         </Badge>
       </div>
 
@@ -382,29 +327,28 @@ const ProductCard = ({ product, index }) => {
           <Button
             onClick={handleAddToCart}
             disabled={isAdding}
-            className="bg-gradient-to-r from-yellow-400 to-yellow-600 hover:from-yellow-500 hover:to-yellow-700 text-black font-black px-6 py-2 rounded-full transition-all duration-300 flex items-center gap-2 shadow-lg tracking-wide"
+            className="bg-gradient-to-r from-yellow-400 to-yellow-600 hover:from-yellow-500 hover:to-yellow-700 text-black font-semibold px-6 py-2 rounded-full transition-all duration-300 flex items-center gap-2 shadow-lg"
           >
             <ShoppingCart className="w-4 h-4" />
-            <span style={{ fontFamily: "Arial Black, sans-serif" }}>{isAdding ? "ADDED!" : "QUICK ADD"}</span>
+            {isAdding ? "Added!" : "Quick Add"}
           </Button>
         </motion.div>
       </div>
 
       <div className="p-6">
         {product.category && (
-          <Badge variant="secondary" className="mb-3 inline-block font-bold tracking-wide">
+          <Badge variant="secondary" className="mb-3 inline-block">
             {product.category}
           </Badge>
         )}
         <h3
-          className="text-xl font-black text-gray-900 mb-2 group-hover:text-yellow-600 transition-colors duration-300 truncate tracking-wide uppercase"
+          className="text-xl font-bold text-gray-900 mb-2 group-hover:text-yellow-600 transition-colors duration-300 truncate"
           title={product.name}
-          style={{ fontFamily: "Arial Black, sans-serif" }}
         >
           {product.name}
         </h3>
         <p
-          className="text-gray-600 text-sm leading-relaxed mb-4 h-10 overflow-hidden line-clamp-2 font-medium"
+          className="text-gray-600 text-sm leading-relaxed mb-4 h-10 overflow-hidden line-clamp-2"
           title={product.description}
         >
           {product.description || "No description available."}
@@ -420,35 +364,26 @@ const ProductCard = ({ product, index }) => {
               />
             ))}
           </div>
-          <span className="text-sm text-gray-600 font-semibold">
+          <span className="text-sm text-gray-600">
             {Number.parseFloat(product.rating || 0).toFixed(1)} ({product.reviews || 0} reviews)
           </span>
         </div>
         <div className="flex items-center justify-between">
           <div>
-            <span className="text-2xl font-black text-gray-900" style={{ fontFamily: "Arial Black, sans-serif" }}>
+            <span className="text-2xl font-bold text-gray-900">
               £{product.price ? product.price.toFixed(2) : "0.00"}
             </span>
-            <div className="flex items-center gap-1">
-              <Zap className="w-3 h-3 text-purple-600" />
-              <p
-                className="text-xs text-purple-600 font-black tracking-wide uppercase"
-                style={{ fontFamily: "Arial Black, sans-serif" }}
-              >
-                Or 3 for £100!
-              </p>
-            </div>
+            <p className="text-xs text-purple-600 font-semibold">Or 3 for £100!</p>
           </div>
           <Button
             onClick={handleAddToCart}
             disabled={isAdding}
             size="sm"
-            className={`transition-all duration-300 font-black tracking-wide ${
+            className={`transition-all duration-300 ${
               isAdding ? "bg-green-500 hover:bg-green-600 text-white" : "bg-yellow-500 hover:bg-yellow-600 text-black"
             }`}
-            style={{ fontFamily: "Arial Black, sans-serif" }}
           >
-            {isAdding ? "ADDED!" : "ADD TO CART"}
+            {isAdding ? "Added!" : "Add to Cart"}
           </Button>
         </div>
       </div>
@@ -470,12 +405,11 @@ const FilterBar = ({ activeFilter, onFilterChange, categories }) => {
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
           onClick={() => onFilterChange(category)}
-          className={`px-6 py-3 rounded-full font-black transition-all duration-300 text-sm tracking-wide uppercase ${
+          className={`px-6 py-3 rounded-full font-medium transition-all duration-300 text-sm ${
             activeFilter === category
               ? "bg-gradient-to-r from-yellow-400 to-yellow-600 text-black shadow-md"
               : "bg-transparent text-gray-700 hover:bg-gray-50"
           }`}
-          style={{ fontFamily: "Arial Black, sans-serif" }}
           aria-pressed={activeFilter === category}
         >
           {category}
@@ -525,12 +459,7 @@ export default function PerfumeProducts() {
       <>
         <Header />
         <main className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-50 via-white to-gray-50 py-24 px-4">
-          <p
-            className="text-xl text-yellow-600 font-black tracking-wide"
-            style={{ fontFamily: "Arial Black, sans-serif" }}
-          >
-            LOADING PERFUMES...
-          </p>
+          <p className="text-xl text-yellow-600">Loading perfumes...</p>
         </main>
         <Footer />
       </>
@@ -542,16 +471,10 @@ export default function PerfumeProducts() {
       <>
         <Header />
         <main className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-gray-50 via-white to-gray-50 py-16 px-4 text-center">
-          <p className="text-xl text-red-600 mb-4 font-black" style={{ fontFamily: "Arial Black, sans-serif" }}>
-            OOPS! SOMETHING WENT WRONG.
-          </p>
-          <p className="text-md text-gray-700 mb-2 font-semibold">{error}</p>
-          <Button
-            onClick={() => window.location.reload()}
-            className="mt-6 font-black"
-            style={{ fontFamily: "Arial Black, sans-serif" }}
-          >
-            TRY AGAIN
+          <p className="text-xl text-red-600 mb-4">Oops! Something went wrong.</p>
+          <p className="text-md text-gray-700 mb-2">{error}</p>
+          <Button onClick={() => window.location.reload()} className="mt-6">
+            Try Again
           </Button>
         </main>
         <Footer />
@@ -576,14 +499,13 @@ export default function PerfumeProducts() {
               transition={{ duration: 0.6, delay: 0.2 }}
               className="flex justify-center mb-6"
             >
-              <Crown className="w-16 h-16 text-yellow-500 animate-pulse" />
+              <Sparkles className="w-16 h-16 text-yellow-500" />
             </motion.div>
             <motion.h1
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.3 }}
-              className="text-5xl md:text-7xl font-black bg-gradient-to-r from-yellow-600 via-yellow-500 to-yellow-400 bg-clip-text text-transparent mb-6 tracking-wider uppercase"
-              style={{ fontFamily: "Impact, Arial Black, sans-serif" }}
+              className="text-5xl md:text-7xl font-bold bg-gradient-to-r from-yellow-600 via-yellow-500 to-yellow-400 bg-clip-text text-transparent mb-6"
             >
               Premium Perfumes
             </motion.h1>
@@ -591,18 +513,14 @@ export default function PerfumeProducts() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.5 }}
-              className="text-xl md:text-2xl text-gray-600 max-w-4xl mx-auto leading-relaxed font-semibold tracking-wide"
+              className="text-xl md:text-2xl text-gray-600 max-w-4xl mx-auto leading-relaxed"
             >
               Discover our exquisite collection of premium fragrances, each crafted to perfection.
             </motion.p>
             {getCartItemsCount() > 0 && (
               <motion.div initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }} className="mt-4">
-                <Badge
-                  variant="outline"
-                  className="text-lg px-4 py-2 bg-yellow-100 text-yellow-800 border-yellow-300 font-black tracking-wide"
-                >
-                  <ShoppingCart className="w-4 h-4 mr-2" />
-                  CART: {getCartItemsCount()} ITEM(S)
+                <Badge variant="outline" className="text-lg px-4 py-2 bg-yellow-100 text-yellow-800 border-yellow-300">
+                  🛒 Cart: {getCartItemsCount()} item(s)
                 </Badge>
               </motion.div>
             )}
@@ -618,9 +536,9 @@ export default function PerfumeProducts() {
             transition={{ duration: 0.6, delay: 0.3 }}
             className="text-center mb-8"
           >
-            <p className="text-gray-600 font-semibold tracking-wide">
-              Showing <span className="font-black text-yellow-600">{filteredProducts.length}</span> of{" "}
-              <span className="font-black">{masterProductList.length}</span> products
+            <p className="text-gray-600">
+              Showing <span className="font-semibold text-yellow-600">{filteredProducts.length}</span> of{" "}
+              <span className="font-semibold">{masterProductList.length}</span> products
             </p>
           </motion.div>
 
@@ -631,12 +549,7 @@ export default function PerfumeProducts() {
               transition={{ duration: 0.5 }}
               className="text-center py-10"
             >
-              <p
-                className="text-xl text-gray-500 font-black tracking-wide uppercase"
-                style={{ fontFamily: "Arial Black, sans-serif" }}
-              >
-                No perfumes found for "{activeFilter}".
-              </p>
+              <p className="text-xl text-gray-500">No perfumes found for "{activeFilter}".</p>
             </motion.div>
           ) : (
             <motion.div layout className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
@@ -659,8 +572,7 @@ export default function PerfumeProducts() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.8 }}
                 id="cta-heading"
-                className="text-3xl md:text-4xl font-black text-gray-900 mb-4 tracking-wide uppercase"
-                style={{ fontFamily: "Arial Black, sans-serif" }}
+                className="text-3xl md:text-4xl font-bold text-gray-900 mb-4"
               >
                 Find Your Signature Scent
               </motion.h2>
@@ -668,7 +580,7 @@ export default function PerfumeProducts() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.9 }}
-                className="text-gray-600 mb-8 max-w-2xl mx-auto text-lg font-semibold tracking-wide"
+                className="text-gray-600 mb-8 max-w-2xl mx-auto text-lg"
               >
                 Each fragrance tells a unique story. Explore our collection and discover the perfect scent that defines
                 your personality and style.

@@ -1,21 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import {
-  Minus,
-  Plus,
-  ShoppingCart,
-  ArrowLeft,
-  Trash2,
-  Star,
-  Gift,
-  Sparkles,
-  Zap,
-  Crown,
-  Award,
-  TrendingUp,
-  Target,
-} from "lucide-react"
+import { Minus, Plus, ShoppingCart, ArrowLeft, Trash2, Star, Gift, Sparkles } from "lucide-react"
 import { useCart } from "./CartContext"
 import { Link } from "react-router-dom"
 import { loadStripe } from "@stripe/stripe-js"
@@ -85,11 +71,27 @@ const PromotionalOffer = ({ cartItems, isCartPage = false }) => {
           clipPath: "polygon(0 0, calc(100% - 15px) 0, 100% 15px, 100% 100%, 15px 100%, 0 calc(100% - 15px))",
         }}
       >
+        {/* Diagonal stripes */}
+        <div className="absolute inset-0 opacity-20">
+          <div
+            className="absolute inset-0"
+            style={{
+              backgroundImage: `repeating-linear-gradient(
+              45deg,
+              transparent,
+              transparent 8px,
+              rgba(0,0,0,0.1) 8px,
+              rgba(0,0,0,0.1) 16px
+            )`,
+            }}
+          ></div>
+        </div>
+
         {/* Stars */}
-        <Crown className="absolute top-3 left-6 w-6 h-6 text-yellow-300 animate-pulse" />
-        <Award className="absolute top-6 right-8 w-5 h-5 text-yellow-300" />
-        <TrendingUp className="absolute bottom-4 left-12 w-5 h-5 text-yellow-300 animate-bounce" />
-        <Zap className="absolute bottom-3 right-6 w-6 h-6 text-yellow-300 animate-pulse" />
+        <Star className="absolute top-3 left-6 w-5 h-5 fill-yellow-300 text-yellow-300" />
+        <Star className="absolute top-6 right-8 w-4 h-4 fill-yellow-300 text-yellow-300" />
+        <Star className="absolute bottom-4 left-12 w-4 h-4 fill-yellow-300 text-yellow-300" />
+        <Star className="absolute bottom-3 right-6 w-5 h-5 fill-yellow-300 text-yellow-300" />
 
         <div className="relative z-10 text-center">
           <div
@@ -98,16 +100,7 @@ const PromotionalOffer = ({ cartItems, isCartPage = false }) => {
               clipPath: "polygon(8px 0, 100% 0, calc(100% - 8px) 100%, 0 100%)",
             }}
           >
-            <div className="flex items-center justify-center gap-2">
-              <Sparkles className="w-6 h-6 text-yellow-300" />
-              <h3
-                className="text-2xl font-black tracking-widest uppercase"
-                style={{ fontFamily: "Impact, Arial Black, sans-serif" }}
-              >
-                SPECIAL OFFER
-              </h3>
-              <Sparkles className="w-6 h-6 text-yellow-300" />
-            </div>
+            <h3 className="text-2xl font-black tracking-wide">🎉 SPECIAL OFFER 🎉</h3>
           </div>
           <div
             className="bg-black/20 p-4"
@@ -115,21 +108,8 @@ const PromotionalOffer = ({ cartItems, isCartPage = false }) => {
               clipPath: "polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 10px 100%, 0 calc(100% - 10px))",
             }}
           >
-            <div className="flex items-center justify-center gap-2 mb-2">
-              <Gift className="w-6 h-6 text-yellow-300" />
-              <p
-                className="text-lg font-black tracking-wide uppercase"
-                style={{ fontFamily: "Arial Black, sans-serif" }}
-              >
-                Buy Any 3 Perfumes for £100
-              </p>
-            </div>
-            <div className="flex items-center justify-center gap-2">
-              <Crown className="w-5 h-5 text-yellow-300" />
-              <p className="text-sm font-bold tracking-wide uppercase" style={{ fontFamily: "Arial, sans-serif" }}>
-                + Get 2 FREE Roll-ins Worth £20!
-              </p>
-            </div>
+            <p className="text-lg font-bold mb-2">Buy Any 3 Perfumes for £100</p>
+            <p className="text-sm font-semibold">+ Get 2 FREE Roll-ins Worth £20!</p>
           </div>
         </div>
       </div>
@@ -144,9 +124,25 @@ const PromotionalOffer = ({ cartItems, isCartPage = false }) => {
           clipPath: "polygon(0 0, calc(100% - 20px) 0, 100% 20px, 100% 100%, 20px 100%, 0 calc(100% - 20px))",
         }}
       >
+        {/* Diagonal stripes */}
+        <div className="absolute inset-0 opacity-15">
+          <div
+            className="absolute inset-0"
+            style={{
+              backgroundImage: `repeating-linear-gradient(
+              45deg,
+              transparent,
+              transparent 10px,
+              rgba(0,0,0,0.1) 10px,
+              rgba(0,0,0,0.1) 20px
+            )`,
+            }}
+          ></div>
+        </div>
+
         <div className="relative z-10">
           <div className="flex items-center gap-3 mb-4">
-            <Gift className="w-10 h-10 animate-bounce" />
+            <Gift className="w-8 h-8" />
             <div>
               <div
                 className="bg-red-600 px-4 py-2 transform -rotate-1"
@@ -154,20 +150,9 @@ const PromotionalOffer = ({ cartItems, isCartPage = false }) => {
                   clipPath: "polygon(6px 0, 100% 0, calc(100% - 6px) 100%, 0 100%)",
                 }}
               >
-                <div className="flex items-center gap-2">
-                  <Zap className="w-6 h-6 text-yellow-300" />
-                  <h3
-                    className="text-xl font-black tracking-widest uppercase"
-                    style={{ fontFamily: "Impact, Arial Black, sans-serif" }}
-                  >
-                    DEAL AVAILABLE!
-                  </h3>
-                  <Zap className="w-6 h-6 text-yellow-300" />
-                </div>
+                <h3 className="text-xl font-black">🎉 DEAL AVAILABLE!</h3>
               </div>
-              <p className="text-sm font-bold mt-2 tracking-wide uppercase" style={{ fontFamily: "Arial, sans-serif" }}>
-                You qualify for our special offer
-              </p>
+              <p className="text-sm opacity-90 mt-2">You qualify for our special offer</p>
             </div>
           </div>
           <div
@@ -177,49 +162,24 @@ const PromotionalOffer = ({ cartItems, isCartPage = false }) => {
             }}
           >
             <div className="flex justify-between items-center mb-2">
-              <div className="flex items-center gap-2">
-                <Crown className="w-5 h-5 text-yellow-300" />
-                <span className="font-black tracking-wide uppercase" style={{ fontFamily: "Arial Black, sans-serif" }}>
-                  3 Perfumes Deal Price:
-                </span>
-              </div>
-              <span className="text-2xl font-black tracking-wide" style={{ fontFamily: "Arial Black, sans-serif" }}>
-                £100.00
-              </span>
+              <span className="font-semibold">3 Perfumes Deal Price:</span>
+              <span className="text-2xl font-bold">£100.00</span>
             </div>
             <div className="flex justify-between items-center mb-2">
-              <div className="flex items-center gap-2">
-                <Gift className="w-4 h-4 text-green-200" />
-                <span className="font-bold tracking-wide uppercase" style={{ fontFamily: "Arial, sans-serif" }}>
-                  + 2 FREE Roll-ins
-                </span>
-              </div>
-              <span
-                className="text-green-200 font-black tracking-wide uppercase"
-                style={{ fontFamily: "Arial Black, sans-serif" }}
-              >
-                FREE (Worth £20)
-              </span>
+              <span>+ 2 FREE Roll-ins</span>
+              <span className="text-green-200">FREE (Worth £20)</span>
             </div>
             {savings > 0 && (
               <div className="flex justify-between items-center text-green-200">
-                <div className="flex items-center gap-2">
-                  <Award className="w-4 h-4" />
-                  <span className="font-bold tracking-wide uppercase" style={{ fontFamily: "Arial, sans-serif" }}>
-                    Your Savings:
-                  </span>
-                </div>
-                <span className="font-black tracking-wide" style={{ fontFamily: "Arial Black, sans-serif" }}>
-                  £{savings.toFixed(2)}
-                </span>
+                <span>Your Savings:</span>
+                <span className="font-bold">£{savings.toFixed(2)}</span>
               </div>
             )}
           </div>
           <button
-            className="w-full mt-4 bg-white text-green-600 font-black py-3 hover:bg-gray-100 transition-colors transform hover:scale-105 tracking-widest uppercase"
+            className="w-full mt-4 bg-white text-green-600 font-bold py-3 hover:bg-gray-100 transition-colors transform hover:scale-105"
             style={{
               clipPath: "polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 8px 100%, 0 calc(100% - 8px))",
-              fontFamily: "Arial Black, sans-serif",
             }}
           >
             Apply Deal - Save £{savings > 0 ? savings.toFixed(2) : "0.00"}
@@ -238,9 +198,25 @@ const PromotionalOffer = ({ cartItems, isCartPage = false }) => {
           clipPath: "polygon(0 0, calc(100% - 20px) 0, 100% 20px, 100% 100%, 20px 100%, 0 calc(100% - 20px))",
         }}
       >
+        {/* Diagonal stripes */}
+        <div className="absolute inset-0 opacity-20">
+          <div
+            className="absolute inset-0"
+            style={{
+              backgroundImage: `repeating-linear-gradient(
+              45deg,
+              transparent,
+              transparent 10px,
+              rgba(0,0,0,0.1) 10px,
+              rgba(0,0,0,0.1) 20px
+            )`,
+            }}
+          ></div>
+        </div>
+
         <div className="relative z-10">
           <div className="flex items-center gap-3 mb-4">
-            <Target className="w-8 h-8 animate-pulse" />
+            <Sparkles className="w-6 h-6 animate-pulse" />
             <div>
               <div
                 className="bg-red-600 px-4 py-2 transform rotate-1"
@@ -248,18 +224,9 @@ const PromotionalOffer = ({ cartItems, isCartPage = false }) => {
                   clipPath: "polygon(6px 0, 100% 0, calc(100% - 6px) 100%, 0 100%)",
                 }}
               >
-                <div className="flex items-center gap-2">
-                  <Sparkles className="w-5 h-5 text-yellow-300" />
-                  <h3
-                    className="text-lg font-black tracking-widest uppercase"
-                    style={{ fontFamily: "Impact, Arial Black, sans-serif" }}
-                  >
-                    Almost There!
-                  </h3>
-                  <Sparkles className="w-5 h-5 text-yellow-300" />
-                </div>
+                <h3 className="text-lg font-black">Almost There! 🎯</h3>
               </div>
-              <p className="text-sm font-bold mt-2 tracking-wide uppercase" style={{ fontFamily: "Arial, sans-serif" }}>
+              <p className="text-sm opacity-90 mt-2">
                 Add {itemsNeeded} more perfume{itemsNeeded > 1 ? "s" : ""} to unlock the deal
               </p>
             </div>
@@ -270,25 +237,14 @@ const PromotionalOffer = ({ cartItems, isCartPage = false }) => {
               clipPath: "polygon(0 0, calc(100% - 12px) 0, 100% 12px, 100% 100%, 12px 100%, 0 calc(100% - 12px))",
             }}
           >
-            <div className="flex items-center gap-2 mb-2">
-              <Gift className="w-5 h-5 text-yellow-300" />
-              <p className="font-black tracking-wide uppercase" style={{ fontFamily: "Arial Black, sans-serif" }}>
-                3 Perfumes for £100 + 2 FREE Roll-ins
-              </p>
-            </div>
-            <div className="flex items-center gap-2">
-              <Award className="w-4 h-4 text-yellow-300" />
-              <p className="text-sm font-bold tracking-wide uppercase" style={{ fontFamily: "Arial, sans-serif" }}>
-                Save up to £39.97 on your order!
-              </p>
-            </div>
+            <p className="font-semibold mb-2">🎁 3 Perfumes for £100 + 2 FREE Roll-ins</p>
+            <p className="text-sm">Save up to £39.97 on your order!</p>
           </div>
           <Link to="/product">
             <button
-              className="w-full bg-white text-orange-600 font-black py-3 hover:bg-gray-100 transition-colors transform hover:scale-105 tracking-widest uppercase"
+              className="w-full bg-white text-orange-600 font-bold py-3 hover:bg-gray-100 transition-colors transform hover:scale-105"
               style={{
                 clipPath: "polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 8px 100%, 0 calc(100% - 8px))",
-                fontFamily: "Arial Black, sans-serif",
               }}
             >
               Add More Perfumes
@@ -430,30 +386,17 @@ export default function CartPage() {
               <ShoppingCart className="w-16 h-16 text-amber-400" />
             </div>
           </div>
-          <h1
-            className="text-3xl font-black text-amber-900 mb-4 tracking-wide uppercase"
-            style={{ fontFamily: "Arial Black, sans-serif" }}
-          >
-            Your cart is currently empty
-          </h1>
-          <p className="text-amber-700 mb-8 max-w-md mx-auto font-semibold tracking-wide">
+          <h1 className="text-3xl font-bold text-amber-900 mb-4">Your cart is currently empty</h1>
+          <p className="text-amber-700 mb-8 max-w-md mx-auto">
             Discover our exquisite collection of luxury fragrances and find your perfect scent.
           </p>
           <Link to="/product">
-            <button
-              className="bg-amber-600 hover:bg-amber-700 text-white px-8 py-3 rounded-lg font-black mb-12 transition-colors duration-300 tracking-widest uppercase"
-              style={{ fontFamily: "Arial Black, sans-serif" }}
-            >
+            <button className="bg-amber-600 hover:bg-amber-700 text-white px-8 py-3 rounded-lg font-semibold mb-12 transition-colors duration-300">
               Continue Shopping
             </button>
           </Link>
           <div className="mt-16">
-            <h2
-              className="text-2xl font-black text-amber-900 mb-8 tracking-wide uppercase"
-              style={{ fontFamily: "Arial Black, sans-serif" }}
-            >
-              You might like these
-            </h2>
+            <h2 className="text-2xl font-bold text-amber-900 mb-8">You might like these</h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
               {recommendedProducts.map((product) => (
                 <div
@@ -465,23 +408,12 @@ export default function CartPage() {
                     alt={product.name}
                     className="w-full h-64 object-cover rounded-lg mb-4"
                   />
-                  <h3
-                    className="font-black text-amber-900 mb-2 text-lg tracking-wide uppercase"
-                    style={{ fontFamily: "Arial Black, sans-serif" }}
-                  >
-                    {product.name}
-                  </h3>
-                  <p className="text-sm text-amber-600 mb-3 line-clamp-2 font-semibold">{product.description}</p>
-                  <p
-                    className="text-2xl font-black text-amber-900 mb-4 tracking-wide"
-                    style={{ fontFamily: "Arial Black, sans-serif" }}
-                  >
-                    £{product.price.toFixed(2)}
-                  </p>
+                  <h3 className="font-semibold text-amber-900 mb-2 text-lg">{product.name}</h3>
+                  <p className="text-sm text-amber-600 mb-3 line-clamp-2">{product.description}</p>
+                  <p className="text-2xl font-bold text-amber-900 mb-4">£{product.price.toFixed(2)}</p>
                   <button
                     onClick={() => addToCart(product)}
-                    className="w-full bg-amber-600 hover:bg-amber-700 text-white py-2 rounded-lg transition-colors duration-300 font-black tracking-widest uppercase"
-                    style={{ fontFamily: "Arial Black, sans-serif" }}
+                    className="w-full bg-amber-600 hover:bg-amber-700 text-white py-2 rounded-lg transition-colors duration-300"
                   >
                     Add to Cart
                   </button>
@@ -498,16 +430,10 @@ export default function CartPage() {
     <div className="min-h-screen bg-white py-8 px-4 pt-24">
       <div className="max-w-6xl mx-auto">
         <div className="flex items-center justify-between mb-8">
-          <h1
-            className="text-3xl font-black text-amber-900 tracking-wide uppercase"
-            style={{ fontFamily: "Arial Black, sans-serif" }}
-          >
-            Shopping Cart
-          </h1>
+          <h1 className="text-3xl font-bold text-amber-900">Shopping Cart</h1>
           <button
             onClick={clearCart}
-            className="text-amber-700 hover:text-red-600 transition-colors duration-300 px-4 py-2 border border-amber-300 rounded-lg font-black tracking-wide uppercase"
-            style={{ fontFamily: "Arial Black, sans-serif" }}
+            className="text-amber-700 hover:text-red-600 transition-colors duration-300 px-4 py-2 border border-amber-300 rounded-lg"
           >
             Clear Cart
           </button>
@@ -530,14 +456,9 @@ export default function CartPage() {
                       className="w-24 h-24 object-cover rounded-lg"
                     />
                     <div className="flex-1">
-                      <h3
-                        className="text-lg font-black text-amber-900 mb-2 tracking-wide uppercase"
-                        style={{ fontFamily: "Arial Black, sans-serif" }}
-                      >
-                        {item.name}
-                      </h3>
-                      <p className="text-sm text-amber-600 mb-2 font-semibold">{item.description}</p>
-                      <span className="inline-block bg-gray-100 text-gray-600 text-xs font-black px-3 py-1 rounded-full mb-2 tracking-wide uppercase">
+                      <h3 className="text-lg font-semibold text-amber-900 mb-2">{item.name}</h3>
+                      <p className="text-sm text-amber-600 mb-2">{item.description}</p>
+                      <span className="inline-block bg-gray-100 text-gray-600 text-xs font-medium px-3 py-1 rounded-full mb-2">
                         {item.category}
                       </span>
                       <div className="flex items-center gap-1 mb-2">
@@ -549,14 +470,9 @@ export default function CartPage() {
                             }`}
                           />
                         ))}
-                        <span className="text-xs text-gray-600 ml-1 font-bold">({item.reviews || 0})</span>
+                        <span className="text-xs text-gray-600 ml-1">({item.reviews || 0})</span>
                       </div>
-                      <p
-                        className="text-xl font-black text-amber-900 tracking-wide"
-                        style={{ fontFamily: "Arial Black, sans-serif" }}
-                      >
-                        £{item.price.toFixed(2)}
-                      </p>
+                      <p className="text-xl font-bold text-amber-900">£{item.price.toFixed(2)}</p>
                     </div>
                     <div className="flex items-center gap-3">
                       <button
@@ -565,12 +481,7 @@ export default function CartPage() {
                       >
                         <Minus className="w-4 h-4" />
                       </button>
-                      <span
-                        className="w-8 text-center font-black tracking-wide"
-                        style={{ fontFamily: "Arial Black, sans-serif" }}
-                      >
-                        {item.quantity}
-                      </span>
+                      <span className="w-8 text-center font-semibold">{item.quantity}</span>
                       <button
                         onClick={() => updateQuantity(item.id, item.quantity + 1)}
                         className="w-8 h-8 rounded-full border border-amber-300 flex items-center justify-center hover:bg-amber-50 transition-colors duration-300"
@@ -590,8 +501,7 @@ export default function CartPage() {
             </div>
             <Link
               to="/product"
-              className="mt-6 flex items-center gap-2 text-amber-900 hover:text-amber-700 transition-colors duration-300 font-black tracking-wide uppercase"
-              style={{ fontFamily: "Arial Black, sans-serif" }}
+              className="mt-6 flex items-center gap-2 text-amber-900 hover:text-amber-700 transition-colors duration-300"
             >
               <ArrowLeft className="w-4 h-4" />
               Continue Shopping
@@ -600,67 +510,34 @@ export default function CartPage() {
 
           <div className="lg:col-span-1">
             <div className="bg-gradient-to-br from-amber-50 to-yellow-50 rounded-lg p-6 sticky top-8">
-              <h2
-                className="text-xl font-black text-amber-900 mb-6 tracking-wide uppercase"
-                style={{ fontFamily: "Arial Black, sans-serif" }}
-              >
-                Order Summary
-              </h2>
+              <h2 className="text-xl font-bold text-amber-900 mb-6">Order Summary</h2>
               <div className="space-y-4 mb-6">
                 <div className="flex justify-between">
-                  <span
-                    className="text-amber-700 font-bold tracking-wide uppercase"
-                    style={{ fontFamily: "Arial, sans-serif" }}
-                  >
-                    Subtotal
-                  </span>
-                  <span className="font-black tracking-wide" style={{ fontFamily: "Arial Black, sans-serif" }}>
-                    £{subtotal.toFixed(2)}
-                  </span>
+                  <span className="text-amber-700">Subtotal</span>
+                  <span className="font-semibold">£{subtotal.toFixed(2)}</span>
                 </div>
 
                 {applyDeal && totalItems >= 3 ? (
                   <div className="bg-green-100 p-3 rounded-lg">
                     <div className="flex justify-between text-green-700">
-                      <span
-                        className="font-black tracking-wide uppercase"
-                        style={{ fontFamily: "Arial Black, sans-serif" }}
-                      >
-                        Deal Applied: 3 Perfumes
-                      </span>
-                      <span className="font-black tracking-wide" style={{ fontFamily: "Arial Black, sans-serif" }}>
-                        £100.00
-                      </span>
+                      <span className="font-semibold">Deal Applied: 3 Perfumes</span>
+                      <span className="font-bold">£100.00</span>
                     </div>
                     <div className="flex justify-between text-green-600 text-sm">
-                      <span className="font-bold tracking-wide uppercase" style={{ fontFamily: "Arial, sans-serif" }}>
-                        + 2 FREE Roll-ins
-                      </span>
-                      <span
-                        className="font-black tracking-wide uppercase"
-                        style={{ fontFamily: "Arial Black, sans-serif" }}
-                      >
-                        FREE
-                      </span>
+                      <span>+ 2 FREE Roll-ins</span>
+                      <span>FREE</span>
                     </div>
                     <div className="flex justify-between text-green-700 text-sm">
-                      <span className="font-bold tracking-wide uppercase" style={{ fontFamily: "Arial, sans-serif" }}>
-                        You Save:
-                      </span>
-                      <span className="font-black tracking-wide" style={{ fontFamily: "Arial Black, sans-serif" }}>
-                        £{(subtotal - 100).toFixed(2)}
-                      </span>
+                      <span>You Save:</span>
+                      <span className="font-semibold">£{(subtotal - 100).toFixed(2)}</span>
                     </div>
                   </div>
                 ) : (
                   <div className="flex justify-between">
-                    <span
-                      className="text-amber-700 font-bold tracking-wide uppercase"
-                      style={{ fontFamily: "Arial, sans-serif" }}
-                    >
+                    <span className="text-amber-700">
                       Delivery {subtotal >= 100 ? "(Free over £100)" : "(Under £100)"}
                     </span>
-                    <span className="font-black tracking-wide" style={{ fontFamily: "Arial Black, sans-serif" }}>
+                    <span className="font-semibold">
                       {deliveryCharge > 0 ? `£${deliveryCharge.toFixed(2)}` : "FREE"}
                     </span>
                   </div>
@@ -668,23 +545,15 @@ export default function CartPage() {
 
                 <hr className="border-amber-200" />
                 <div className="flex justify-between text-lg">
-                  <span
-                    className="font-black tracking-wide uppercase"
-                    style={{ fontFamily: "Arial Black, sans-serif" }}
-                  >
-                    Total
-                  </span>
-                  <span className="font-black tracking-wide" style={{ fontFamily: "Arial Black, sans-serif" }}>
-                    £{finalTotal.toFixed(2)}
-                  </span>
+                  <span className="font-bold">Total</span>
+                  <span className="font-bold">£{finalTotal.toFixed(2)}</span>
                 </div>
               </div>
 
               {!applyDeal && totalItems >= 3 && (
                 <button
                   onClick={handleApplyDeal}
-                  className="w-full bg-green-600 hover:bg-green-700 text-white py-3 mb-4 rounded-lg font-black transition-colors duration-300 tracking-widest uppercase"
-                  style={{ fontFamily: "Arial Black, sans-serif" }}
+                  className="w-full bg-green-600 hover:bg-green-700 text-white py-3 mb-4 rounded-lg font-semibold transition-colors duration-300"
                 >
                   Apply 3-Perfume Deal (Save £{(subtotal - 100).toFixed(2)})
                 </button>
@@ -693,19 +562,13 @@ export default function CartPage() {
               <button
                 onClick={handleProceedToCheckout}
                 disabled={isProcessingCheckout || !stripePromise}
-                className="w-full bg-amber-600 hover:bg-amber-700 text-white py-3 mb-4 rounded-lg font-black transition-colors duration-300 disabled:opacity-50 tracking-widest uppercase"
-                style={{ fontFamily: "Arial Black, sans-serif" }}
+                className="w-full bg-amber-600 hover:bg-amber-700 text-white py-3 mb-4 rounded-lg font-semibold transition-colors duration-300 disabled:opacity-50"
               >
-                {isProcessingCheckout ? "PROCESSING..." : "PROCEED TO CHECKOUT"}
+                {isProcessingCheckout ? "Processing..." : "Proceed to Checkout"}
               </button>
-              {checkoutError && <p className="text-red-500 text-sm mb-2 font-bold">{checkoutError}</p>}
+              {checkoutError && <p className="text-red-500 text-sm mb-2">{checkoutError}</p>}
               <div className="text-center">
-                <p
-                  className="text-xs text-amber-600 font-bold tracking-wide uppercase"
-                  style={{ fontFamily: "Arial, sans-serif" }}
-                >
-                  🔒 Secure checkout guaranteed
-                </p>
+                <p className="text-xs text-amber-600">🔒 Secure checkout guaranteed</p>
               </div>
             </div>
           </div>
