@@ -54,17 +54,16 @@ const recommendedProducts = [
 ]
 
 // Enhanced Promotional Offer Component for Cart Page
-const EnhancedCartPromotionalOffer = ({ cartItems, isCartPage = false }) => {
+const EnhancedCartPromotionalOffer = ({ cartItems, isCartPage = false, onApplyDealClick }) => {
   const totalItems = cartItems.reduce((sum, item) => sum + item.quantity, 0)
   const subtotal = cartItems.reduce((total, item) => total + item.price * item.quantity, 0)
 
-  // Check if eligible for the 3-perfume deal
   const isEligibleForDeal = totalItems >= 3
   const dealPrice = 100
   const savings = subtotal - dealPrice
 
   if (!isCartPage && totalItems === 0) {
-    // Enhanced promotional banner for product page
+    // Enhanced promotional banner for product page (empty cart)
     return (
       <motion.div
         initial={{ opacity: 0, scale: 0.9 }}
@@ -75,33 +74,18 @@ const EnhancedCartPromotionalOffer = ({ cartItems, isCartPage = false }) => {
           clipPath: "polygon(0 0, calc(100% - 15px) 0, 100% 15px, 100% 100%, 15px 100%, 0 calc(100% - 15px))",
         }}
       >
-        {/* Animated background */}
         <motion.div
           className="absolute inset-0 opacity-20"
-          animate={{
-            backgroundPosition: ["0% 0%", "100% 100%"],
-          }}
-          transition={{
-            duration: 15,
-            repeat: Number.POSITIVE_INFINITY,
-            repeatType: "reverse",
-          }}
+          animate={{ backgroundPosition: ["0% 0%", "100% 100%"] }}
+          transition={{ duration: 15, repeat: Number.POSITIVE_INFINITY, repeatType: "reverse" }}
         >
           <div
             className="absolute inset-0"
             style={{
-              backgroundImage: `repeating-linear-gradient(
-                45deg,
-                transparent,
-                transparent 8px,
-                rgba(0,0,0,0.1) 8px,
-                rgba(0,0,0,0.1) 16px
-              )`,
+              backgroundImage: `repeating-linear-gradient(45deg, transparent, transparent 8px, rgba(0,0,0,0.1) 8px, rgba(0,0,0,0.1) 16px)`,
             }}
           />
         </motion.div>
-
-        {/* Floating animated elements */}
         {[
           { Icon: Star, className: "top-3 left-6 w-5 h-5", delay: 0 },
           { Icon: Sparkles, className: "top-6 right-8 w-4 h-4", delay: 0.5 },
@@ -111,225 +95,92 @@ const EnhancedCartPromotionalOffer = ({ cartItems, isCartPage = false }) => {
           <motion.div
             key={index}
             className={`absolute ${className} fill-yellow-300 text-yellow-300`}
-            animate={{
-              y: [0, -10, 0],
-              rotate: [0, 360],
-              scale: [1, 1.2, 1],
-            }}
-            transition={{
-              duration: 4,
-              repeat: Number.POSITIVE_INFINITY,
-              ease: "easeInOut",
-              delay,
-            }}
-          >
-            <Icon />
-          </motion.div>
+            animate={{ y: [0, -10, 0], rotate: [0, 360], scale: [1, 1.2, 1] }}
+            transition={{ duration: 4, repeat: Number.POSITIVE_INFINITY, ease: "easeInOut", delay }}
+          > <Icon /> </motion.div>
         ))}
-
         <div className="relative z-10 text-center">
           <motion.div
             className="bg-red-600 p-4 mb-4 transform -rotate-1 shadow-xl"
-            style={{
-              clipPath: "polygon(8px 0, 100% 0, calc(100% - 8px) 100%, 0 100%)",
-            }}
-            animate={{
-              rotate: [-1, 0, -1],
-            }}
-            transition={{
-              duration: 6,
-              repeat: Number.POSITIVE_INFINITY,
-              ease: "easeInOut",
-            }}
+            style={{ clipPath: "polygon(8px 0, 100% 0, calc(100% - 8px) 100%, 0 100%)" }}
+            animate={{ rotate: [-1, 0, -1] }}
+            transition={{ duration: 6, repeat: Number.POSITIVE_INFINITY, ease: "easeInOut" }}
           >
             <motion.h3
               className="text-2xl font-black tracking-wide"
-              animate={{
-                textShadow: [
-                  "0 0 0px rgba(255,255,255,0)",
-                  "0 0 15px rgba(255,255,255,0.8)",
-                  "0 0 0px rgba(255,255,255,0)",
-                ],
-              }}
-              transition={{
-                duration: 2,
-                repeat: Number.POSITIVE_INFINITY,
-                ease: "easeInOut",
-              }}
-            >
-              🎉 SPECIAL OFFER 🎉
-            </motion.h3>
+              animate={{ textShadow: ["0 0 0px rgba(255,255,255,0)", "0 0 15px rgba(255,255,255,0.8)", "0 0 0px rgba(255,255,255,0)"] }}
+              transition={{ duration: 2, repeat: Number.POSITIVE_INFINITY, ease: "easeInOut" }}
+            > 🎉 SPECIAL OFFER 🎉 </motion.h3>
           </motion.div>
-
           <motion.div
             className="bg-black/20 p-4"
-            style={{
-              clipPath: "polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 10px 100%, 0 calc(100% - 10px))",
-            }}
-            animate={{
-              scale: [1, 1.02, 1],
-            }}
-            transition={{
-              duration: 3,
-              repeat: Number.POSITIVE_INFINITY,
-              ease: "easeInOut",
-            }}
+            style={{ clipPath: "polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 10px 100%, 0 calc(100% - 10px))" }}
+            animate={{ scale: [1, 1.02, 1] }}
+            transition={{ duration: 3, repeat: Number.POSITIVE_INFINITY, ease: "easeInOut" }}
           >
             <p className="text-lg font-bold mb-2">Buy Any 3 Perfumes for £100</p>
             <motion.p
               className="text-sm font-semibold"
-              animate={{
-                color: ["#ffffff", "#ffff99", "#ffffff"],
-              }}
-              transition={{
-                duration: 2,
-                repeat: Number.POSITIVE_INFINITY,
-                ease: "easeInOut",
-              }}
-            >
-              + Get 2 FREE Roll-ins Worth £20!
-            </motion.p>
+              animate={{ color: ["#ffffff", "#ffff99", "#ffffff"] }}
+              transition={{ duration: 2, repeat: Number.POSITIVE_INFINITY, ease: "easeInOut" }}
+            > + Get 2 FREE Roll-ins Worth £20! </motion.p>
           </motion.div>
         </div>
       </motion.div>
     )
   }
 
-  if (isCartPage && totalItems >= 3) {
+  if (isCartPage && isEligibleForDeal) { // Deal Available section
     return (
       <motion.div
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6 }}
+        initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}
         className="relative bg-gradient-to-r from-green-500 via-emerald-500 to-green-600 text-white p-6 mb-6 overflow-hidden"
-        style={{
-          clipPath: "polygon(0 0, calc(100% - 20px) 0, 100% 20px, 100% 100%, 20px 100%, 0 calc(100% - 20px))",
-        }}
+        style={{ clipPath: "polygon(0 0, calc(100% - 20px) 0, 100% 20px, 100% 100%, 20px 100%, 0 calc(100% - 20px))" }}
       >
-        {/* Animated success background */}
         <motion.div
           className="absolute inset-0 opacity-15"
-          animate={{
-            backgroundPosition: ["0% 0%", "100% 100%"],
-          }}
-          transition={{
-            duration: 20,
-            repeat: Number.POSITIVE_INFINITY,
-            repeatType: "reverse",
-          }}
+          animate={{ backgroundPosition: ["0% 0%", "100% 100%"] }}
+          transition={{ duration: 20, repeat: Number.POSITIVE_INFINITY, repeatType: "reverse" }}
         >
           <div
             className="absolute inset-0"
-            style={{
-              backgroundImage: `repeating-linear-gradient(
-                45deg,
-                transparent,
-                transparent 10px,
-                rgba(0,0,0,0.1) 10px,
-                rgba(0,0,0,0.1) 20px
-              )`,
-            }}
+            style={{ backgroundImage: `repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(0,0,0,0.1) 10px, rgba(0,0,0,0.1) 20px)`}}
           />
         </motion.div>
-
-        {/* Celebration particles */}
         {[...Array(6)].map((_, i) => (
           <motion.div
-            key={i}
-            className="absolute w-2 h-2 bg-yellow-300 rounded-full"
-            style={{
-              left: `${20 + i * 12}%`,
-              top: `${10 + (i % 2) * 70}%`,
-            }}
-            animate={{
-              y: [0, -20, 0],
-              opacity: [0, 1, 0],
-              scale: [0, 1, 0],
-            }}
-            transition={{
-              duration: 2,
-              repeat: Number.POSITIVE_INFINITY,
-              delay: i * 0.3,
-              ease: "easeInOut",
-            }}
+            key={i} className="absolute w-2 h-2 bg-yellow-300 rounded-full"
+            style={{ left: `${20 + i * 12}%`, top: `${10 + (i % 2) * 70}%` }}
+            animate={{ y: [0, -20, 0], opacity: [0, 1, 0], scale: [0, 1, 0] }}
+            transition={{ duration: 2, repeat: Number.POSITIVE_INFINITY, delay: i * 0.3, ease: "easeInOut" }}
           />
         ))}
-
         <div className="relative z-10">
           <div className="flex items-center gap-3 mb-4">
-            <motion.div
-              animate={{
-                rotate: [0, 360],
-                scale: [1, 1.2, 1],
-              }}
-              transition={{
-                duration: 3,
-                repeat: Number.POSITIVE_INFINITY,
-                ease: "easeInOut",
-              }}
-            >
+            <motion.div animate={{ rotate: [0, 360], scale: [1, 1.2, 1] }} transition={{ duration: 3, repeat: Number.POSITIVE_INFINITY, ease: "easeInOut" }}>
               <Gift className="w-8 h-8" />
             </motion.div>
             <div>
               <motion.div
                 className="bg-red-600 px-4 py-2 transform -rotate-1"
-                style={{
-                  clipPath: "polygon(6px 0, 100% 0, calc(100% - 6px) 100%, 0 100%)",
-                }}
-                animate={{
-                  rotate: [-1, 0, -1],
-                }}
-                transition={{
-                  duration: 4,
-                  repeat: Number.POSITIVE_INFINITY,
-                  ease: "easeInOut",
-                }}
-              >
-                <h3 className="text-xl font-black">🎉 DEAL AVAILABLE!</h3>
-              </motion.div>
-              <motion.p
-                className="text-sm opacity-90 mt-2"
-                animate={{
-                  opacity: [0.9, 1, 0.9],
-                }}
-                transition={{
-                  duration: 2,
-                  repeat: Number.POSITIVE_INFINITY,
-                  ease: "easeInOut",
-                }}
-              >
+                style={{ clipPath: "polygon(6px 0, 100% 0, calc(100% - 6px) 100%, 0 100%)" }}
+                animate={{ rotate: [-1, 0, -1] }}
+                transition={{ duration: 4, repeat: Number.POSITIVE_INFINITY, ease: "easeInOut" }}
+              > <h3 className="text-xl font-black">🎉 DEAL AVAILABLE!</h3> </motion.div>
+              <motion.p className="text-sm opacity-90 mt-2" animate={{ opacity: [0.9, 1, 0.9]}} transition={{ duration: 2, repeat: Number.POSITIVE_INFINITY, ease: "easeInOut" }}>
                 You qualify for our special offer
               </motion.p>
             </div>
           </div>
-
           <motion.div
             className="bg-white/20 p-4"
-            style={{
-              clipPath: "polygon(0 0, calc(100% - 12px) 0, 100% 12px, 100% 100%, 12px 100%, 0 calc(100% - 12px))",
-            }}
-            animate={{
-              scale: [1, 1.01, 1],
-            }}
-            transition={{
-              duration: 3,
-              repeat: Number.POSITIVE_INFINITY,
-              ease: "easeInOut",
-            }}
+            style={{ clipPath: "polygon(0 0, calc(100% - 12px) 0, 100% 12px, 100% 100%, 12px 100%, 0 calc(100% - 12px))" }}
+            animate={{ scale: [1, 1.01, 1] }}
+            transition={{ duration: 3, repeat: Number.POSITIVE_INFINITY, ease: "easeInOut" }}
           >
             <div className="flex justify-between items-center mb-2">
               <span className="font-semibold">3 Perfumes Deal Price:</span>
-              <motion.span
-                className="text-2xl font-bold"
-                animate={{
-                  scale: [1, 1.05, 1],
-                }}
-                transition={{
-                  duration: 2,
-                  repeat: Number.POSITIVE_INFINITY,
-                  ease: "easeInOut",
-                }}
-              >
+              <motion.span className="text-2xl font-bold" animate={{ scale: [1, 1.05, 1]}} transition={{ duration: 2, repeat: Number.POSITIVE_INFINITY, ease: "easeInOut" }}>
                 £100.00
               </motion.span>
             </div>
@@ -338,225 +189,82 @@ const EnhancedCartPromotionalOffer = ({ cartItems, isCartPage = false }) => {
               <span className="text-green-200">FREE (Worth £20)</span>
             </div>
             {savings > 0 && (
-              <motion.div
-                className="flex justify-between items-center text-green-200"
-                animate={{
-                  scale: [1, 1.02, 1],
-                }}
-                transition={{
-                  duration: 2,
-                  repeat: Number.POSITIVE_INFINITY,
-                  ease: "easeInOut",
-                }}
-              >
+              <motion.div className="flex justify-between items-center text-green-200" animate={{ scale: [1, 1.02, 1]}} transition={{ duration: 2, repeat: Number.POSITIVE_INFINITY, ease: "easeInOut" }}>
                 <span>Your Savings:</span>
                 <span className="font-bold">£{savings.toFixed(2)}</span>
               </motion.div>
             )}
           </motion.div>
-
-          <motion.button
-            className="w-full mt-4 bg-white text-green-600 font-bold py-3 hover:bg-gray-100 transition-colors"
-            style={{
-              clipPath: "polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 8px 100%, 0 calc(100% - 8px))",
-            }}
-            whileHover={{
-              scale: 1.02,
-              boxShadow: "0 5px 15px rgba(0,0,0,0.2)",
-            }}
-            whileTap={{ scale: 0.98 }}
-            animate={{
-              boxShadow: [
-                "0 0 0px rgba(255,255,255,0)",
-                "0 0 20px rgba(255,255,255,0.3)",
-                "0 0 0px rgba(255,255,255,0)",
-              ],
-            }}
-            transition={{
-              duration: 3,
-              repeat: Number.POSITIVE_INFINITY,
-              ease: "easeInOut",
-            }}
-          >
-            Apply Deal - Save £{savings > 0 ? savings.toFixed(2) : "0.00"}
-          </motion.button>
+          {/* The button to apply the deal is now in the Order Summary section if not yet applied */}
         </div>
       </motion.div>
     )
   }
 
-  if (isCartPage && totalItems > 0 && totalItems < 3) {
+  if (isCartPage && totalItems > 0 && totalItems < 3) { // Almost There section
     const itemsNeeded = 3 - totalItems
     return (
       <motion.div
-        initial={{ opacity: 0, x: -20 }}
-        animate={{ opacity: 1, x: 0 }}
-        transition={{ duration: 0.6 }}
+        initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.6 }}
         className="relative bg-gradient-to-r from-amber-500 via-orange-500 to-red-500 text-white p-6 mb-6 overflow-hidden"
-        style={{
-          clipPath: "polygon(0 0, calc(100% - 20px) 0, 100% 20px, 100% 100%, 20px 100%, 0 calc(100% - 20px))",
-        }}
+        style={{ clipPath: "polygon(0 0, calc(100% - 20px) 0, 100% 20px, 100% 100%, 20px 100%, 0 calc(100% - 20px))" }}
       >
-        {/* Animated urgency background */}
         <motion.div
           className="absolute inset-0 opacity-20"
-          animate={{
-            backgroundPosition: ["0% 0%", "100% 100%"],
-          }}
-          transition={{
-            duration: 10,
-            repeat: Number.POSITIVE_INFINITY,
-            repeatType: "reverse",
-          }}
+          animate={{ backgroundPosition: ["0% 0%", "100% 100%"] }}
+          transition={{ duration: 10, repeat: Number.POSITIVE_INFINITY, repeatType: "reverse" }}
         >
           <div
             className="absolute inset-0"
-            style={{
-              backgroundImage: `repeating-linear-gradient(
-                45deg,
-                transparent,
-                transparent 10px,
-                rgba(0,0,0,0.1) 10px,
-                rgba(0,0,0,0.1) 20px
-              )`,
-            }}
+            style={{ backgroundImage: `repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(0,0,0,0.1) 10px, rgba(0,0,0,0.1) 20px)`}}
           />
         </motion.div>
-
-        {/* Progress indicators */}
         <div className="absolute top-2 left-4 flex gap-1">
           {[...Array(3)].map((_, i) => (
             <motion.div
               key={i}
               className={`w-3 h-3 rounded-full ${i < totalItems ? "bg-green-400" : "bg-white/30"}`}
-              animate={
-                i < totalItems
-                  ? {
-                      scale: [1, 1.3, 1],
-                      boxShadow: [
-                        "0 0 0px rgba(34, 197, 94, 0)",
-                        "0 0 10px rgba(34, 197, 94, 0.8)",
-                        "0 0 0px rgba(34, 197, 94, 0)",
-                      ],
-                    }
-                  : {
-                      scale: [1, 1.1, 1],
-                    }
-              }
-              transition={{
-                duration: 2,
-                repeat: Number.POSITIVE_INFINITY,
-                ease: "easeInOut",
-                delay: i * 0.2,
-              }}
+              animate={ i < totalItems ? { scale: [1, 1.3, 1], boxShadow: ["0 0 0px rgba(34, 197, 94, 0)", "0 0 10px rgba(34, 197, 94, 0.8)", "0 0 0px rgba(34, 197, 94, 0)"]} : { scale: [1, 1.1, 1] }}
+              transition={{ duration: 2, repeat: Number.POSITIVE_INFINITY, ease: "easeInOut", delay: i * 0.2 }}
             />
           ))}
         </div>
-
         <div className="relative z-10">
           <div className="flex items-center gap-3 mb-4">
-            <motion.div
-              animate={{
-                rotate: [0, 10, -10, 0],
-                scale: [1, 1.1, 1],
-              }}
-              transition={{
-                duration: 2,
-                repeat: Number.POSITIVE_INFINITY,
-                ease: "easeInOut",
-              }}
-            >
+            <motion.div animate={{ rotate: [0, 10, -10, 0], scale: [1, 1.1, 1] }} transition={{ duration: 2, repeat: Number.POSITIVE_INFINITY, ease: "easeInOut" }}>
               <Sparkles className="w-6 h-6 animate-pulse" />
             </motion.div>
             <div>
               <motion.div
                 className="bg-red-600 px-4 py-2 transform rotate-1"
-                style={{
-                  clipPath: "polygon(6px 0, 100% 0, calc(100% - 6px) 100%, 0 100%)",
-                }}
-                animate={{
-                  rotate: [1, -0.5, 1],
-                }}
-                transition={{
-                  duration: 3,
-                  repeat: Number.POSITIVE_INFINITY,
-                  ease: "easeInOut",
-                }}
-              >
-                <h3 className="text-lg font-black">Almost There! 🎯</h3>
-              </motion.div>
-              <motion.p
-                className="text-sm opacity-90 mt-2"
-                animate={{
-                  opacity: [0.9, 1, 0.9],
-                }}
-                transition={{
-                  duration: 1.5,
-                  repeat: Number.POSITIVE_INFINITY,
-                  ease: "easeInOut",
-                }}
-              >
+                style={{ clipPath: "polygon(6px 0, 100% 0, calc(100% - 6px) 100%, 0 100%)" }}
+                animate={{ rotate: [1, -0.5, 1] }}
+                transition={{ duration: 3, repeat: Number.POSITIVE_INFINITY, ease: "easeInOut" }}
+              > <h3 className="text-lg font-black">Almost There! 🎯</h3> </motion.div>
+              <motion.p className="text-sm opacity-90 mt-2" animate={{ opacity: [0.9, 1, 0.9]}} transition={{ duration: 1.5, repeat: Number.POSITIVE_INFINITY, ease: "easeInOut" }}>
                 Add {itemsNeeded} more perfume{itemsNeeded > 1 ? "s" : ""} to unlock the deal
               </motion.p>
             </div>
           </div>
-
           <motion.div
             className="bg-white/20 p-4 mb-4"
-            style={{
-              clipPath: "polygon(0 0, calc(100% - 12px) 0, 100% 12px, 100% 100%, 12px 100%, 0 calc(100% - 12px))",
-            }}
-            animate={{
-              scale: [1, 1.01, 1],
-            }}
-            transition={{
-              duration: 2,
-              repeat: Number.POSITIVE_INFINITY,
-              ease: "easeInOut",
-            }}
+            style={{ clipPath: "polygon(0 0, calc(100% - 12px) 0, 100% 12px, 100% 100%, 12px 100%, 0 calc(100% - 12px))" }}
+            animate={{ scale: [1, 1.01, 1] }}
+            transition={{ duration: 2, repeat: Number.POSITIVE_INFINITY, ease: "easeInOut" }}
           >
             <p className="font-semibold mb-2">🎁 3 Perfumes for £100 + 2 FREE Roll-ins</p>
-            <motion.p
-              className="text-sm"
-              animate={{
-                color: ["#ffffff", "#ffff99", "#ffffff"],
-              }}
-              transition={{
-                duration: 2,
-                repeat: Number.POSITIVE_INFINITY,
-                ease: "easeInOut",
-              }}
-            >
+            <motion.p className="text-sm" animate={{ color: ["#ffffff", "#ffff99", "#ffffff"]}} transition={{ duration: 2, repeat: Number.POSITIVE_INFINITY, ease: "easeInOut" }}>
               Save up to £39.97 on your order!
             </motion.p>
           </motion.div>
-
           <Link to="/product">
             <motion.button
               className="w-full bg-white text-orange-600 font-bold py-3 hover:bg-gray-100 transition-colors"
-              style={{
-                clipPath: "polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 8px 100%, 0 calc(100% - 8px))",
-              }}
-              whileHover={{
-                scale: 1.02,
-                boxShadow: "0 5px 15px rgba(0,0,0,0.2)",
-              }}
-              whileTap={{ scale: 0.98 }}
-              animate={{
-                boxShadow: [
-                  "0 0 0px rgba(255,255,255,0)",
-                  "0 0 15px rgba(255,255,255,0.5)",
-                  "0 0 0px rgba(255,255,255,0)",
-                ],
-              }}
-              transition={{
-                duration: 2,
-                repeat: Number.POSITIVE_INFINITY,
-                ease: "easeInOut",
-              }}
-            >
-              Add More Perfumes
-            </motion.button>
+              style={{ clipPath: "polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 8px 100%, 0 calc(100% - 8px))" }}
+              whileHover={{ scale: 1.02, boxShadow: "0 5px 15px rgba(0,0,0,0.2)" }} whileTap={{ scale: 0.98 }}
+              animate={{ boxShadow: ["0 0 0px rgba(255,255,255,0)", "0 0 15px rgba(255,255,255,0.5)", "0 0 0px rgba(255,255,255,0)"]}}
+              transition={{ duration: 2, repeat: Number.POSITIVE_INFINITY, ease: "easeInOut" }}
+            > Add More Perfumes </motion.button>
           </Link>
         </div>
       </motion.div>
@@ -569,24 +277,51 @@ const EnhancedCartPromotionalOffer = ({ cartItems, isCartPage = false }) => {
 export default function CartPage() {
   const [checkoutError, setCheckoutError] = useState("")
   const [isProcessingCheckout, setIsProcessingCheckout] = useState(false)
-  const [applyDeal, setApplyDeal] = useState(false)
+  const [applyDeal, setApplyDeal] = useState(false) // State to track if user wants to apply the deal
   const { cartItems, addToCart, removeItem, updateQuantity, clearCart, getCartTotal } = useCart()
 
-  const subtotal = getCartTotal()
+  const subtotalFromCart = getCartTotal() // This is sum of (item.price * item.quantity)
   const totalItems = cartItems.reduce((sum, item) => sum + item.quantity, 0)
 
-  // Calculate delivery charge (£4.99 for orders under £100)
-  const deliveryCharge = subtotal < 100 ? 4.99 : 0
+  // Deal constants
+  const dealPrice = 100;
+  const dealMinItems = 3;
 
-  // Calculate final total based on whether deal is applied
-  let finalTotal = subtotal + deliveryCharge
-  if (applyDeal && totalItems >= 3) {
-    finalTotal = 100 + deliveryCharge // Deal price + delivery if applicable
+  // Determine if the cart is eligible for the deal based on item count
+  const isEligibleForDeal = totalItems >= dealMinItems;
+
+  // Calculate delivery charge
+  // Delivery is £4.99 if (actual amount spent on items) is less than £100
+  // If deal is applied, delivery is based on deal price (£100).
+  // If deal not applied, delivery is based on subtotalFromCart.
+  let itemsValueForDeliveryCalc = subtotalFromCart;
+  if (applyDeal && isEligibleForDeal) {
+    itemsValueForDeliveryCalc = dealPrice;
+  }
+  const deliveryCharge = itemsValueForDeliveryCalc < 100 && itemsValueForDeliveryCalc > 0 ? 4.99 : 0;
+
+
+  // Calculate final total
+  let finalTotal;
+  if (applyDeal && isEligibleForDeal) {
+    finalTotal = dealPrice + deliveryCharge;
+  } else {
+    finalTotal = subtotalFromCart + deliveryCharge;
   }
 
-  const handleApplyDeal = () => {
-    if (totalItems >= 3) {
-      setApplyDeal(true)
+  // Savings calculation (only relevant if deal is applied and eligible)
+  let savings = 0;
+  if (applyDeal && isEligibleForDeal) {
+    savings = subtotalFromCart - dealPrice;
+  }
+
+
+  const handleApplyDealToggle = () => {
+    if (isEligibleForDeal) {
+      setApplyDeal(!applyDeal); // Toggle the deal application
+    } else {
+      // This case should ideally not be reachable if button is disabled/hidden
+      alert("You need at least 3 items to apply this deal.");
     }
   }
 
@@ -615,23 +350,27 @@ export default function CartPage() {
     }
 
     try {
-      const itemsToCheckout = cartItems.map((item) => ({
-        id: item.id,
+      // We only need to send item IDs and quantities. Backend will fetch prices.
+      const itemsForBackend = cartItems.map((item) => ({
+        id: item.id, // This is the id_from_js
         quantity: item.quantity,
-        name: item.name,
-        price: item.price,
-        image: item.image ? `${VITE_APP_BASE_URL}${item.image.startsWith("/") ? item.image : "/" + item.image}` : null,
+        // For logging/reference, can send name, but backend should use its own DB name
+        name: item.name, 
+        image: item.image // For reference if needed for order summary image generation
       }))
 
-      // Add deal information if applied
       const checkoutData = {
-        cartItems: itemsToCheckout,
-        dealApplied: applyDeal && totalItems >= 3,
-        dealPrice: applyDeal && totalItems >= 3 ? 100 : null,
-        deliveryCharge: deliveryCharge,
+        cartItems: itemsForBackend,
+        dealApplied: applyDeal && isEligibleForDeal, // Send true only if user applied AND is eligible
+        // dealPrice and deliveryCharge from frontend are for display/reference, backend recalculates
+        // For robustness, backend should calculate the dealPrice and deliveryCharge itself.
+        // We can still send them to give backend context on user's view.
+        frontendCalculatedDealPrice: applyDeal && isEligibleForDeal ? dealPrice : null,
+        frontendCalculatedDeliveryCharge: deliveryCharge,
+        // No userId for guest checkout
       }
 
-      console.log("Items being sent to backend for checkout:", checkoutData)
+      console.log("Data being sent to backend for checkout:", checkoutData)
 
       const response = await fetch(`${API_BASE_URL_CLIENT}/create-checkout-session`, {
         method: "POST",
@@ -692,82 +431,47 @@ export default function CartPage() {
           <div className="mb-8">
             <motion.div
               className="w-32 h-32 mx-auto bg-gradient-to-br from-amber-100 to-yellow-100 rounded-full flex items-center justify-center"
-              animate={{
-                scale: [1, 1.05, 1],
-                rotate: [0, 5, 0],
-              }}
-              transition={{
-                duration: 3,
-                repeat: Number.POSITIVE_INFINITY,
-                ease: "easeInOut",
-              }}
-            >
-              <ShoppingCart className="w-16 h-16 text-amber-400" />
-            </motion.div>
+              animate={{ scale: [1, 1.05, 1], rotate: [0, 5, 0] }}
+              transition={{ duration: 3, repeat: Number.POSITIVE_INFINITY, ease: "easeInOut" }}
+            > <ShoppingCart className="w-16 h-16 text-amber-400" /> </motion.div>
           </div>
           <motion.h1
             className="text-3xl font-bold text-amber-900 mb-4"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-          >
-            Your cart is currently empty
-          </motion.h1>
+            initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}
+          > Your cart is currently empty </motion.h1>
           <motion.p
             className="text-amber-700 mb-8 max-w-md mx-auto"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-          >
-            Discover our exquisite collection of luxury fragrances and find your perfect scent.
-          </motion.p>
+            initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.2 }}
+          > Discover our exquisite collection of luxury fragrances and find your perfect scent. </motion.p>
           <Link to="/product">
             <motion.button
               className="bg-amber-600 hover:bg-amber-700 text-white px-8 py-3 rounded-lg font-semibold mb-12 transition-colors duration-300"
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.4 }}
-            >
-              Continue Shopping
-            </motion.button>
+              whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}
+              initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.4 }}
+            > Continue Shopping </motion.button>
           </Link>
           <div className="mt-16">
             <motion.h2
               className="text-2xl font-bold text-amber-900 mb-8"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.6 }}
-            >
-              You might like these
-            </motion.h2>
+              initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.6 }}
+            > You might like these </motion.h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
               {recommendedProducts.map((product, index) => (
                 <motion.div
                   key={`${product.id}-${product.name}`}
                   className="bg-gradient-to-br from-white to-amber-50 border border-amber-200 rounded-lg p-4 hover:shadow-amber-200/50 hover:shadow-lg transition-shadow duration-300"
-                  initial={{ opacity: 0, y: 30 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.6, delay: 0.8 + index * 0.1 }}
+                  initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.8 + index * 0.1 }}
                   whileHover={{ scale: 1.02 }}
                 >
-                  <img
-                    src={product.image || "/placeholder.svg"}
-                    alt={product.name}
-                    className="w-full h-64 object-cover rounded-lg mb-4"
-                  />
+                  <img src={product.image || "/placeholder.svg"} alt={product.name} className="w-full h-64 object-cover rounded-lg mb-4" />
                   <h3 className="font-semibold text-amber-900 mb-2 text-lg">{product.name}</h3>
                   <p className="text-sm text-amber-600 mb-3 line-clamp-2">{product.description}</p>
                   <p className="text-2xl font-bold text-amber-900 mb-4">£{product.price.toFixed(2)}</p>
                   <motion.button
                     onClick={() => addToCart(product)}
                     className="w-full bg-amber-600 hover:bg-amber-700 text-white py-2 rounded-lg transition-colors duration-300"
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
-                  >
-                    Add to Cart
-                  </motion.button>
+                    whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}
+                  > Add to Cart </motion.button>
                 </motion.div>
               ))}
             </div>
@@ -782,19 +486,14 @@ export default function CartPage() {
       <div className="max-w-6xl mx-auto">
         <motion.div
           className="flex items-center justify-between mb-8"
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
+          initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}
         >
           <h1 className="text-3xl font-bold text-amber-900">Shopping Cart</h1>
           <motion.button
             onClick={clearCart}
             className="text-amber-700 hover:text-red-600 transition-colors duration-300 px-4 py-2 border border-amber-300 rounded-lg"
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-          >
-            Clear Cart
-          </motion.button>
+            whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}
+          > Clear Cart </motion.button>
         </motion.div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -806,15 +505,12 @@ export default function CartPage() {
                 <motion.div
                   key={item.id}
                   className="bg-gradient-to-br from-white to-amber-50 border border-amber-200 rounded-lg p-6 hover:shadow-amber-200/50 hover:shadow-lg transition-shadow duration-300"
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ duration: 0.5, delay: index * 0.1 }}
+                  initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.5, delay: index * 0.1 }}
                   whileHover={{ scale: 1.01 }}
                 >
                   <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
                     <motion.img
-                      src={item.image || "/placeholder.svg"}
-                      alt={item.name}
+                      src={item.image || "/placeholder.svg"} alt={item.name}
                       className="w-24 h-24 object-cover rounded-lg"
                       whileHover={{ scale: 1.05 }}
                     />
@@ -826,12 +522,7 @@ export default function CartPage() {
                       </span>
                       <div className="flex items-center gap-1 mb-2">
                         {[...Array(5)].map((_, i) => (
-                          <Star
-                            key={i}
-                            className={`w-3 h-3 ${
-                              i < Math.floor(item.rating || 0) ? "fill-yellow-400 text-yellow-400" : "text-gray-300"
-                            }`}
-                          />
+                          <Star key={i} className={`w-3 h-3 ${ i < Math.floor(item.rating || 0) ? "fill-yellow-400 text-yellow-400" : "text-gray-300"}`} />
                         ))}
                         <span className="text-xs text-gray-600 ml-1">({item.reviews || 0})</span>
                       </div>
@@ -841,29 +532,20 @@ export default function CartPage() {
                       <motion.button
                         onClick={() => updateQuantity(item.id, item.quantity - 1)}
                         className="w-8 h-8 rounded-full border border-amber-300 flex items-center justify-center hover:bg-amber-50 transition-colors duration-300"
-                        whileHover={{ scale: 1.1 }}
-                        whileTap={{ scale: 0.9 }}
-                      >
-                        <Minus className="w-4 h-4" />
-                      </motion.button>
+                        whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}
+                      > <Minus className="w-4 h-4" /> </motion.button>
                       <span className="w-8 text-center font-semibold">{item.quantity}</span>
                       <motion.button
                         onClick={() => updateQuantity(item.id, item.quantity + 1)}
                         className="w-8 h-8 rounded-full border border-amber-300 flex items-center justify-center hover:bg-amber-50 transition-colors duration-300"
-                        whileHover={{ scale: 1.1 }}
-                        whileTap={{ scale: 0.9 }}
-                      >
-                        <Plus className="w-4 h-4" />
-                      </motion.button>
+                        whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}
+                      > <Plus className="w-4 h-4" /> </motion.button>
                     </div>
                     <motion.button
                       onClick={() => removeItem(item.id)}
                       className="text-amber-400 hover:text-red-600 transition-colors duration-300 p-2"
-                      whileHover={{ scale: 1.1 }}
-                      whileTap={{ scale: 0.9 }}
-                    >
-                      <Trash2 className="w-5 h-5" />
-                    </motion.button>
+                      whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}
+                    > <Trash2 className="w-5 h-5" /> </motion.button>
                   </div>
                 </motion.div>
               ))}
@@ -871,56 +553,54 @@ export default function CartPage() {
             <Link
               to="/product"
               className="mt-6 flex items-center gap-2 text-amber-900 hover:text-amber-700 transition-colors duration-300"
-            >
-              <ArrowLeft className="w-4 h-4" />
-              Continue Shopping
-            </Link>
+            > <ArrowLeft className="w-4 h-4" /> Continue Shopping </Link>
           </div>
 
           <div className="lg:col-span-1">
             <motion.div
               className="bg-gradient-to-br from-amber-50 to-yellow-50 rounded-lg p-6 sticky top-8"
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.6, delay: 0.3 }}
+              initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.6, delay: 0.3 }}
             >
               <h2 className="text-xl font-bold text-amber-900 mb-6">Order Summary</h2>
               <div className="space-y-4 mb-6">
                 <div className="flex justify-between">
                   <span className="text-amber-700">Subtotal</span>
-                  <span className="font-semibold">£{subtotal.toFixed(2)}</span>
+                  <span className="font-semibold">£{subtotalFromCart.toFixed(2)}</span>
                 </div>
 
-                {applyDeal && totalItems >= 3 ? (
+                {/* Deal Applied Display - only if deal is chosen and eligible */}
+                {applyDeal && isEligibleForDeal && (
                   <motion.div
                     className="bg-green-100 p-3 rounded-lg"
-                    initial={{ scale: 0.9 }}
-                    animate={{ scale: 1 }}
-                    transition={{ duration: 0.3 }}
+                    initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} transition={{ duration: 0.3 }}
                   >
                     <div className="flex justify-between text-green-700">
-                      <span className="font-semibold">Deal Applied: 3 Perfumes</span>
-                      <span className="font-bold">£100.00</span>
+                      <span className="font-semibold">Deal Applied: {dealMinItems} Perfumes</span>
+                      <span className="font-bold">£{dealPrice.toFixed(2)}</span>
                     </div>
                     <div className="flex justify-between text-green-600 text-sm">
                       <span>+ 2 FREE Roll-ins</span>
                       <span>FREE</span>
                     </div>
-                    <div className="flex justify-between text-green-700 text-sm">
-                      <span>You Save:</span>
-                      <span className="font-semibold">£{(subtotal - 100).toFixed(2)}</span>
-                    </div>
+                    {savings > 0 && (
+                       <div className="flex justify-between text-green-700 text-sm">
+                        <span>You Save:</span>
+                        <span className="font-semibold">£{savings.toFixed(2)}</span>
+                      </div>
+                    )}
                   </motion.div>
-                ) : (
-                  <div className="flex justify-between">
+                )}
+                
+                {/* Delivery Charge Display */}
+                 <div className="flex justify-between">
                     <span className="text-amber-700">
-                      Delivery {subtotal >= 100 ? "(Free over £100)" : "(Under £100)"}
+                      Delivery {itemsValueForDeliveryCalc >= 100 ? "(Free over £100)" : `(£${deliveryCharge.toFixed(2)} for orders under £100)`}
                     </span>
                     <span className="font-semibold">
                       {deliveryCharge > 0 ? `£${deliveryCharge.toFixed(2)}` : "FREE"}
                     </span>
                   </div>
-                )}
+
 
                 <hr className="border-amber-200" />
                 <div className="flex justify-between text-lg">
@@ -929,35 +609,26 @@ export default function CartPage() {
                 </div>
               </div>
 
-              {!applyDeal && totalItems >= 3 && (
+              {/* Button to Apply/Remove Deal */}
+              {isEligibleForDeal && (
                 <motion.button
-                  onClick={handleApplyDeal}
-                  className="w-full bg-green-600 hover:bg-green-700 text-white py-3 mb-4 rounded-lg font-semibold transition-colors duration-300"
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                  animate={{
-                    boxShadow: [
-                      "0 0 0px rgba(34, 197, 94, 0)",
-                      "0 0 20px rgba(34, 197, 94, 0.3)",
-                      "0 0 0px rgba(34, 197, 94, 0)",
-                    ],
-                  }}
-                  transition={{
-                    duration: 2,
-                    repeat: Number.POSITIVE_INFINITY,
-                    ease: "easeInOut",
-                  }}
+                  onClick={handleApplyDealToggle}
+                  className={`w-full py-3 mb-4 rounded-lg font-semibold transition-colors duration-300 ${
+                    applyDeal ? "bg-red-500 hover:bg-red-600 text-white" : "bg-green-600 hover:bg-green-700 text-white"
+                  }`}
+                  whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}
                 >
-                  Apply 3-Perfume Deal (Save £{(subtotal - 100).toFixed(2)})
+                  {applyDeal ? "Remove 3-Perfume Deal" : `Apply 3-Perfume Deal (Save £${(subtotalFromCart - dealPrice).toFixed(2)})`}
                 </motion.button>
               )}
 
+
               <motion.button
                 onClick={handleProceedToCheckout}
-                disabled={isProcessingCheckout || !stripePromise}
+                disabled={isProcessingCheckout || !stripePromise || cartItems.length === 0}
                 className="w-full bg-amber-600 hover:bg-amber-700 text-white py-3 mb-4 rounded-lg font-semibold transition-colors duration-300 disabled:opacity-50"
-                whileHover={{ scale: isProcessingCheckout ? 1 : 1.02 }}
-                whileTap={{ scale: isProcessingCheckout ? 1 : 0.98 }}
+                whileHover={{ scale: (isProcessingCheckout || cartItems.length === 0) ? 1 : 1.02 }}
+                whileTap={{ scale: (isProcessingCheckout || cartItems.length === 0) ? 1 : 0.98 }}
               >
                 {isProcessingCheckout ? "Processing..." : "Proceed to Checkout"}
               </motion.button>

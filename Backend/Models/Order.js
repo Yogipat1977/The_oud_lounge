@@ -6,9 +6,8 @@ const OrderSchema = new mongoose.Schema(
     user: {
       type: mongoose.Schema.ObjectId,
       ref: 'User', // Reference to the User model
-      // required: true, // Make it true if orders must be tied to a registered user
+      // required: false, // Explicitly not required for guest checkout
     },
-    // If user is not registered, you might store guest email directly
     guestEmail: {
       type: String,
       match: [
@@ -21,16 +20,16 @@ const OrderSchema = new mongoose.Schema(
         name: { type: String, required: true },
         quantity: { type: Number, required: true },
         image: { type: String }, // URL or path
-        price: { type: Number, required: true }, // Price at the time of purchase
+        price: { type: Number, required: true }, // Price at the time of purchase (original unit price)
         product_id_from_js: { type: Number }, // To link back to your products.js ID if needed
-        // product: { // If products are in DB
-        //   type: mongoose.Schema.ObjectId,
-        //   ref: 'Product',
-        //   required: true
-        // }
+        product: { // If products are in DB and you want to store the ObjectId ref
+           type: mongoose.Schema.ObjectId,
+           ref: 'Product',
+           // required: true // make this true if you always link to a DB product
+        }
       },
     ],
-    shippingAddress: { // If you collect this in Stripe Checkout
+    shippingAddress: { 
       address: { type: String },
       city: { type: String },
       postalCode: { type: String },
@@ -40,23 +39,36 @@ const OrderSchema = new mongoose.Schema(
       type: String,
       default: 'Stripe',
     },
-    paymentResult: { // Details from Stripe
-      id: { type: String },         // Stripe Payment Intent ID or Checkout Session ID
-      status: { type: String },     // e.g., 'succeeded', 'pending'
+    paymentResult: { 
+      id: { type: String },        
+      status: { type: String },    
       update_time: { type: String },
-      email_address: { type: String }, // Customer email from Stripe
+      email_address: { type: String }, 
     },
-    taxPrice: { // Calculate and store if needed
+    // Pricing breakdown
+    subtotalBeforeDiscount: { // Sum of (item.price * item.quantity) using original prices
+      type: Number,
+      default: 0.0,
+    },
+    discountAmount: { // Amount discounted due to deals
+      type: Number,
+      default: 0.0,
+    },
+    dealApplied: { // Flag if a deal was used for this order
+      type: Boolean,
+      default: false,
+    },
+    taxPrice: { 
       type: Number,
       required: true,
       default: 0.0,
     },
-    shippingPrice: { // If applicable
+    shippingPrice: { 
       type: Number,
       required: true,
       default: 0.0,
     },
-    totalPrice: { // Amount paid (in your primary currency, e.g., GBP)
+    totalPrice: { // Final amount paid
       type: Number,
       required: true,
       default: 0.0,
@@ -74,20 +86,20 @@ const OrderSchema = new mongoose.Schema(
     paidAt: {
       type: Date,
     },
-    isDelivered: { // If you track delivery
+    isDelivered: { 
       type: Boolean,
       default: false,
     },
     deliveredAt: {
       type: Date,
     },
-    stripeCheckoutSessionId: { // Store the Stripe session ID for reference
+    stripeCheckoutSessionId: { 
         type: String,
         unique: true,
     }
   },
   {
-    timestamps: true, // Adds createdAt and updatedAt
+    timestamps: true, 
   }
 );
 
