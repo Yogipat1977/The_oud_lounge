@@ -702,14 +702,14 @@ export default function PerfumeProducts() {
             transition={{ duration: 0.8 }}
             className="text-center mb-16"
           >
-            <motion.div
+            {/* <motion.div
               initial={{ scale: 0 }}
               animate={{ scale: 1 }}
               transition={{ duration: 0.6, delay: 0.2 }}
               className="flex justify-center mb-6"
             >
               <Sparkles className="w-16 h-16 text-yellow-500" />
-            </motion.div>
+            </motion.div> */}
             <motion.h1
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -793,7 +793,7 @@ export default function PerfumeProducts() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.9 }}
                 className="text-gray-600 mb-8 max-w-2xl mx-auto text-lg"
-                 style={{ fontFamily: "'item'm" }}
+                 style={{ fontFamily: "'item'" }}
               >
                 Each fragrance tells a unique story. Explore our collection and discover the perfect scent that defines
                 your personality and style.
