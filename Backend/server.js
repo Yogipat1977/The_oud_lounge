@@ -49,6 +49,7 @@ app.post('/api/webhook', express.raw({type: 'application/json'}), async (request
     case 'checkout.session.completed':
       const session = event.data.object;
       console.log(`🔔 Checkout session completed for session ID: ${session.id}, Payment Status: ${session.payment_status}`);
+      console.log('[Webhook] Raw session.shipping_details:', JSON.stringify(session.shipping_details, null, 2));
 
       const existingOrder = await Order.findOne({ stripeCheckoutSessionId: session.id });
       if (existingOrder) {
@@ -134,10 +135,12 @@ app.post('/api/webhook', express.raw({type: 'application/json'}), async (request
         },
         stripeCheckoutSessionId: session.id,
       };
+      console.log('[Webhook] newOrderData.shippingAddress:', JSON.stringify(newOrderData.shippingAddress, null, 2));
 
       try {
         const newOrder = await Order.create(newOrderData);
         console.log(`Order ${newOrder._id} created successfully for session ${session.id}`);
+        console.log('[Webhook] newOrder.shippingAddress (from DB object):', JSON.stringify(newOrder.shippingAddress, null, 2));
 
         if (process.env.ADMIN_PHONE_NUMBER) {
           try {
