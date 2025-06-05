@@ -118,12 +118,12 @@ app.post('/api/webhook', express.raw({type: 'application/json'}), async (request
         totalPrice: session.amount_total / 100,
         taxPrice: (session.total_details && session.total_details.amount_tax) ? session.total_details.amount_tax / 100 : 0,
         
-        shippingAddress: session.shipping_details && session.shipping_details.address ? {
-          address: session.shipping_details.address.line1,
-          city: session.shipping_details.address.city,
-          postalCode: session.shipping_details.address.postal_code,
-          country: session.shipping_details.address.country,
-        } : undefined,
+       shippingAddress: sessionWithLineItems.shipping_details && sessionWithLineItems.shipping_details.address ? {
+  address: sessionWithLineItems.shipping_details.address.line1,
+  city: sessionWithLineItems.shipping_details.address.city,
+  postalCode: sessionWithLineItems.shipping_details.address.postal_code,
+  country: sessionWithLineItems.shipping_details.address.country,
+} : undefined,
         isPaid: session.payment_status === 'paid',
         paidAt: session.payment_status === 'paid' ? new Date() : null,
         orderStatus: session.payment_status === 'paid' ? 'Paid' : 'Pending',
