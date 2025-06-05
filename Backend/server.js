@@ -21,6 +21,8 @@ const stripe = StripeNode(process.env.STRIPE_SECRET_KEY);
 const app = express();
 
 const FRONTEND_URL = process.env.FRONTEND_URL || 'http://localhost:5173';
+// Prioritize IMAGE_BASE_URL from .env, then FRONTEND_URL.
+// This ensures Stripe gets absolute URLs if images are served from the frontend.
 const IMAGE_BASE_URL = process.env.IMAGE_BASE_URL || process.env.FRONTEND_URL;
 
 
@@ -47,9 +49,9 @@ app.post('/api/webhook', express.raw({type: 'application/json'}), async (request
 
   switch (event.type) {
     case 'checkout.session.completed':
-      const session = event.data.object;
+      const session = event.data.object; // This is the session object directly from the webhook event
       console.log(`🔔 Checkout session completed for session ID: ${session.id}, Payment Status: ${session.payment_status}`);
-      console.log('[Webhook] Raw session.shipping_details:', JSON.stringify(session.shipping_details, null, 2));
+      console.log('[Webhook] Raw session.shipping_details (from webhook payload):', JSON.stringify(session.shipping_details, null, 2));
 
       const existingOrder = await Order.findOne({ stripeCheckoutSessionId: session.id });
       if (existingOrder) {
@@ -57,19 +59,22 @@ app.post('/api/webhook', express.raw({type: 'application/json'}), async (request
         return response.status(200).json({received: true, message: 'Order already processed'});
       }
 
-      let sessionWithLineItems;
+      // Retrieve the session again from Stripe API for potentially more complete data
+      // and to expand necessary fields like line_items.
+      let retrievedSessionWithDetails;
       try {
-        sessionWithLineItems = await stripe.checkout.sessions.retrieve(
-          session.id,
+        retrievedSessionWithDetails = await stripe.checkout.sessions.retrieve(
+          session.id, // Use the session ID from the webhook event
           { expand: ['line_items.data.price.product', 'customer', 'payment_intent'] }
         );
+        console.log('[Webhook] Retrieved sessionWithDetails.shipping_details (from API retrieve):', JSON.stringify(retrievedSessionWithDetails.shipping_details, null, 2));
       } catch (stripeError) {
-        console.error(`[Webhook] Error retrieving session ${session.id} from Stripe:`, stripeError);
-        return response.status(500).json({ error: 'Failed to retrieve session details from Stripe.' });
+        console.error(`[Webhook] Error retrieving session ${session.id} from Stripe API:`, stripeError);
+        return response.status(500).json({ error: 'Failed to retrieve full session details from Stripe.' });
       }
       
-      const metadata = sessionWithLineItems.metadata || {}; 
-      console.log('[Webhook] Session Metadata:', metadata);
+      const metadata = retrievedSessionWithDetails.metadata || {}; 
+      console.log('[Webhook] Session Metadata (from retrieved session):', metadata);
 
       const dealWasActuallyApplied = metadata.dealApplied === 'true';
       const dealPriceWhenApplied = parseFloat(metadata.dealPriceIfApplied); 
@@ -78,10 +83,14 @@ app.post('/api/webhook', express.raw({type: 'application/json'}), async (request
       const deliveryChargePaidFromMeta = parseFloat(metadata.deliveryChargePaid);
       const totalQuantityFromMeta = parseInt(metadata.totalQuantityInCart || '0');
 
-      const customerEmail = session.customer_details ? session.customer_details.email : 
-                            (session.customer ? session.customer.email : 
-                            (session.payment_intent && session.payment_intent.receipt_email ? session.payment_intent.receipt_email : null));
-
+      // Prioritize customer email from retrieved session, then webhook payload
+      const customerEmail = retrievedSessionWithDetails.customer_details?.email ||
+                            session.customer_details?.email || 
+                            retrievedSessionWithDetails.customer?.email ||
+                            session.customer?.email ||
+                            retrievedSessionWithDetails.payment_intent?.receipt_email ||
+                            session.payment_intent?.receipt_email ||
+                            null;
 
       const orderItemsForDB = cartDetailsFromMeta.map(item => ({
         name: item.name,
@@ -91,7 +100,8 @@ app.post('/api/webhook', express.raw({type: 'application/json'}), async (request
         product: item.dbProductId, 
       }));
 
-      if (dealWasActuallyApplied && totalQuantityFromMeta >= 3) { 
+      // Add bonus gifts if the deal was applied
+      if (dealWasActuallyApplied && totalQuantityFromMeta >= 3) { // Assuming 3 is the deal minimum
         orderItemsForDB.push({
           name: 'Free Roll-in (Bonus Gift 1)', quantity: 1, price: 0, image: '/Images/placeholder_roll_in.jpg', product: null,
         });
@@ -103,8 +113,11 @@ app.post('/api/webhook', express.raw({type: 'application/json'}), async (request
       let calculatedDiscount = 0;
       if (dealWasActuallyApplied && !isNaN(dealPriceWhenApplied) && !isNaN(originalSubtotalFromMeta)) {
         calculatedDiscount = originalSubtotalFromMeta - dealPriceWhenApplied;
-        if (calculatedDiscount < 0) calculatedDiscount = 0;
+        if (calculatedDiscount < 0) calculatedDiscount = 0; // Discount cannot be negative
       }
+
+      // Use shipping details: prioritize retrieved session, then webhook payload
+      const shippingDetailsToUse = retrievedSessionWithDetails.shipping_details || session.shipping_details;
 
       const newOrderData = {
         guestEmail: customerEmail,
@@ -115,85 +128,80 @@ app.post('/api/webhook', express.raw({type: 'application/json'}), async (request
         dealApplied: dealWasActuallyApplied,
 
         shippingPrice: !isNaN(deliveryChargePaidFromMeta) ? deliveryChargePaidFromMeta : 0,
-        totalPrice: session.amount_total / 100,
-        taxPrice: (session.total_details && session.total_details.amount_tax) ? session.total_details.amount_tax / 100 : 0,
+        totalPrice: retrievedSessionWithDetails.amount_total / 100, // Use amount_total from retrieved session
+        taxPrice: (retrievedSessionWithDetails.total_details && retrievedSessionWithDetails.total_details.amount_tax) ? retrievedSessionWithDetails.total_details.amount_tax / 100 : 0,
         
-       shippingAddress: sessionWithLineItems.shipping_details && sessionWithLineItems.shipping_details.address ? {
-  address: sessionWithLineItems.shipping_details.address.line1,
-  city: sessionWithLineItems.shipping_details.address.city,
-  postalCode: sessionWithLineItems.shipping_details.address.postal_code,
-  country: sessionWithLineItems.shipping_details.address.country,
-} : undefined,
-        isPaid: session.payment_status === 'paid',
-        paidAt: session.payment_status === 'paid' ? new Date() : null,
-        orderStatus: session.payment_status === 'paid' ? 'Paid' : 'Pending',
+        shippingAddress: shippingDetailsToUse && shippingDetailsToUse.address ? {
+          name: shippingDetailsToUse.name || null, // Capture recipient name
+          address: shippingDetailsToUse.address.line1,
+          city: shippingDetailsToUse.address.city,
+          postalCode: shippingDetailsToUse.address.postal_code,
+          country: shippingDetailsToUse.address.country,
+        } : undefined,
+        isPaid: retrievedSessionWithDetails.payment_status === 'paid',
+        paidAt: retrievedSessionWithDetails.payment_status === 'paid' ? new Date() : null,
+        orderStatus: retrievedSessionWithDetails.payment_status === 'paid' ? 'Paid' : 'Pending',
         paymentResult: {
-          id: typeof session.payment_intent === 'string' ? session.payment_intent : (session.payment_intent?.id || session.id),
-          status: session.payment_status,
-          update_time: new Date(session.created * 1000).toISOString(),
+          id: typeof retrievedSessionWithDetails.payment_intent === 'string' ? retrievedSessionWithDetails.payment_intent : (retrievedSessionWithDetails.payment_intent?.id || retrievedSessionWithDetails.id),
+          status: retrievedSessionWithDetails.payment_status,
+          update_time: new Date(retrievedSessionWithDetails.created * 1000).toISOString(),
           email_address: customerEmail,
         },
-        stripeCheckoutSessionId: session.id,
+        stripeCheckoutSessionId: retrievedSessionWithDetails.id, // Use ID from retrieved session
       };
-      console.log('[Webhook] newOrderData.shippingAddress:', JSON.stringify(newOrderData.shippingAddress, null, 2));
+      console.log('[Webhook] newOrderData.shippingAddress (to be saved):', JSON.stringify(newOrderData.shippingAddress, null, 2));
 
       try {
         const newOrder = await Order.create(newOrderData);
-        console.log(`Order ${newOrder._id} created successfully for session ${session.id}`);
+        console.log(`Order ${newOrder._id} created successfully for session ${retrievedSessionWithDetails.id}`);
         console.log('[Webhook] newOrder.shippingAddress (from DB object):', JSON.stringify(newOrder.shippingAddress, null, 2));
 
+        // --- DETAILED SMS CONSTRUCTION ---
         if (process.env.ADMIN_PHONE_NUMBER) {
           try {
-            let customerIdentifier = newOrder.guestEmail || (newOrder.paymentResult ? newOrder.paymentResult.email_address : 'N/A');
-            let shippingAddressString = "No shipping address.";
-            if (newOrder.shippingAddress) {
-                const sa = newOrder.shippingAddress;
-                const addressParts = [sa.address, sa.city, sa.postalCode, sa.country].filter(Boolean);
-                if (addressParts.length > 0) shippingAddressString = addressParts.join(', ');
-            }
-            let productNamesString = "";
-            const maxProductNameLengthPerItem = 20;
-            const maxTotalProductChars = 60;
+            const smsCustomerEmail = newOrder.guestEmail || (newOrder.paymentResult?.email_address) || 'N/A';
+
+            let itemsSummary = "";
             if (newOrder.orderItems && newOrder.orderItems.length > 0) {
-                const productNames = newOrder.orderItems
-                    .filter(item => item.price > 0) 
-                    .map(item => {
-                        let name = item.name;
-                        if (name.length > maxProductNameLengthPerItem) name = name.substring(0, maxProductNameLengthPerItem - 3) + "...";
-                        return name;
-                    });
-                let tempProductString = productNames.join('; ');
-                if (tempProductString.length > maxTotalProductChars) {
-                    productNamesString = "";
-                    for (const name of productNames) {
-                        if ((productNamesString.length + name.length + 2) <= maxTotalProductChars) {
-                            productNamesString += (productNamesString ? '; ' : '') + name;
-                        } else {
-                            productNamesString += (productNamesString ? '; ' : '') + "...";
-                            break;
-                        }
-                    }
-                } else {
-                    productNamesString = tempProductString;
-                }
+              itemsSummary = newOrder.orderItems
+                .map(item => `${item.quantity}x ${item.name}`)
+                .join(', ');
             }
-            if (!productNamesString) productNamesString = "Items in email";
-            const smsBody = `TOL Order (#${newOrder._id.toString().slice(-6)}) £${newOrder.totalPrice.toFixed(2)}. ` +
-                            `Cust: ${customerIdentifier}. ` +
-                            `Items: ${productNamesString}. ` +
-                            `Ship to: ${shippingAddressString}`;
-            console.log(`[Webhook] Constructed SMS Body (length ${smsBody.length}): ${smsBody}`);
+            if (!itemsSummary) itemsSummary = "Details in email";
+
+            let shippingAddressString = "No shipping address provided.";
+            if (newOrder.shippingAddress) {
+              const sa = newOrder.shippingAddress;
+              const namePart = sa.name ? `${sa.name}, ` : "";
+              const addressParts = [sa.address, sa.city, sa.postalCode, sa.country].filter(Boolean);
+              if (addressParts.length > 0) {
+                shippingAddressString = namePart + addressParts.join(', ');
+              } else if (namePart) {
+                shippingAddressString = namePart.slice(0, -2); 
+              }
+            }
+
+            const smsBody = 
+`TOL Order Alert!
+ID: #${newOrder._id.toString().slice(-6)}
+Total: £${newOrder.totalPrice.toFixed(2)}
+Cust Email: ${smsCustomerEmail}
+Items: ${itemsSummary}
+Ship To: ${shippingAddressString}`;
+            console.log(`[Webhook] Constructed Detailed SMS Body (length ${smsBody.length}):\n${smsBody}`);
             await sendSms(process.env.ADMIN_PHONE_NUMBER, smsBody);
           } catch (smsError) {
-            console.error(`[Webhook] Failed to send admin SMS for order ${newOrder._id}. Error: ${smsError.message}`);
+            console.error(`[Webhook] Failed to send detailed admin SMS for order ${newOrder._id}. Error: ${smsError.message}`);
           }
         } else {
           console.log('[Webhook] ADMIN_PHONE_NUMBER not set, skipping admin SMS notification.');
         }
+        // --- END DETAILED SMS CONSTRUCTION ---
 
+        // Stock Update Logic
         if (cartDetailsFromMeta.length > 0) {
             for (const item of cartDetailsFromMeta) { 
-              if (item.dbProductId && item.quantity > 0) {
+              if (item.dbProductId && item.quantity > 0) { // Ensure dbProductId exists and quantity is positive
                 try {
                   await Product.findByIdAndUpdate(item.dbProductId, {
                     $inc: { stockQuantity: -item.quantity },
@@ -205,29 +213,39 @@ app.post('/api/webhook', express.raw({type: 'application/json'}), async (request
               }
             }
         } else {
-            console.warn(`[Webhook] No cartDetails found in metadata for stock update for session ${session.id}.`);
+            console.warn(`[Webhook] No cartDetails found in metadata for stock update for session ${retrievedSessionWithDetails.id}.`);
         }
         
-        console.log(`[Webhook] Order processing complete for ${session.id}. Sending 200 OK.`);
+        console.log(`[Webhook] Order processing complete for ${retrievedSessionWithDetails.id}. Sending 200 OK.`);
         return response.status(200).json({ received: true, message: 'Order processed successfully' });
 
       } catch (dbError) {
-        console.error(`[Webhook] Error saving order or updating stock for session ${session.id}:`, dbError);
+        console.error(`[Webhook] Error saving order or updating stock for session ${retrievedSessionWithDetails.id}:`, dbError);
+        // Consider the type of error. If it's a duplicate key error for stripeCheckoutSessionId,
+        // it might mean the order was already processed by a concurrent webhook.
+        if (dbError.code === 11000 && dbError.keyPattern && dbError.keyPattern.stripeCheckoutSessionId) {
+             console.log(`[Webhook] Race condition likely: Order for session ${retrievedSessionWithDetails.id} already created (duplicate key error).`);
+             return response.status(200).json({ received: true, message: 'Order already processed (detected duplicate key on create)' });
+        }
         return response.status(500).json({ error: 'Failed to save order or update stock after payment.' });
       }
 
     default:
+      // Acknowledge other event types to prevent Stripe from resending them.
       console.log(`[Webhook] Unhandled event type ${event.type}. Sending 200 OK.`);
       return response.status(200).json({received: true, message: 'Unhandled event type, acknowledged.'});
   }
 });
 
+// Middleware for parsing JSON bodies (should be after webhook for raw body)
 app.use(express.json());
 
+// Mount Routers
 app.use('/api/auth', authRoutes);
 app.use('/api/orders', orderRoutes);
 app.use('/api/products', productRoutes);
 
+// Create Checkout Session Endpoint
 app.post('/api/create-checkout-session', async (req, res) => {
   const { cartItems, dealApplied } = req.body; 
   console.log('[Checkout Session] Request received. CartItems count:', cartItems ? cartItems.length : 0, 'Deal Applied from Frontend:', dealApplied);
@@ -240,45 +258,55 @@ app.post('/api/create-checkout-session', async (req, res) => {
   try {
     let backendSubtotal = 0;
     let backendTotalQuantity = 0;
-    const dbCartItems = []; // Will store items with DB-verified details
+    const dbCartItems = []; // Will store items with DB-verified details for metadata
+
+    // Fetch all product details from DB at once for efficiency if many products
+    // This is an optimization if cartItems contains many items.
+    // For a few items, individual queries are fine.
+    const productIdsFromJs = cartItems.map(item => item.id);
+    const productsFromDB = await Product.find({ id_from_js: { $in: productIdsFromJs } });
+    const productsMap = new Map(productsFromDB.map(p => [p.id_from_js, p]));
+
 
     for (const cartItem of cartItems) {
-      if (!cartItem.id) { 
+      if (typeof cartItem.id === 'undefined') { // Check for undefined specifically
         console.error('[Checkout Session] Cart item missing ID:', cartItem);
         throw new Error('Invalid cart item: product ID is missing.');
       }
-      const product = await Product.findOne({ id_from_js: cartItem.id });
+      const product = productsMap.get(cartItem.id); // Use the map for quick lookup
+
       if (!product) {
         console.error(`[Checkout Session] Product with id_from_js ${cartItem.id} (name: "${cartItem.name}") not found in database.`);
         throw new Error(`Product "${cartItem.name || cartItem.id}" not found. Refresh cart or contact support.`);
       }
       
       dbCartItems.push({
-        id_from_js: cartItem.id,
+        id_from_js: cartItem.id, // Keep original ID from JS
         quantity: cartItem.quantity,
-        dbPrice: product.price,
-        dbName: product.name,
-        dbDescription: product.description,
-        dbImage: product.image, // Relative path from DB
-        dbProductId: product._id.toString(),
+        dbPrice: product.price,     // Price from DB
+        dbName: product.name,       // Name from DB
+        dbDescription: product.description, // Description from DB
+        dbImage: product.image,     // Relative image path from DB
+        dbProductId: product._id.toString(), // MongoDB ObjectId as string
       });
       backendSubtotal += product.price * cartItem.quantity;
       backendTotalQuantity += cartItem.quantity;
     }
     console.log(`[Checkout Session] Backend calculated subtotal: £${backendSubtotal.toFixed(2)}, Total quantity: ${backendTotalQuantity}`);
 
-    const dealMinItems = 3;
-    const actualDealPrice = 100; 
+    const dealMinItems = 3; // Minimum items for the deal
+    const actualDealPrice = 100; // The fixed price for the deal
     const isDealEffectivelyApplied = dealApplied && backendTotalQuantity >= dealMinItems;
     console.log(`[Checkout Session] Deal effectively applied by backend: ${isDealEffectivelyApplied}`);
 
+    // Calculate delivery charge
     let finalCalculatedDeliveryCharge = 0;
-    const deliveryThreshold = 100;
+    const deliveryThreshold = 100; // Free delivery if itemsValue is 100 or more
     const standardDeliveryCost = 4.99;
     let itemsValueForDeliveryCalc = backendSubtotal;
 
     if (isDealEffectivelyApplied) {
-      itemsValueForDeliveryCalc = actualDealPrice;
+      itemsValueForDeliveryCalc = actualDealPrice; // If deal applied, use deal price for delivery calc
     }
     if (itemsValueForDeliveryCalc < deliveryThreshold && itemsValueForDeliveryCalc > 0) {
       finalCalculatedDeliveryCharge = standardDeliveryCost;
@@ -286,43 +314,33 @@ app.post('/api/create-checkout-session', async (req, res) => {
     console.log(`[Checkout Session] Final backend calculated delivery charge: £${finalCalculatedDeliveryCharge.toFixed(2)}`);
 
     const line_items_for_stripe = [];
-    let dealItemNamesForDescription = ""; // To list product names in the deal description
-
+    
     if (isDealEffectivelyApplied) {
-      // Get names of products in the deal for the description
-      // And determine the primary image for the bundle (e.g., first product's image)
       let primaryImageUrlForDeal = null;
-      const productNamesInDeal = [];
-
-      // Iterate through dbCartItems to get names and find the first image
-      // We only need to list products up to the deal quantity, or all if more are in cart but part of the same flat price deal.
-      // For simplicity here, we'll list all names from dbCartItems if they contribute to the deal.
-      for (let i = 0; i < dbCartItems.length; i++) {
-          const item = dbCartItems[i];
-          productNamesInDeal.push(item.dbName); // Add name to list
-          if (i === 0 && item.dbImage) { // Use first item's image as primary for the bundle
-            primaryImageUrlForDeal = item.dbImage.startsWith('http') ? item.dbImage : `${IMAGE_BASE_URL}${item.dbImage.startsWith('/') ? item.dbImage : '/' + item.dbImage}`;
-          }
+      const productNamesInDeal = dbCartItems.map(item => item.dbName); // All items contribute to the bundle name
+      
+      if (dbCartItems.length > 0 && dbCartItems[0].dbImage) {
+          const firstItemImage = dbCartItems[0].dbImage;
+          primaryImageUrlForDeal = firstItemImage.startsWith('http') ? firstItemImage : `${IMAGE_BASE_URL}${firstItemImage.startsWith('/') ? firstItemImage : '/' + firstItemImage}`;
       }
-      dealItemNamesForDescription = productNamesInDeal.join(', ');
-      if (dealItemNamesForDescription.length > 200) { // Truncate if too long for Stripe description
-          dealItemNamesForDescription = dealItemNamesForDescription.substring(0, 197) + "...";
+
+      let dealDescription = `Includes: ${productNamesInDeal.join(', ')}. Total for selected perfumes at £${actualDealPrice.toFixed(2)}. Plus 2 Free Roll-ins (Worth £20).`;
+      if (dealDescription.length > 1000) { // Stripe's description limit is generous but good to check
+          dealDescription = dealDescription.substring(0, 997) + "...";
       }
       
-      console.log(`[Checkout Session] Primary image for deal: ${primaryImageUrlForDeal}`);
-      console.log(`[Checkout Session] Deal item names for description: ${dealItemNamesForDescription}`);
-
       line_items_for_stripe.push({
         price_data: {
           currency: 'gbp',
           product_data: {
             name: `Special Offer (${backendTotalQuantity} Perfumes) + 2 Free Roll-ins`,
-            description: `Includes: ${dealItemNamesForDescription}. Total for selected perfumes at £${actualDealPrice.toFixed(2)}. Plus 2 Free Roll-ins (Worth £20).`,
-            images: primaryImageUrlForDeal ? [primaryImageUrlForDeal] : [], // Use the first product's image
+            description: dealDescription,
+            images: primaryImageUrlForDeal ? [primaryImageUrlForDeal] : [],
+            // No metadata.dbProductId here as this is a bundle, not a single DB product
           },
           unit_amount: Math.round(actualDealPrice * 100),
         },
-        quantity: 1, // The deal is one line item
+        quantity: 1, // The deal is one line item in Stripe
       });
     } else { // No deal, or not eligible - list items individually
       for (const item of dbCartItems) {
@@ -330,7 +348,7 @@ app.post('/api/create-checkout-session', async (req, res) => {
         if (item.dbImage) {
           imageUrl = item.dbImage.startsWith('http') ? item.dbImage : `${IMAGE_BASE_URL}${item.dbImage.startsWith('/') ? item.dbImage : '/' + item.dbImage}`;
         }
-        console.log(`[Checkout Session] Product: ${item.dbName}, Image URL: ${imageUrl}`);
+        console.log(`[Checkout Session] Adding to Stripe Line Items (No Deal): Product: ${item.dbName}, Image URL: ${imageUrl}, DB ID: ${item.dbProductId}`);
         line_items_for_stripe.push({
           price_data: {
             currency: 'gbp',
@@ -338,7 +356,7 @@ app.post('/api/create-checkout-session', async (req, res) => {
               name: item.dbName,
               images: imageUrl ? [imageUrl] : [],
               description: item.dbDescription || 'No description available.',
-              metadata: { dbProductId: item.dbProductId }
+              metadata: { dbProductId: item.dbProductId } // Crucial for stock update if not a deal
             },
             unit_amount: Math.round(item.dbPrice * 100),
           },
@@ -347,28 +365,31 @@ app.post('/api/create-checkout-session', async (req, res) => {
       }
     }
 
+    // Add delivery charge as a line item if applicable
     if (finalCalculatedDeliveryCharge > 0) {
       line_items_for_stripe.push({
         price_data: {
           currency: 'gbp',
-          product_data: { name: 'Delivery Charge' }, // No image needed for delivery
+          product_data: { name: 'Delivery Charge' },
           unit_amount: Math.round(finalCalculatedDeliveryCharge * 100),
         },
         quantity: 1,
       });
     }
 
+    // Prepare metadata to be stored with the Stripe session
     const metadataForStripe = {
       cartDetails: JSON.stringify(dbCartItems.map(item => ({ 
+        // Storing essential details needed by webhook to recreate orderItemsForDB
         id_from_js: item.id_from_js,
         dbProductId: item.dbProductId,
         name: item.dbName,
         quantity: item.quantity,
-        pricePerUnit: item.dbPrice,
-        image: item.dbImage // Store relative path in metadata for order creation
+        pricePerUnit: item.dbPrice, // Store the original price per unit
+        image: item.dbImage // Store relative image path for consistency
       }))),
       dealApplied: isDealEffectivelyApplied ? 'true' : 'false',
-      dealPriceIfApplied: isDealEffectivelyApplied ? actualDealPrice.toFixed(2) : null,
+      dealPriceIfApplied: isDealEffectivelyApplied ? actualDealPrice.toFixed(2) : "", // Store as string or empty
       originalSubtotalCalculated: backendSubtotal.toFixed(2),
       deliveryChargePaid: finalCalculatedDeliveryCharge.toFixed(2),
       totalQuantityInCart: backendTotalQuantity.toString(),
@@ -381,12 +402,15 @@ app.post('/api/create-checkout-session', async (req, res) => {
       shipping_address_collection: { allowed_countries: ['GB', 'US', 'CA', 'AU'] },
       invoice_creation: { enabled: true },
       customer_creation: 'if_required', 
-      success_url: `${FRONTEND_URL}/checkout-success?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${FRONTEND_URL}/checkout-cancel`,
+      success_url: `${FRONTEND_URL}/checkout-success?session_id={CHECKOUT_SESSION_ID}`, // Make sure this is correct
+      cancel_url: `${FRONTEND_URL}/checkout-cancel`, // Make sure this is correct
       metadata: metadataForStripe,
     };
     
-    console.log('[Checkout Session] Attempting to create Stripe session with params (first 1000 chars):', JSON.stringify(sessionParams, null, 2).substring(0,1000) + "...");
+    // Log only a portion of sessionParams if it's too large for console
+    const sessionParamsString = JSON.stringify(sessionParams, null, 2);
+    console.log('[Checkout Session] Attempting to create Stripe session with params (first 1000 chars):', sessionParamsString.substring(0,1000) + (sessionParamsString.length > 1000 ? "..." : ""));
+    
     const checkoutSession = await stripe.checkout.sessions.create(sessionParams);
     console.log('[Checkout Session] Stripe session created successfully. ID:', checkoutSession.id);
     return res.status(200).json({ sessionId: checkoutSession.id });
@@ -397,7 +421,7 @@ app.post('/api/create-checkout-session', async (req, res) => {
       if (error.message.includes("not found")) {
         return res.status(404).json({ error: error.message });
       }
-      return res.status(500).json({ error: 'Failed to create checkout session. ' + error.message });
+      return res.status(500).json({ error: 'Failed to create checkout session due to an internal error. Details: ' + error.message });
     } else {
       console.error('[Checkout Session] Headers already sent, cannot send error JSON response.');
     }
